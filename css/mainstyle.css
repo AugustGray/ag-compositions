@@ -30,8 +30,8 @@ nav {
 		top: 50%;
 		left: 50%;
 		width: 200px;
-    margin-top: -100px;
-    margin-left: -100px;
+    margin-top: -150px;
+    margin-left: -95px;
     height: auto;
 
 	}
@@ -41,8 +41,8 @@ nav {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		margin-top: 150px;
-		margin-left: -90px;
+		margin-top: 100px;
+		margin-left: -85px;
 		color: #FFFFFF;
 		text-align: center;
 		margin-bottom: .5em;
@@ -334,7 +334,7 @@ footer a{
 }
 
 footer img{
-  height: 30px;
+  height: 35px;
   margin-left: 5px;
 	margin-bottom: 5px;
 	padding-bottom: 5px;
