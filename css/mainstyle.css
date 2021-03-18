@@ -1,4 +1,10 @@
 /* Body */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
 
 html, body{
 	background-image: url("../img/background.webp");
