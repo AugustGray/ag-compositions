@@ -341,11 +341,13 @@ footer img{
 @media (max-width: 1000px) {
     footer {
         height: 90px;
-        font-size: 25px;
+        font-size: 35px;
     }
 
 		footer img {
-			height: 60px;
+			height: 80px;
+          margin-left: 20px;
+          margin-right: 20px;
 		}
 
     .index img {
