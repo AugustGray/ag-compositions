@@ -12,18 +12,18 @@
 
 // Uses Node, AMD or browser globals to create a module.
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory(require('jquery'));
-    } else {
-        // Browser globals (root is window)
-        root.lightbox = factory(root.jQuery);
-    }
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['jquery'], factory);
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(require('jquery'));
+  } else {
+    // Browser globals (root is window)
+    root.lightbox = factory(root.jQuery);
+  }
 }(this, function ($) {
 
   function Lightbox(options) {
@@ -39,15 +39,15 @@
   // Descriptions of all options available on the demo site:
   // http://lokeshdhakar.com/projects/lightbox2/index.html#options
   Lightbox.defaults = {
-    albumLabel: 'Image %1 of %2',
+    albumLabel: '%1/%2',
     alwaysShowNavOnTouchDevices: false,
-    fadeDuration: 600,
+    fadeDuration: 300,
     fitImagesInViewport: true,
     imageFadeDuration: 600,
     // maxWidth: 800,
     // maxHeight: 600,
     positionFromTop: 50,
-    resizeDuration: 700,
+    resizeDuration: 100,
     showImageNumberLabel: true,
     wrapAround: false,
     disableScrolling: false,
@@ -93,7 +93,7 @@
   // Attach event handlers to the new DOM elements. click click click
   Lightbox.prototype.build = function() {
     var self = this;
-    $('<div id="lightboxOverlay" class="lightboxOverlay"></div><div id="lightbox" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /><div class="lb-nav"><a class="lb-prev" href="" ></a><a class="lb-next" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
+    $('<div id="lightboxOverlay" class="lightboxOverlay"></div><div id="lightbox" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:null" /><div class="lb-nav"><a class="lb-prev" href="" ><p>&#10094;</p></a><a class="lb-next" href="" ><p>&#10095;</p></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close">&times;</a></div></div></div></div>').appendTo($('body'));
 
     // Cache jQuery objects
     this.$lightbox       = $('#lightbox');
@@ -175,7 +175,7 @@
 
         self.$lightbox.one('contextmenu', function() {
           setTimeout(function() {
-              this.$nav.css('pointer-events', 'auto');
+            this.$nav.css('pointer-events', 'auto');
           }.bind(self), 0);
         });
       }
@@ -329,8 +329,8 @@
   // Stretch overlay to fit the viewport
   Lightbox.prototype.sizeOverlay = function() {
     this.$overlay
-      .width($(document).width())
-      .height($(document).height());
+        .width($(document).width())
+        .height($(document).height());
   };
 
   // Animate the size of the lightbox to fit the image we are showing
@@ -415,7 +415,7 @@
     // Enable anchor clicks in the injected caption html.
     // Thanks Nate Wright for the fix. @https://github.com/NateWr
     if (typeof this.album[this.currentImageIndex].title !== 'undefined' &&
-      this.album[this.currentImageIndex].title !== '') {
+        this.album[this.currentImageIndex].title !== '') {
       var $caption = this.$lightbox.find('.lb-caption');
       if (this.options.sanitizeTitle) {
         $caption.text(this.album[this.currentImageIndex].title);
@@ -423,13 +423,13 @@
         $caption.html(this.album[this.currentImageIndex].title);
       }
       $caption.fadeIn('fast')
-        .find('a').on('click', function(event) {
-          if ($(this).attr('target') !== undefined) {
-            window.open($(this).attr('href'), $(this).attr('target'));
-          } else {
-            location.href = $(this).attr('href');
-          }
-        });
+          .find('a').on('click', function(event) {
+        if ($(this).attr('target') !== undefined) {
+          window.open($(this).attr('href'), $(this).attr('target'));
+        } else {
+          location.href = $(this).attr('href');
+        }
+      });
     }
 
     if (this.album.length > 1 && this.options.showImageNumberLabel) {

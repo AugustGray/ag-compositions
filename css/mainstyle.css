@@ -1,9 +1,14 @@
 /* Body */
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
+  font-family: Roboto, sans-serif;
+  src: url(../fonts/Roboto-Regular.ttf);
   font-display: swap;
+}
+
+* {
+  padding: 0;
+  margin:  0;
+  font-family: 'Roboto', sans-serif;
 }
 
 html, body{
@@ -21,9 +26,9 @@ nav {
 	z-index: 1000;
 }
 
-	nav ul {
-		list-style: none;
-	}
+nav ul {
+    list-style: none;
+}
 
 	/* Index */
 
@@ -352,6 +357,7 @@ footer img{
 
 		footer img {
 			height: 80px;
+          width: 80px;
           margin-left: 20px;
           margin-right: 20px;
 		}
@@ -364,6 +370,6 @@ footer img{
 
 		.index h1 {
 			margin-top: 250px;
-		}
+        }
 
 }
