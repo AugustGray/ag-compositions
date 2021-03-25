@@ -1,5 +1,5 @@
 // Index
-$('#index').click(function() {
+$('#logo').click(function() {
    $('#toggle').toggleClass('active');
    $('#overlay').toggleClass('open');
   });
