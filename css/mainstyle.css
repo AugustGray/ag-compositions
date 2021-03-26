@@ -15,6 +15,7 @@ html, body{
   background-repeat: no-repeat;
   overflow: auto;
   border-style: none;
+  scroll-behavior: smooth;
 }
 a {
   text-decoration: none;
