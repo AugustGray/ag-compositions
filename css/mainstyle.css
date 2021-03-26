@@ -107,6 +107,9 @@ nav ul {
 #Scroll-Link a:hover h2:before {
   content: "Read More";
 }
+.blue {
+  color: rgb(0,55,218) !important;
+}
 .slide-bg {
   -webkit-animation: kenburns 80s infinite linear;
   animation: kenburns 80s infinite linear;
