@@ -61,7 +61,6 @@ nav ul {
   padding-top: 30px;
   color: #FFFFFF;
   text-align: center;
-  margin-bottom: .5em;
   font-size: 33px;
   font-family: 'Ubuntu Mono', monospace;
 }
@@ -79,7 +78,7 @@ nav ul {
 #Scroll-Link {
   color: #FFFFFF;
   text-align: center;
-  padding-top: 15px;
+  padding-top: 30px;
 }
 
 #Scroll-Link a {
@@ -87,6 +86,27 @@ nav ul {
   text-decoration: none;
 }
 
+#Scroll-Link img {
+  height: 30px;
+  width: auto;
+  padding-top: 0;
+  -webkit-transition: .35s ease;
+  transition: .35s ease;
+}
+
+#Scroll-Link a:hover span {
+  display: none;
+}
+
+#Scroll-Link a:hover img {
+  padding-top: 15px;
+  -webkit-transition: .35s ease;
+  transition: .35s ease;
+}
+
+#Scroll-Link a:hover h2:before {
+  content: "Read More";
+}
 .slide-bg {
   -webkit-animation: kenburns 80s infinite linear;
   animation: kenburns 80s infinite linear;
