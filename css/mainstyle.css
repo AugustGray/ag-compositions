@@ -386,6 +386,7 @@ h1 {
 .ag-compositions h3 {
   padding: 15px 0 15px 0;
   color: #FFFFFF;
+  font-weight: bold;
 }
 .ag-compositions h3 span {
   animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
@@ -393,9 +394,12 @@ h1 {
 .ag-compositions p {
   text-align: justify;
   color: #FFFFFF;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 24px;
 }
 .ag-compositions .gray {
-  color: #888;
+  color: #CCC;
 }
 .ag-compositions ul {
   padding: 30px 0 0 30px;
