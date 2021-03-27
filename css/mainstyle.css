@@ -17,6 +17,9 @@ html, body{
   border-style: none;
   scroll-behavior: smooth;
 }
+body {
+  background: rgba(0,0,0,0.0);
+}
 a {
   text-decoration: none;
   color: #FFF;
@@ -26,106 +29,10 @@ nav {
   text-align: center;
   z-index: 1000;
 }
-
 nav ul {
   list-style: none;
 }
-
-/* Index */
-
-.index {
-  height: 100vh;
-  text-align: center;
-}
-
-.index img {
-  /* position: absolute;
-    top: 50%;
-    left: 50%; */
-  margin: auto;
-  padding-top: calc(50vh - 150px);
-  width: 200px;
-  /* margin-top: -150px;
-  margin-left: -95px; */
-  height: auto;
-
-}
-
-.index h1 {
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: 100px;
-  margin-left: -85px; */
-  margin: auto;
-  padding-top: 30px;
-  color: #FFFFFF;
-  text-align: center;
-  font-size: 33px;
-  font-family: 'Ubuntu Mono', monospace;
-}
-
-.index h1 span {
-  animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
-}
-
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
-}
-
-#Scroll-Link {
-  color: #FFFFFF;
-  text-align: center;
-  padding-top: 30px;
-}
-
-#Scroll-Link a {
-  color: #FFFFFF;
-  text-decoration: none;
-}
-
-#Scroll-Link img {
-  height: 30px;
-  width: auto;
-  padding-top: 0;
-  -webkit-transition: .35s ease;
-  transition: .35s ease;
-}
-
-#Scroll-Link a:hover span {
-  display: none;
-}
-
-#Scroll-Link a:hover img {
-  padding-top: 15px;
-  -webkit-transition: .35s ease;
-  transition: .35s ease;
-}
-
-#Scroll-Link a:hover h2:before {
-  content: "Read More";
-}
-.blue {
-  color: rgb(0,55,218) !important;
-}
-.slide-bg {
-  -webkit-animation: kenburns 80s infinite linear;
-  animation: kenburns 80s infinite linear;
-  width: 105%;
-  height: 105%;
-  background-color: #000;
-  background-size: cover;
-
-}
-
-body {
-  background: rgba(0,0,0,0.0);
-}
-
 /* Overlay Container */
-
 .section {
   position: absolute;
   width: 100%;
@@ -156,23 +63,21 @@ body {
   height: 2px;
   width: 0;
   -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-          transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
   left: 50%;
   bottom: 0;
   -webkit-transition: .35s ease;
-          transition: .35s ease;
+  transition: .35s ease;
 }
 .section a:hover:after {
   width: 100%;
 }
-
 h1 {
   position: relative;
   text-align: center;
   font-family: 'Ubuntu Mono', monospace;
 }
-
 .button_container {
   position: fixed;
   top: 93%;
@@ -183,20 +88,18 @@ h1 {
   z-index: 100;
   opacity: .7;
   -webkit-transition: opacity .25s ease;
-          transition: opacity .25s ease;
+  transition: opacity .25s ease;
 }
 .button_container:hover {
   opacity: .95;
 }
-
 .button_container.active {
   background-color: rgba(0, 0, 0, 0);
 }
-
 .button_container.active .top {
   -webkit-transform: translateY(10px) translateX(0) rotate(45deg);
-      -ms-transform: translateY(10px) translateX(0) rotate(45deg);
-          transform: translateY(10px) translateX(0) rotate(45deg);
+  -ms-transform: translateY(10px) translateX(0) rotate(45deg);
+  transform: translateY(10px) translateX(0) rotate(45deg);
   background: #FFF;
 }
 .button_container.active .middle {
@@ -205,8 +108,8 @@ h1 {
 }
 .button_container.active .bottom {
   -webkit-transform: translateY(-10px) translateX(0) rotate(-45deg);
-      -ms-transform: translateY(-10px) translateX(0) rotate(-45deg);
-          transform: translateY(-10px) translateX(0) rotate(-45deg);
+  -ms-transform: translateY(-10px) translateX(0) rotate(-45deg);
+  transform: translateY(-10px) translateX(0) rotate(-45deg);
   background: #FFF;
 }
 .button_container span {
@@ -218,7 +121,7 @@ h1 {
   top: 0;
   left: 0;
   -webkit-transition: all .35s ease;
-          transition: all .35s ease;
+  transition: all .35s ease;
   cursor: pointer;
 }
 .button_container span:nth-of-type(2) {
@@ -237,7 +140,7 @@ h1 {
   opacity: 1;
   visibility: hidden;
   -webkit-transition: opacity .35s, visibility .35s, width .35s;
-          transition: opacity .35s, visibility .35s, width .35s;
+  transition: opacity .35s, visibility .35s, width .35s;
   z-index: 50;
 }
 .overlay:before {
@@ -249,7 +152,7 @@ h1 {
   height: 100%;
   position: absolute;
   -webkit-transition: left .35s ease;
-          transition: left .35s ease;
+  transition: left .35s ease;
 }
 .overlay:after {
   content: '';
@@ -260,7 +163,7 @@ h1 {
   height: 100%;
   position: absolute;
   -webkit-transition: all .35s ease;
-          transition: all .35s ease;
+  transition: all .35s ease;
 }
 .overlay.open {
   opacity: .8;
@@ -275,37 +178,36 @@ h1 {
 }
 .overlay.open li {
   -webkit-animation: fadeInRight .5s ease forwards;
-          animation: fadeInRight .5s ease forwards;
+  animation: fadeInRight .5s ease forwards;
   -webkit-animation-delay: .35s;
-          animation-delay: .35s;
+  animation-delay: .35s;
 }
 .overlay.open li:nth-of-type(2) {
   -webkit-animation-delay: .45s;
-          animation-delay: .45s;
+  animation-delay: .45s;
 }
 .overlay.open li:nth-of-type(3) {
   -webkit-animation-delay: .55s;
-          animation-delay: .55s;
+  animation-delay: .55s;
 }
 .overlay.open li:nth-of-type(4) {
   -webkit-animation-delay: .65s;
-          animation-delay: .65s;
+  animation-delay: .65s;
 }
 .overlay nav {
   position: relative;
   height: 70%;
   top: 50%;
   -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
   font-size: 50px;
   font-family: 'Ubuntu Mono', monospace;
   font-weight: 400;
-    letter-spacing: 2px;
+  letter-spacing: 2px;
   text-align: center;
   z-index: 100;
 }
-
 .overlay ul {
   list-style: none;
   padding: 0;
@@ -338,14 +240,13 @@ h1 {
   left: 50%;
   width: 0;
   -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-          transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
   height: 3px;
   background: #FFF;
   -webkit-transition: .35s;
-          transition: .35s;
+  transition: .35s;
 }
-
 @-webkit-keyframes fadeInRight {
   0% {
     opacity: 0;
@@ -356,7 +257,6 @@ h1 {
     left: 0;
   }
 }
-
 @keyframes fadeInRight {
   0% {
     opacity: 0;
@@ -366,6 +266,84 @@ h1 {
     opacity: 1;
     left: 0;
   }
+}
+/* Index */
+.index {
+  height: 100vh;
+  text-align: center;
+}
+.index img {
+  /* position: absolute;
+    top: 50%;
+    left: 50%; */
+  margin: auto;
+  padding-top: calc(50vh - 150px);
+  width: 200px;
+  /* margin-top: -150px;
+  margin-left: -95px; */
+  height: auto;
+}
+.index h1 {
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: 100px;
+  margin-left: -85px; */
+  margin: auto;
+  padding-top: 30px;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 33px;
+  font-family: 'Ubuntu Mono', monospace;
+}
+.index h1 span {
+  animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+#Scroll-Link {
+  color: #FFFFFF;
+  text-align: center;
+  padding-top: 30px;
+}
+#Scroll-Link a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+#Scroll-Link img {
+  height: 30px;
+  width: auto;
+  padding-top: 0;
+  -webkit-transition: .35s ease;
+  transition: .35s ease;
+}
+#Scroll-Link a:hover span {
+  display: none;
+}
+
+#Scroll-Link a:hover img {
+  padding-top: 15px;
+  -webkit-transition: .35s ease;
+  transition: .35s ease;
+}
+
+#Scroll-Link a:hover h2:before {
+  content: "Read More";
+}
+.blue {
+  color: rgb(0,55,218) !important;
+}
+.slide-bg {
+  -webkit-animation: kenburns 80s infinite linear;
+  animation: kenburns 80s infinite linear;
+  width: 105%;
+  height: 105%;
+  background-color: #000;
+  background-size: cover;
+
 }
 /* ag-compositions-projects */
 #ag-compositions-projects {
@@ -446,14 +424,11 @@ footer{
   text-decoration: none;
   font-size: 15px;
   text-align: center;
-
 }
-
 footer a{
   color: rgb(255,255,255);
   text-decoration: none;
 }
-
 footer img{
   height: 35px;
   margin-left: 10px;
@@ -461,14 +436,15 @@ footer img{
 	margin-bottom: 5px;
 	padding-bottom: 5px;
 }
-
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 @media (max-width: 1000px) {
+  .index img {
+    width: 200px;
+  }
   .ag-compositions {
     display: block;
     width: auto;
   }
-
   .projects {
     display: block;
     width: auto;
@@ -480,16 +456,10 @@ footer img{
     height: 90px;
     font-size: 15px;
   }
-
   footer img {
     height: 50px;
     width: 50px;
     margin-left: 15px;
     margin-right: 15px;
   }
-
-  .index img {
-    width: 200px;
-  }
-
 }
