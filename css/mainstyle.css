@@ -416,6 +416,7 @@ h1 {
   animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
 }
 .projects {
+  float: right;
   display: inline-block;
   width: calc(50% - 100px);
   margin: 15px;
