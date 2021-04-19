@@ -1,2 +1,2 @@
-# August Gray compositons | Porfolio | [WIP]
+## August Gray compositons | Porfolio | [WIP]
 
