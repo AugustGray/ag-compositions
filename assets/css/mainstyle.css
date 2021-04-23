@@ -446,8 +446,10 @@ footer img{
     width: auto;
   }
   .projects {
+    float: left;
     display: block;
     width: auto;
+    margin-bottom: 90px;
   }
   #ag-compositions-projects {
     margin-bottom: 180px;
