@@ -415,6 +415,31 @@ h1 {
   color: #FFFFFF !important;
   animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
 }
+.cv {
+  display: inline-block;
+  color: #FFF;
+}
+.profile {
+  float: left;
+  display: inline-block;
+  margin: 30px;
+  width: 200px;
+}
+.profile img {
+  width: 200px;
+  height: auto;
+  border-radius: 50%;
+  border: 5px solid #FFF;
+}
+.profile figcaption {
+  color: #FFF;
+  text-align: center;
+  margin-top: 15px;
+}
+.about {
+  display: inline-block;
+  float: left;
+}
 /* Footer */
 footer{
   position: fixed;
