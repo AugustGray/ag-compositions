@@ -343,7 +343,6 @@ h1 {
   height: 105%;
   background-color: #000;
   background-size: cover;
-
 }
 /* ag-compositions-projects */
 #ag-compositions-projects {
@@ -439,11 +438,13 @@ h1 {
 .about {
   display: inline-block;
   float: left;
+  margin-top: 30px;
 }
 .about p {
   font-weight: normal;
 }
 .programs-OS {
+  float: left;
   display: inline-block;
 }
 .programs-OS h3 {
