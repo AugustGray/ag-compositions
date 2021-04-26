@@ -417,16 +417,16 @@ h1 {
 }
 .cv {
   display: inline-block;
-  color: #FFF;
+  color: #FFF;;
 }
 .profile {
   float: left;
   display: inline-block;
   margin: 30px;
-  width: 200px;
+  width: 150px;
 }
 .profile img {
-  width: 200px;
+  width: 150px;
   height: auto;
   border-radius: 50%;
   border: 5px solid #FFF;
@@ -439,6 +439,18 @@ h1 {
 .about {
   display: inline-block;
   float: left;
+}
+.about p {
+  font-weight: normal;
+}
+.programs-OS {
+  display: inline-block;
+}
+.programs-OS h3 {
+  font-weight: bold;
+}
+.programs-OS p {
+  font-weight: normal;
 }
 /* Footer */
 footer{
@@ -481,6 +493,9 @@ footer img{
   }
   #ag-compositions-projects {
     margin-bottom: 180px;
+  }
+  .cv {
+    margin-bottom: 60px;
   }
   footer {
     height: 90px;
