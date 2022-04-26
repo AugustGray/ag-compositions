@@ -38,15 +38,25 @@
 					<li><a href="./assets/wip.html">/WEB-DESIGN</a></li>
 					<li><a href="./assets/wip.html">/DESIGN</a></li>
 					<li><a href="https://hellodesvu.com/" target="_blank" rel="noopener">/PHOTOGRAPHY</a></li>
-					<li><a href="./portfolio/CV/cv.html">/CV</a></li>
+					<li><a href="./portfolio/CV/cv.html">/3D-MODELING</a></li>
 				</ul>
 			</nav>
 		</div>
 		<!-- Index -->
 		<div class="index" id="#index">
 			<!-- AG Logo -->
-		<img src="./assets/img/logo.webp" width="200" height="auto" alt="August Gray Logo" class="delay-3 animated fadeInDown" id="logo">
-		<h1 class="delay-9 animated fadeInUp">August Gray<span>&#10074</span></h1>
+			<!-- AG-Logo Loop -->
+  <svg width="300" height="auto" viewBox="0 0 415 415" fill="none" xmlns="http://www.w3.org/2000/svg" class="morphing-demo line-drawing-demo delay-3 animated fadeInDown" id="logo">
+    <g fill="none" fill-rule="evenodd" class="lines">
+      <polygon class="p00" fill="#54C1FB" fill-opacity="0.1" points="207.500 0.000, 404.844 143.379, 329.465 375.371, 85.535 375.371, 10.156 143.379, 207.500 0.000"></polygon>
+      <polygon class="p01" fill="#54C1FB" fill-opacity="0.1" points="207.500 42.000, 365.851 157.049, 305.366 343.201, 109.634 343.201, 49.149 157.049, 207.500 42.000"></polygon>
+      <polygon class="p02" fill="#54C1FB" fill-opacity="0.1" points="207.500 87.000, 323.053 170.954, 278.916 306.796, 136.084 306.796, 91.947 170.954, 207.500 87.000"></polygon>
+      <polygon class="p03" fill="#54C1FB" fill-opacity="0.1" points="207.500 134.000, 278.354 185.478, 251.290 268.772, 163.710 268.772, 136.646 185.478, 207.500 134.000"></polygon>
+      <polygon class="line" stroke="#54C1FB" stroke-width="4" points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104"></polygon>
+      <polygon class="poli" stroke="#54C1FB" stroke-width="4" points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104"></polygon>
+    </g>
+  </svg>
+		<h1 class="delay-9 animated fadeInUp">August Gray<!-- <span>&#10074</span> --></h1>
 
 		<!-- Scroll Link -->
 		<div id="Scroll-Link" class="delay-9 animated fadeInUp">
@@ -93,6 +103,49 @@
 		<script src="./assets/js/jquery-3.6.js"></script>
 		<script src="./assets/js/wow.min.js"></script>
 		<script src="./assets/js/index.js"></script>
+		<script src="./assets/js/anime.min.js"></script>
+<script>
+  // Create a timeline with default parameters
+anime({
+  targets: '.line-drawing-demo .lines .line',
+  strokeDashoffset: [anime.setDashoffset, 0],
+  easing: 'easeInOutSine',
+  duration: 1500,
+  delay: function(el, i) { return i * 250 },
+  direction: 'alternate',
+  loop: true
+});
+anime({
+  targets: '.morphing-demo .poli',
+  opacity: ['0%', '100%'],
+  duration: 100,
+  delay: 1500
+});
+anime({
+  targets: '.line-drawing-demo .lines .line',
+  opacity: ['100%', '0%'],
+  duration: 100,
+  delay: 1500
+});
+anime({
+  targets: '.morphing-demo .poli',
+  points: [
+    { value: [
+      '12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104',
+      '13.897 145.203, 206.409 134.508, 363.694 157.682, 328.032 372.626, 167.174 265.878, 13.897 145.203']
+    },
+    { value: '51.636 157.699, 207.203 3.610, 321.541 170.947, 249.603 267.029, 86.483 376.595, 51.636 157.699' },
+    { value: '52.982 156.645, 207.647 88.122, 403.590 144.106, 278.782 303.175, 163.567 266.740, 52.982 156.645' },
+    { value: '138.405 184.119, 208.269 3.556, 363.986 156.336, 277.640 303.865, 88.448 372.192, 138.405 184.119' },
+    { value: '94.973 171.282, 208.464 41.508, 402.839 144.355, 303.681 343.163, 87.620 373.063, 94.973 171.282' },
+    { value: '12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104' }
+  ],
+  easing: 'easeOutQuad',
+  duration: 5000,
+  delay: 2000,
+  loop: true
+});
+</script>
 	</body>
 
 </html>

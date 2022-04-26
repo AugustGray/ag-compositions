@@ -11,7 +11,7 @@ $('#logo').click(function() {
     });
 
 // Change Text
-var text = ["Design", "Web Design", "Photography", "Architecture"];
+var text = ["Design", "Web Design", "Photography", "3D Modeling", "Architecture"];
 var counter = 0;
 var elem = document.getElementById("changeText");
 var inst = setInterval(change, 5000);
