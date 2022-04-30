@@ -496,7 +496,8 @@ h1 {
 
 .projects svg {
   height: auto;
-  width: 600px;
+  width: 100%;
+  max-width: 700px;
   margin: auto;
 }
 
@@ -582,7 +583,6 @@ footer img {
 
   .projects {
     float: left;
-    display: block;
     width: auto;
     margin-bottom: 90px;
   }
@@ -604,7 +604,6 @@ footer img {
   }
 
   .projects svg {
-    width: 300px;
     margin-bottom: 120px;
   }
 
