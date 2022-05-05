@@ -1,3 +1,7 @@
 .idea/
 index.sublime-project
 index.sublime-workspace
+
+.obsidian
+.obsidian/graph.json
+.obsidian/workspace
