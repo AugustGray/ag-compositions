@@ -64,38 +64,43 @@
         <script src="../../assets/js/wow.min.js"></script>
         <script src="../../assets/js/index.js"></script>
         <script src="../../assets/js/anime.min.js"></script>
-        <script src="./js/three.js"></script>
-        <script>
-
-            //creating scene
-            var scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x212428);
-
-            //add camera
-            var camera = new THREE.PerspectiveCamera(
-                75,
-                window.innerWidth / window.innerHeight
-            );
+        <!-- <script src="./js/three.js"></script> -->
+        <script type="module">
+            import * as THREE from "./js/three.module.js"
+            import { OrbitControls } from "./js/OrbitControls.js"
 
             //renderer
-            var renderer = new THREE.WebGLRenderer();
+            const renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
+            //creating scene
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x212428);
+
+            //add camera
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+
+            //Controls
+            const controls = new OrbitControls( camera, renderer.domElement );
+
             //add geometry
-            var geometry = new THREE.BoxGeometry();
-            var material = new THREE.MeshBasicMaterial({ color: 0x54C1FB, wireframe: true });
-            var cube = new THREE.Mesh(geometry, material);
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial({ color: 0x54C1FB, wireframe: true });
+            const cube = new THREE.Mesh(geometry, material);
 
             scene.add(cube);
+            cube.rotation.x = .5;
 
-            camera.position.z = 3;
+            camera.position.z = 4;
+            controls.update();
 
             //animation
-            var animate = function () {
+            function animate () {
                 requestAnimationFrame(animate);
 
-                cube.rotation.x += 0.008;
+                controls.update();
+
                 cube.rotation.y += 0.008;
 
                 renderer.render(scene, camera);
