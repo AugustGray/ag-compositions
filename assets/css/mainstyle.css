@@ -539,12 +539,25 @@ h1 {
 /* .programs-OS {
 } */
 
-.programs-OS h3 {
+.programs-OS h3, .cv-projects h3 {
   font-weight: bold;
 }
 .programs-OS p {
   font-weight: normal;
 }
+
+.cv-projects {
+  color: #fff;
+  font-weight: normal;
+  font-size: 18px;
+  list-style: none;
+  margin-bottom: 90px;
+}
+
+.cv-projects li {
+  margin-left: 30px;
+}
+
 /* Footer */
 footer {
   position: fixed;
