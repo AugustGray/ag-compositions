@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title> August Gray | Design </title>
+    <meta name="description"
+        content="Arquitectura, Diseño Web, Diseño Gráfico, Fotografía, Renders, Architecture, Design, Web Design, Photography">
+    <meta name="keywords"
+        content="Fotografía, Drone, DSLR, Arquitectura, Diseño, Web, Gráfico, Chihuahua, CUU, México, Architecture, Design, Web, Photography">
+    <meta name="copyright" content="August Gray (c) 2021">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" type="icon/png" href="../../assets/img/agfavicon.png">
+    <!-- Preload -->
+    <link rel="preload" href="../../assets/css/mainstyle.css" as="style">
+    <link rel="preload" href="../../assets/css/animate.min.css" as="style">
+    <link rel="preload" href="../../assets/js/jquery-3.6.js" as="script">
+    <link rel="preload" href="../../assets/js/wow.min.js" as="script">
+    <link rel="preload" href="../../assets/js/index.js" as="script">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/mainstyle.css">
+    <link rel="stylesheet" href="../../assets/css/lightbox.css">
+    <link rel="stylesheet" href="../../assets/css/animate.min.css">
+    <link rel="stylesheet" href="./css/hello-cube.css">
+</head>
+
+<body>
+
+    <section>
+        <!-- Overlay Menu -->
+        <div class="button_container" id="toggle">
+            <span class="top"></span>
+            <span class="middle"></span>
+            <span class="bottom"></span>
+        </div>
+
+        <div class="overlay" id="overlay">
+            <nav class="overlay-menu">
+                <ul>
+                    <li><a href="../../assets/wip.html">/ARCHITECTURE</a></li>
+                    <li><a href="../../assets/wip.html">/WEB-DESIGN</a></li>
+                    <li><a href="../../assets/wip.html">/DESIGN</a></li>
+                    <li><a href="https://hellodesvu.com/" target="_blank" rel="noopener">/PHOTOGRAPHY</a></li>
+                    <li><a href="../../portfolio/CV/cv.html">/CV</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="title-back">
+            <h2><a href="../../index.html" accesskey="b"><span>AugustGray@ag-compositions</span></a>:<span
+                    class="blue">/3D-Modeling/GLTF-test</span>$ alt+b ../<span class="blink">&#10074</span></h2>
+        </div>
+
+        <footer>
+
+            <a href="https://github.com/AugustGray" title="GitHub" target="_blank" rel="noopener"><img
+                    src="../../assets/img/ghicon.png" width="35" height="35" alt="github icon"></a>
+            <a href="http://insitu-arquitectos.com/" title="In Situ" target="_blank" rel="noopener"><img
+                    src="../../assets/img/insituicon.webp" width="35" height="35" alt="insitu arquitectura icon"></a>
+            <a href="http://hellodesvu.com/" title="Dès Vu" target="_blank" rel="noopener"><img
+                    src="../../../assets/img/vuw.webp" width="35" height="35" alt="dès vu icon"></a>
+            <p>Powered by August Gray® 2021</p>
+        </footer>
+
+
+
+        <!-- Scripts JS -->
+        <script src="../../assets/js/jquery-3.6.js"></script>
+        <script src="../../assets/js/wow.min.js"></script>
+        <script src="../../assets/js/index.js"></script>
+        <script src="../../assets/js/anime.min.js"></script>
+        <!-- <script src="./js/three.js"></script> -->
+        <script type="module">
+            import * as THREE from "./js/three.module.js"
+            import { OrbitControls } from "./js/OrbitControls.js"
+            import { GLTFLoader } from './js/GLTFLoader.js';
+
+            //renderer
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            //creating scene
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x212428);
+
+            //add camera
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+
+            //Controls
+            const controls = new OrbitControls(camera, renderer.domElement);
+
+            //3d model loader
+            const loader = new GLTFLoader();
+
+            loader.load('./220502 - Proyecto SF05 V2.glb', function (gltf) {
+
+                const model = gltf.scene;
+				model.position.set( -1, -1, 0 );
+				model.scale.set( 0.1, 0.1, 0.1 );
+                model.rotation.x = 0;
+                model.rotation.y = 4;
+				scene.add( model );
+
+            }, undefined, function (error) {
+
+                console.error(error);
+
+            });
+
+            camera.position.z = 8;
+            controls.update();
+
+            //animation
+            function animate() {
+                requestAnimationFrame(animate);
+
+                controls.update();
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+        </script>
+</body>
+
+</html>
