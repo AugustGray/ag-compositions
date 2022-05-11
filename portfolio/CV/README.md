@@ -15,10 +15,10 @@ portafolio: [ag-compositionos.com](https://ag-compositions.com/)
 
 ## Habilidades + Programas
 
-**OS:** Windows, Mac OS, Linux (Debian and Arch based)
-**Modelado 3D + Render:** Cinema 4D con Corona Render y Octane, Lumion, SketchUp + Vray Básico
-**Arquitectura:** AutoCAD, ArchiCAD
-**Edición e Ilustración:** Photoshop, Illustrator, Krita
+**OS:** Windows, Mac OS, Linux (Debian and Arch based)  
+**Modelado 3D + Render:** Cinema 4D con Corona Render y Octane, Lumion, SketchUp + Vray Básico  
+**Arquitectura:** AutoCAD, ArchiCAD  
+**Edición e Ilustración:** Photoshop, Illustrator, Krita  
 **Diseño Web y Programación:** Adobe XD, Figma, VS Code, HTML + CSS + JS, Python
 
 ---
