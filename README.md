@@ -4,7 +4,7 @@
 
 I'm an Architect from ISAD CUU (Instituto Superior de Arquitectura y Diseño de Chihuahua), currently working as a designer and architect at [in]situ arquitectura [<https://insitu-arquitectos.com>]. Also a web design and 3D modeling enthusiast.
 
-**Our Focus**
+**Our Focus**  
 AG-Compositions is a project whose main focus is composition, in its different shapes and forms. With main attention in Design. We seek to compose custom pieces for our clients, pieces that meet their particular needs. Through the balance between function, form and code.
 
 ### Programs and languages
