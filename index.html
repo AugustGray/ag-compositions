@@ -150,12 +150,14 @@
 	</main>
 
 	<footer>
-		<a href="https://github.com/AugustGray" title="GitHub" target="_blank" rel="noopener"><img
+		<div class="links"></div>
+			<a href="https://github.com/AugustGray" title="GitHub" target="_blank" rel="noopener"><img
 				src="./assets/img/ghicon.png" width="35" height="35" alt="github icon"></a>
-		<a href="http://insitu-arquitectos.com/" title="In Situ" target="_blank" rel="noopener"><img
+			<a href="http://insitu-arquitectos.com/" title="In Situ" target="_blank" rel="noopener"><img
 				src="./assets/img/insituicon.webp" width="35" height="35" alt="insitu arquitectura icon"></a>
-		<a href="http://hellodesvu.com/" title="Dès Vu" target="_blank" rel="noopener"><img src="./assets/img/vuw.webp"
+			<a href="http://hellodesvu.com/" title="Dès Vu" target="_blank" rel="noopener"><img src="./assets/img/vuw.webp"
 				width="35" height="35" alt="dès vu icon"></a>
+		</div>
 		<p>Powered by August Gray® 2021</p>
 	</footer>
 
@@ -180,7 +182,13 @@
 				counter = 0;
 				// clearInterval(inst); // uncomment this if you want to stop refreshing after one cycle
 			}
-		}
+		};
+
+		var readMore = "Read More";
+
+		$('#changeText').hover(function change() {
+			elem.innerHTML = readMore;
+		});
 	</script>
 	<script>
 		// Create a timeline with default parameters
