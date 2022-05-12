@@ -360,7 +360,7 @@ h1 {
   transition: 0.35s ease;
 }
 
-#Scroll-Link a:hover img {
+#Scroll-Link a img:hover {
   padding-top: 15px;
   -webkit-transition: 0.35s ease;
   transition: 0.35s ease;

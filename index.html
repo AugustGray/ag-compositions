@@ -77,9 +77,9 @@
 
 			<!-- Scroll Link -->
 			<div id="Scroll-Link" class="delay-9 animated fadeInUp">
-				<a href="index.html#ag-compositions-projects">
+				
 					<h2><span id="changeText">Architecture</span></h2>
-					<img src="./assets/img/flecha-correcta.png" alt="read more">
+					<a href="index.html#ag-compositions-projects"><img src="./assets/img/flecha-correcta.png" alt="read more" id="ReadMore">
 				</a>
 			</div>
 		</div>
@@ -186,7 +186,7 @@
 
 		var readMore = "Read More";
 
-		$('#changeText').hover(function change() {
+		$('#ReadMore').hover(function change() {
 			elem.innerHTML = readMore;
 		});
 	</script>
