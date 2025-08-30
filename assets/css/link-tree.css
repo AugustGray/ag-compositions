@@ -15,7 +15,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100dvh;
 }
 
 .link-container {
@@ -38,12 +38,17 @@ main {
 }
 
 .link-container h2 {
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    color: #464D46;
+}
+
+.link-container h3 {
+    margin-bottom: 12px;
     color: #464D46;
 }
 
 .info {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     font-size: 14px;
     color: #464D46;
 }
