@@ -16,7 +16,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100dvh;
+    height: 100svh;
 }
 
 #dotted-wave-bg {
