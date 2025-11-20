@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<title> August Gray </title>
+	<meta name="description" content="Arquitectura, Diseño Web, Diseño Gráfico, Fotografía, Renders">
+	<meta name="keywords" content="Fotografía, Drone, DSLR, Arquitectura, Diseño, Web, Gráfico, Chihuahua, CUU, México">
+	<meta name="copyright" content="August Gray (c) 2021">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="icon" type="icon/png" href="./assets/img/agfavicon.png">
+	<!-- Preload -->
+	<link rel="preload" href="./assets/css/mainstyle.css">
+	<link rel="preload" href="./assets/css/animate.min.css">
+	<link rel="preload" href="./assets/js/jquery-3.6.js">
+	<link rel="preload" href="./assets/js/wow.min.js">
+	<link rel="preload" href="./assets/js/index.js">
+	<!-- CSS -->
+	<link rel="stylesheet" href="./assets/css/mainstyle.css">
+	<link rel="stylesheet" href="./assets/css/link-tree.css">
+	<link rel="stylesheet" href="./assets/css/lightbox.css">
+	<link rel="stylesheet" href="./assets/css/animate.min.css">
+</head>
+
+<body>
+	<div id="dotted-wave-bg"></div>
+	<main>
+			<div class="link-container">
+        <svg width="300" height="auto" viewBox="0 0 415 415" fill="none" xmlns="http://www.w3.org/2000/svg"
+				class="morphing-demo line-drawing-demo delay-3 animated fadeInDown" id="logo">
+				<g fill="none" fill-rule="evenodd" class="lines">
+					<polygon class="p00" fill="#44A0D1" fill-opacity="0.1"
+						points="207.500 0.000, 404.844 143.379, 329.465 375.371, 85.535 375.371, 10.156 143.379, 207.500 0.000">
+					</polygon>
+					<polygon class="p01" fill="#44A0D1" fill-opacity="0.1"
+						points="207.500 42.000, 365.851 157.049, 305.366 343.201, 109.634 343.201, 49.149 157.049, 207.500 42.000">
+					</polygon>
+					<polygon class="p02" fill="#44A0D1" fill-opacity="0.1"
+						points="207.500 87.000, 323.053 170.954, 278.916 306.796, 136.084 306.796, 91.947 170.954, 207.500 87.000">
+					</polygon>
+					<polygon class="p03" fill="#44A0D1" fill-opacity="0.1"
+						points="207.500 134.000, 278.354 185.478, 251.290 268.772, 163.710 268.772, 136.646 185.478, 207.500 134.000">
+					</polygon>
+					<polygon class="line" fill="#44A0D1" fill-opacity="0.1" stroke="#44A0D1" stroke-width="6"
+						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
+					</polygon>
+					<polygon class="poli" fill="#44A0D1" fill-opacity="0.1" stroke="#44A0D1" stroke-width="6"
+						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
+					</polygon>
+				</g>
+			</svg>
+        <a href="https://ag-compositions.com/"><h1>August Gray</h1></a>
+        <p class="info">Chihuahua, Chih., Méx.</p>
+        <div class="divider"></div> <!-- Línea divisoria -->
+
+        <h2>Links</h2>
+        <a class="link" href="https://github.com/AugustGray" target="_blank">GitHub</a>
+		<a class="link" href="https://ag-compositions.com/" target="_blank">AG Compositions</a>
+		<h3>Otros Proyectos</h3>
+		<a class="link" href="https://insitu-arquitectos.com/" target="_blank">[in] situ</a>
+		<a class="link" href="https://augustgray.github.io/hellodesvu-bootstrap/" target="_blank">Des Vu</a>
+        <a class="link-disabled" href="" >Instagram (Próximamente)</a>
+    </div>
+
+    
+	</main>
+
+	<footer>
+		<p>Powered by August Gray® 2021</p>
+	</footer>
+
+
+
+	<!-- Scripts JS -->
+	<script src="./assets/js/jquery-3.6.js"></script>
+	<script src="./assets/js/wow.min.js"></script>
+	<script src="./assets/js/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('dotted-wave-bg');
+        
+        // Configuration
+        const DOT_SPACING = 25;
+        const DOT_RADIUS = 1;
+        const COLORS = {
+            bg: '#212428',
+            dotBase: '#464D56',
+            dotHighlight: '#54C1FB'
+        };
+
+        let animationTimeline = null;
+
+        // --- 1. Grid Generator ---
+        function createGrid() {
+            // Clear existing SVG if resizing
+            container.innerHTML = '';
+
+            // Stop old animation if running
+            if (animationTimeline) animationTimeline.pause();
+
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const cols = Math.floor(width / DOT_SPACING);
+            const rows = Math.floor(height / DOT_SPACING);
+            const isBottomHalfStart = Math.floor(rows / 2);
+
+            // Create SVG Namespace Element
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+
+            let dots = [];
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    
+                    // Position
+                    circle.setAttribute('cx', j * DOT_SPACING + DOT_SPACING / 2);
+                    circle.setAttribute('cy', i * DOT_SPACING + DOT_SPACING / 2);
+                    circle.setAttribute('r', DOT_RADIUS);
+                    circle.setAttribute('fill', COLORS.dotBase);
+
+                    // Logic: Only animate the bottom half
+                    if (i > isBottomHalfStart) {
+                        circle.classList.add('wave-dot');
+                    }
+                    
+                    svg.appendChild(circle);
+                }
+            }
+
+            container.appendChild(svg);
+
+            // Store grid info for the animation to access
+            startAnimation();
+        }
+
+        // --- 2. The Animation (Ping-Pong Logic) ---
+        function startAnimation() {
+            const targets = document.querySelectorAll('.wave-dot');
+            if (targets.length === 0) return;
+
+            animationTimeline = anime.timeline({
+                loop: true,
+                direction: 'normal',
+            });
+
+            // PHASE 1: Rise (Bottom -> Middle)
+            animationTimeline.add({
+                targets: targets,
+                fill: [
+                    { value: COLORS.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                    { value: COLORS.dotBase, duration: 1000, easing: 'easeInQuad' }
+                ],
+                delay: function(el, i, total) {
+                    const reverseIndex = total - i;
+                    return (reverseIndex * 10) + anime.random(0, 800);
+                }
+            })
+            // PHASE 2: Fall (Middle -> Bottom)
+            .add({
+                targets: targets,
+                fill: [
+                    { value: COLORS.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                    { value: COLORS.dotBase, duration: 1000, easing: 'easeInQuad' }
+                ],
+                delay: function(el, i, total) {
+                    return (i * 10) + anime.random(0, 800);
+                },
+                offset: '-=500' // Overlap logic
+            });
+        }
+
+        // --- 3. Initialization & Resize Handling ---
+        createGrid();
+
+        // Debounce resize (wait for user to finish resizing before regenerating)
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(createGrid, 200);
+        });
+    });
+</script>
+</body>
+
+</html>

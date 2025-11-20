@@ -1,190 +1,590 @@
-<!DOCTYPE html>
-<html lang="es">
 
-<head>
-	<title> August Gray </title>
-	<meta name="description" content="Arquitectura, Diseño Web, Diseño Gráfico, Fotografía, Renders">
-	<meta name="keywords" content="Fotografía, Drone, DSLR, Arquitectura, Diseño, Web, Gráfico, Chihuahua, CUU, México">
-	<meta name="copyright" content="August Gray (c) 2021">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<link rel="icon" type="icon/png" href="./assets/img/agfavicon.png">
-	<!-- Preload -->
-	<link rel="preload" href="./assets/css/mainstyle.css">
-	<link rel="preload" href="./assets/css/animate.min.css">
-	<link rel="preload" href="./assets/js/jquery-3.6.js">
-	<link rel="preload" href="./assets/js/wow.min.js">
-	<link rel="preload" href="./assets/js/index.js">
-	<!-- CSS -->
-	<link rel="stylesheet" href="./assets/css/mainstyle.css">
-	<link rel="stylesheet" href="./assets/css/link-tree.css">
-	<link rel="stylesheet" href="./assets/css/lightbox.css">
-	<link rel="stylesheet" href="./assets/css/animate.min.css">
-</head>
+        <!DOCTYPE html>
+        <html lang="en" data-theme="dark">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Landing Page</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+	        <link rel="preload" href="./assets/css/animate.min.css">
+	        <link rel="preload" href="./assets/js/jquery-3.6.js">
+	        <link rel="preload" href="./assets/js/wow.min.js">
+	        <link rel="preload" href="./assets/js/index.js">
+            <style>
+                html {
+                    scroll-behavior: smooth;
+                }
+                section[id] {
+                    scroll-margin-top: 4rem; /* h-16 navbar height */
+                }
+                .hidden {
+                    display: none !important;
+                }
+                /* Custom Scrollbar */
+                ::-webkit-scrollbar {
+                    width: 12px;
+                    height: 12px;
+                }
+                ::-webkit-scrollbar-track {
+                    background: var(--low-contrast);
+                }
+                ::-webkit-scrollbar-thumb {
+                    background-color: var(--background);
+                    border-radius: 10px;
+                    border: 3px solid var(--low-contrast);
+                }
+                ::-webkit-scrollbar-thumb:hover {
+                    background-color: var(--text);
+                }
+                html[data-theme="light"] {
+                    --primary: #44A8D1;
+                    --secondary: #5AC549;
+                    --background: #E0E5EC;
+                    --low-contrast: #CED2D9;
+                    --high-contrast: #212428;
+                    --text: #464D56;
+                }
+                html[data-theme="dark"] {
+                    --primary: #54C1FB;
+                    --secondary: #6DFB54;
+                    --background: #212428;
+                    --low-contrast: #464D56;
+                    --high-contrast: #E0E5EC;
+                    --text: #CED2D9;
+                }
+                html[data-theme="light"] .logo-dark { display: none; }
+                html[data-theme="light"] .logo-light { display: inline-block; }
+                html[data-theme="dark"] .logo-light { display: none; }
+                html[data-theme="dark"] .logo-dark { display: inline-block; }
+                body, html {
+                    background-color: transparent !important;
+                    /* background-color: var(--background); */
+                    color: var(--high-contrast);
+                    font-family: 'Inter', sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+                #dotted-wave-bg {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: -1; /* Behind everything */
+                    background-color: var(--background);
+                    /* background-color: #212428; /* Your bg color */
+                    transition: background-color 0.3s ease;
+                    overflow: hidden;
+                    pointer-events: none; /* Let clicks pass through */
+                }
+                body.modal-open {
+                    overflow: hidden;
+                }
+                .container {
+                    width: 100%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                }
+                @media (min-width: 640px) { .container { max-width: 640px; } }
+                @media (min-width: 768px) { .container { max-width: 768px; } }
+                @media (min-width: 1024px) { .container { max-width: 1024px; } }
+                @media (min-width: 1280px) { .container { max-width: 1280px; } }
+                #theme-toggle {
+                    position: fixed;
+                    bottom: 1.5rem;
+                    right: 1.5rem;
+                    z-index: 100;
+                    padding: 0.75rem;
+                    border-radius: 9999px;
+                    background-color: var(--low-contrast);
+                    color: var(--high-contrast);
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    transition: all 0.2s;
+                    border: none;
+                    cursor: pointer;
+                }
+                #theme-toggle:hover {
+                    background-color: var(--primary);
+                }
+                html[data-theme="dark"] #sun-icon { display: block; }
+                html[data-theme="dark"] #moon-icon { display: none; }
+                html[data-theme="light"] #sun-icon { display: none; }
+                html[data-theme="light"] #moon-icon { display: block; }
+                .modal-overlay {
+                    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.75);
+                    z-index: 1000;
+                    display: none;
+                    align-items: center; justify-content: center;
+                    padding: 1rem;
+                }
+                .modal-overlay.active { display: flex; }
+                .modal-container {
+                    background-color: var(--background);
+                    color: var(--high-contrast);
+                    border-radius: 0.5rem;
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                    width: 100%;
+                    max-width: 56rem; /* 896px */
+                    height: 90vh;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                }
+                .modal-content { overflow-y: auto; flex-grow: 1; }
+                .modal-close-btn {
+                    position: absolute; top: 0.5rem; right: 0.75rem;
+                    font-size: 2rem; line-height: 1;
+                    color: var(--text); background: none; border: none;
+                    cursor: pointer; z-index: 1010;
+                }
+                .modal-close-btn:hover { color: var(--high-contrast); }
+                .filter-button {
+                    background-color: var(--low-contrast);
+                    color: var(--text);
+                    cursor: pointer;
+                    border: none;
+                    transition: background-color 0.2s, color 0.2s;
+                }
+                .filter-button.active {
+                    background-color: var(--primary);
+                    color: var(--high-contrast);
+                }
+                /* Timeline Styles */
+                .timeline-container {
+                    position: relative;
+                    margin: 0 auto;
+                }
+                .timeline-container::after {
+                    content: '';
+                    position: absolute;
+                    width: 4px;
+                    background-color: var(--low-contrast);
+                    top: 0;
+                    bottom: 0;
+                    left: 50%;
+                    margin-left: -2px;
+                }
+                .timeline-event {
+                    padding: 10px 40px;
+                    position: relative;
+                    width: 50%;
+                }
+                .timeline-event:nth-child(odd) {
+                    left: 0;
+                }
+                .timeline-event:nth-child(even) {
+                    left: 50%;
+                }
+                .timeline-event::after {
+                    content: '';
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+                    right: -10px;
+                    background-color: var(--background);
+                    border: 4px solid var(--primary);
+                    top: 15px;
+                    border-radius: 50%;
+                    z-index: 1;
+                }
+                .timeline-event:nth-child(even)::after {
+                    left: -10px;
+                }
+                .timeline-event-card {
+                    background-color: var(--low-contrast);
+                    border-radius: 6px;
+                    position: relative;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="dotted-wave-bg"></div>
+            
+        <section style="background-color: transparent; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 5rem 1rem;">
+            <div style="width: 100%; max-width: 28rem; background-color: var(--low-contrast); border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; align-items: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                <div style="width: 6rem; height: 6rem; border-radius: 9999px; overflow: hidden; border: 4px solid var(--background); background-color: var(--background); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <img src="./assets/Augusto400.webp" alt="Profile" class="w-full h-full object-cover logo-light"><img src="./assets/Augusto400.webp" alt="Profile" class="w-full h-full object-cover logo-dark">
+                </div>
+                <div style="width: 100%;">
+                    <h2 class="text-2xl font-bold text-center" style="color: var(--high-contrast); margin-bottom: 0.5rem;">August Gray</h2><p class="text-center text-sm" style="color: var(--text); margin-bottom: 1rem;">Chihuahua, Chih., Méx.</p><h3 class="text-2xl font-bold text-center" style="color: var(--high-contrast); margin-bottom: 0.5rem;">Links</h3>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 px-6 rounded-xl text-center font-semibold transition-all shadow-sm hover:shadow-md mb-3" style="background-color: var(--primary); color: var(--background); text-decoration: none; border: 2px solid var(--low-contrast);">
+                    GitHub
+                </a>
+             
+                <a href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 px-6 rounded-xl text-center font-semibold transition-all shadow-sm hover:shadow-md mb-3" style="background-color: var(--primary); color: var(--background); text-decoration: none; border: 2px solid var(--low-contrast);">
+                    AG: Compositions
+                </a>
 
-<body>
-	<div id="dotted-wave-bg"></div>
-	<main>
-			<div class="link-container">
-        <svg width="300" height="auto" viewBox="0 0 415 415" fill="none" xmlns="http://www.w3.org/2000/svg"
-				class="morphing-demo line-drawing-demo delay-3 animated fadeInDown" id="logo">
-				<g fill="none" fill-rule="evenodd" class="lines">
-					<polygon class="p00" fill="#44A0D1" fill-opacity="0.1"
-						points="207.500 0.000, 404.844 143.379, 329.465 375.371, 85.535 375.371, 10.156 143.379, 207.500 0.000">
-					</polygon>
-					<polygon class="p01" fill="#44A0D1" fill-opacity="0.1"
-						points="207.500 42.000, 365.851 157.049, 305.366 343.201, 109.634 343.201, 49.149 157.049, 207.500 42.000">
-					</polygon>
-					<polygon class="p02" fill="#44A0D1" fill-opacity="0.1"
-						points="207.500 87.000, 323.053 170.954, 278.916 306.796, 136.084 306.796, 91.947 170.954, 207.500 87.000">
-					</polygon>
-					<polygon class="p03" fill="#44A0D1" fill-opacity="0.1"
-						points="207.500 134.000, 278.354 185.478, 251.290 268.772, 163.710 268.772, 136.646 185.478, 207.500 134.000">
-					</polygon>
-					<polygon class="line" fill="#44A0D1" fill-opacity="0.1" stroke="#44A0D1" stroke-width="6"
-						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
-					</polygon>
-					<polygon class="poli" fill="#44A0D1" fill-opacity="0.1" stroke="#44A0D1" stroke-width="6"
-						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
-					</polygon>
-				</g>
-			</svg>
-        <a href="https://ag-compositions.com/"><h1>August Gray</h1></a>
-        <p class="info">Chihuahua, Chih., Méx.</p>
-        <div class="divider"></div> <!-- Línea divisoria -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 px-6 rounded-xl text-center font-semibold transition-all shadow-sm hover:shadow-md mb-3" style="background-color: var(--primary); color: var(--background); text-decoration: none; border: 2px solid var(--low-contrast);">
+                    IG: @augustgray
+                </a>
 
-        <h2>Links</h2>
-        <a class="link" href="https://github.com/AugustGray" target="_blank">GitHub</a>
-		<a class="link" href="https://ag-compositions.com/" target="_blank">AG Compositions</a>
-		<h3>Otros Proyectos</h3>
-		<a class="link" href="https://insitu-arquitectos.com/" target="_blank">[in] situ</a>
-		<a class="link" href="https://augustgray.github.io/hellodesvu-bootstrap/" target="_blank">Des Vu</a>
-        <a class="link-disabled" href="" >Instagram (Próximamente)</a>
-    </div>
-
+                <h3 class="text-2xl font-bold text-center" style="color: var(--high-contrast); margin-bottom: 0.5rem;">Otros Proyectos</h3>
+             
+                <a href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 px-6 rounded-xl text-center font-semibold transition-all shadow-sm hover:shadow-md mb-3" style="background-color: var(--primary); color: var(--background); text-decoration: none; border: 2px solid var(--low-contrast);">
+                    [in]situ
+                </a>
+             
+                </div>
+            </div>
+        </section>
     
-	</main>
+            
+            
+        <button id="theme-toggle" title="Toggle theme">
+            <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+    
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Animation Observer
+                    const observerOptions = {
+                        root: null,
+                        rootMargin: '0px',
+                        threshold: 0.2
+                    };
 
-	<footer>
-		<p>Powered by August Gray® 2021</p>
-	</footer>
+                    const observer = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const el = entry.target;
+                                const type = el.dataset.animeType;
+                                const duration = parseInt(el.dataset.animeDuration || '1000');
+                                const delay = parseInt(el.dataset.animeDelay || '0');
+                                const loop = el.dataset.animeLoop === 'true';
+                                const easing = el.dataset.animeEasing || 'easeOutQuad';
 
+                                // Remove opacity 0 override
+                                el.style.opacity = '';
 
+                                let animConfig = {
+                                    targets: el,
+                                    duration: duration,
+                                    delay: delay,
+                                    loop: loop,
+                                    easing: easing
+                                };
 
-	<!-- Scripts JS -->
-	<script src="./assets/js/jquery-3.6.js"></script>
-	<script src="./assets/js/wow.min.js"></script>
-	<script src="./assets/js/index.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+                                if (type === 'fade-in') {
+                                    animConfig.opacity = [0, 1];
+                                } else if (type === 'slide-up') {
+                                    animConfig.opacity = [0, 1];
+                                    animConfig.translateY = [50, 0];
+                                } else if (type === 'slide-down') {
+                                    animConfig.opacity = [0, 1];
+                                    animConfig.translateY = [-50, 0];
+                                } else if (type === 'scale-up') {
+                                    animConfig.opacity = [0, 1];
+                                    animConfig.scale = [0.8, 1];
+                                } else if (type === 'draw-stroke') {
+                                     const paths = el.querySelectorAll('path, circle, rect, line, polyline, polygon, ellipse');
+                                     if (paths.length > 0) {
+                                         animConfig = {
+                                             targets: paths,
+                                             strokeDashoffset: [anime.setDashoffset, 0],
+                                             easing: 'easeInOutSine',
+                                             duration: duration,
+                                             delay: function(el, i) { return i * 250 + delay },
+                                             direction: 'alternate',
+                                             loop: loop
+                                         };
+                                     }
+                                }
+
+                                anime(animConfig);
+                                observer.unobserve(el);
+                            }
+                        });
+                    }, observerOptions);
+
+                    document.querySelectorAll('.anime-element').forEach(el => {
+                        observer.observe(el);
+                    });
+
+                    // Tabs Logic
+                    const tabContainers = document.querySelectorAll('[id^="tabs-"]');
+                    tabContainers.forEach(container => {
+                        const tabs = container.querySelectorAll('[role="tab"]');
+                        const panels = container.querySelectorAll('[role="tabpanel"]');
+                        
+                        tabs.forEach(tab => {
+                            tab.addEventListener('click', () => {
+                                tabs.forEach(t => {
+                                    t.setAttribute('aria-selected', 'false');
+                                    t.style.borderColor = 'transparent';
+                                    t.style.color = 'var(--text)';
+                                });
+                                panels.forEach(p => p.hidden = true);
+                                
+                                tab.setAttribute('aria-selected', 'true');
+                                tab.style.borderColor = 'var(--primary)';
+                                tab.style.color = 'var(--primary)';
+                                const controlledPanelId = tab.getAttribute('aria-controls');
+                                const controlledPanel = document.getElementById(controlledPanelId);
+                                if (controlledPanel) {
+                                    controlledPanel.hidden = false;
+                                }
+                            });
+                        });
+                    });
+
+                    // Carousel Logic
+                    document.querySelectorAll('.carousel-container').forEach(carousel => {
+                        const track = carousel.querySelector('.carousel-track');
+                        const prevBtn = carousel.querySelector('.carousel-prev');
+                        const nextBtn = carousel.querySelector('.carousel-next');
+                        const dots = carousel.querySelectorAll('.carousel-dot');
+                        let currentSlide = 0;
+                        const totalSlides = parseInt(carousel.dataset.totalSlides);
+
+                        const updateCarousel = () => {
+                            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                            dots.forEach((dot, index) => {
+                                dot.style.backgroundColor = index === currentSlide ? 'var(--primary)' : 'rgba(255,255,255,0.5)';
+                            });
+                        };
+
+                        if(prevBtn) {
+                            prevBtn.addEventListener('click', () => {
+                                currentSlide = (currentSlide === 0) ? totalSlides - 1 : currentSlide - 1;
+                                updateCarousel();
+                            });
+                        }
+
+                        if(nextBtn) {
+                            nextBtn.addEventListener('click', () => {
+                                currentSlide = (currentSlide === totalSlides - 1) ? 0 : currentSlide + 1;
+                                updateCarousel();
+                            });
+                        }
+                        
+                        dots.forEach(dot => {
+                            dot.addEventListener('click', (e) => {
+                                currentSlide = parseInt(e.target.dataset.index);
+                                updateCarousel();
+                            });
+                        });
+                    });
+                    
+                    // Theme Toggle
+                    const themeToggleBtn = document.getElementById('theme-toggle');
+                    const htmlEl = document.documentElement;
+
+                    const storedTheme = localStorage.getItem('theme');
+                    if (storedTheme) {
+                        htmlEl.setAttribute('data-theme', storedTheme);
+                    }
+
+                    themeToggleBtn.addEventListener('click', () => {
+                        const currentTheme = htmlEl.getAttribute('data-theme');
+                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                        htmlEl.setAttribute('data-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                    });
+
+                    // Modal Logic
+                    const openModal = (modal) => {
+                        if (modal == null) return;
+                        modal.classList.add('active');
+                        document.body.classList.add('modal-open');
+                    };
+
+                    const closeModal = (modal) => {
+                        if (modal == null) return;
+                        modal.classList.remove('active');
+                        document.body.classList.remove('modal-open');
+                    };
+
+                    const openModalButtons = document.querySelectorAll('[data-modal-target]');
+                    
+                    openModalButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const modal = document.querySelector(button.dataset.modalTarget);
+                            openModal(modal);
+                        });
+                    });
+
+                    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                        overlay.addEventListener('click', (e) => {
+                            if (e.target === overlay) {
+                                closeModal(overlay);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.modal-close-btn, .modal-close-btn-secondary').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const modal = button.closest('.modal-overlay');
+                            closeModal(modal);
+                        });
+                    });
+
+                    // Product Grid Filtering Logic
+                    document.querySelectorAll('.product-grid-section').forEach(grid => {
+                        const filterControls = grid.querySelector('.filter-controls');
+                        if (!filterControls) return;
+
+                        filterControls.addEventListener('click', (event) => {
+                            const button = event.target.closest('.filter-button');
+                            if (!button) return;
+
+                            const category = button.dataset.category;
+                            
+                            filterControls.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                            button.classList.add('active');
+                            
+                            grid.querySelectorAll('.product-card').forEach(card => {
+                                const cardCategories = (card.dataset.categories || '').split(',');
+                                if (category === 'All' || cardCategories.includes(category)) {
+                                    card.classList.remove('hidden');
+                                } else {
+                                    card.classList.add('hidden');
+                                }
+                            });
+                        });
+                    });
+                });
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('dotted-wave-bg');
         
-        // Configuration
-        const DOT_SPACING = 25;
-        const DOT_RADIUS = 1;
-        const COLORS = {
-            bg: '#212428',
-            dotBase: '#464D56',
-            dotHighlight: '#54C1FB'
+        // --- CONFIGURATION ---
+        const PALETTES = {
+            dark: {
+                bg: '#212428',
+                dotBase: '#464D56',
+                dotHighlight: '#54C1FB'
+            },
+            light: {
+                bg: '#E0E5EC',
+                dotBase: '#CED2B9',
+                dotHighlight: '#44A0D1'
+            }
         };
 
         let animationTimeline = null;
+        let resizeTimer;
 
-        // --- 1. Grid Generator ---
+        // --- CORE FUNCTIONS ---
+
         function createGrid() {
-            // Clear existing SVG if resizing
-            container.innerHTML = '';
+            // 1. Read the current theme from the HTML tag (set by your other script)
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const colors = PALETTES[currentTheme];
 
-            // Stop old animation if running
-            if (animationTimeline) animationTimeline.pause();
+            // 2. Apply Background Color
+            // We don't touch the button here, your other script handles that!
+            container.style.backgroundColor = colors.bg;
 
+            // 3. Reset
+            container.innerHTML = ''; 
+            if (animationTimeline) animationTimeline.pause(); 
+
+            // 4. Build Grid
             const width = window.innerWidth;
             const height = window.innerHeight;
+            const DOT_SPACING = 25;
+            const DOT_RADIUS = 1;
             const cols = Math.floor(width / DOT_SPACING);
             const rows = Math.floor(height / DOT_SPACING);
             const isBottomHalfStart = Math.floor(rows / 2);
 
-            // Create SVG Namespace Element
             const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             svg.setAttribute('width', '100%');
             svg.setAttribute('height', '100%');
 
-            let dots = [];
+            let hasDots = false;
 
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
                     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                    
-                    // Position
                     circle.setAttribute('cx', j * DOT_SPACING + DOT_SPACING / 2);
                     circle.setAttribute('cy', i * DOT_SPACING + DOT_SPACING / 2);
                     circle.setAttribute('r', DOT_RADIUS);
-                    circle.setAttribute('fill', COLORS.dotBase);
+                    circle.setAttribute('fill', colors.dotBase); 
 
-                    // Logic: Only animate the bottom half
                     if (i > isBottomHalfStart) {
                         circle.classList.add('wave-dot');
+                        hasDots = true;
                     }
-                    
                     svg.appendChild(circle);
                 }
             }
-
             container.appendChild(svg);
 
-            // Store grid info for the animation to access
-            startAnimation();
+            if (hasDots) startAnimation(colors);
         }
 
-        // --- 2. The Animation (Ping-Pong Logic) ---
-        function startAnimation() {
+        function startAnimation(colors) {
             const targets = document.querySelectorAll('.wave-dot');
-            if (targets.length === 0) return;
-
+            
             animationTimeline = anime.timeline({
                 loop: true,
                 direction: 'normal',
             });
 
-            // PHASE 1: Rise (Bottom -> Middle)
+            // Phase 1: Rise
             animationTimeline.add({
                 targets: targets,
                 fill: [
-                    { value: COLORS.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
-                    { value: COLORS.dotBase, duration: 1000, easing: 'easeInQuad' }
+                    { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                    { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
                 ],
                 delay: function(el, i, total) {
                     const reverseIndex = total - i;
                     return (reverseIndex * 10) + anime.random(0, 800);
                 }
             })
-            // PHASE 2: Fall (Middle -> Bottom)
+            // Phase 2: Fall
             .add({
                 targets: targets,
                 fill: [
-                    { value: COLORS.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
-                    { value: COLORS.dotBase, duration: 1000, easing: 'easeInQuad' }
+                    { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                    { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
                 ],
                 delay: function(el, i, total) {
                     return (i * 10) + anime.random(0, 800);
                 },
-                offset: '-=500' // Overlap logic
+                offset: '-=500'
             });
         }
 
-        // --- 3. Initialization & Resize Handling ---
+        // --- THE MAGIC GLUE ---
+        
+        // 1. Initial Draw
         createGrid();
 
-        // Debounce resize (wait for user to finish resizing before regenerating)
-        let resizeTimer;
+        // 2. Watch for Theme Changes (MutationObserver)
+        // This waits for your Main Script to update 'data-theme' on the <html> tag
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    createGrid(); // Repaint grid when theme changes
+                }
+            });
+        });
+        
+        // Start watching the <html> tag
+        observer.observe(document.documentElement, { attributes: true });
+
+        // 3. Resize Handler
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(createGrid, 200);
         });
     });
 </script>
-</body>
-
-</html>
+        </body>
+        </html>
+    
