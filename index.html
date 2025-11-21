@@ -1,439 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 
-        <!DOCTYPE html>
-        <html lang="en" data-theme="dark">
-        <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Landing Page</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-            <!-- Copy this and the assets folder -->
-            <link rel="stylesheet" href="./assets/css/animate.min.css">
-            <!-- AnimeJS for animations -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-            <style>
-                html {
-                    scroll-behavior: smooth;
-                }
-                section[id] {
-                    scroll-margin-top: 4rem; /* h-16 navbar height */
-                }
-                .hidden {
-                    display: none !important;
-                }
-                /* Custom Scrollbar */
-                ::-webkit-scrollbar {
-                    width: 12px;
-                    height: 12px;
-                }
-                ::-webkit-scrollbar-track {
-                    background: var(--low-contrast);
-                }
-                ::-webkit-scrollbar-thumb {
-                    background-color: var(--background);
-                    border-radius: 10px;
-                    border: 3px solid var(--low-contrast);
-                }
-                ::-webkit-scrollbar-thumb:hover {
-                    background-color: var(--text);
-                }
-                html[data-theme="light"] {
-                    --primary: #44A8D1;
-                    --secondary: #5AC549;
-                    --background: #E0E5EC;
-                    --low-contrast: #CED2D9;
-                    --high-contrast: #212428;
-                    --text: #464D56;
-                    --tags: #212428;
-                    --shadow: #464d5622;
-                }
-                html[data-theme="dark"] {
-                    --primary: #54C1FB;
-                    --secondary: #6DFB54;
-                    --background: #212428;
-                    --low-contrast: #464D56;
-                    --high-contrast: #E0E5EC;
-                    --text: #CED2D9;
-                    --tags: #212428;
-                    --shadow: #00000044;
-                }
-                html[data-theme="light"] .logo-dark { display: none; }
-                html[data-theme="light"] .logo-light { display: inline-block; }
-                html[data-theme="dark"] .logo-light { display: none; }
-                html[data-theme="dark"] .logo-dark { display: inline-block; }
-                body, html {
-                    background-color: transparent !important;
-                    /* background-color: var(--background); */
-                    color: var(--high-contrast);
-                    font-family: 'Inter', sans-serif;
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                }
-                body.modal-open {
-                    overflow: hidden;
-                }
-                #dotted-wave-bg {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: -1; /* Behind everything */
-                    background-color: var(--background);
-                    /* background-color: #212428; /* Your bg color */
-                    overflow: hidden;
-                    pointer-events: none; /* Let clicks pass through */
-                }
-                .container {
-                    background-color: var(--background);
-                    width: 75vw;
-                    margin-left: auto;
-                    margin-right: auto;
-                    padding-left: 1.5rem;
-                    padding-right: 1.5rem;
-                    padding-top: 3rem;
-                    padding-bottom: 3rem;
-                    box-shadow: 0 0 20px 5px var(--shadow);
-                    clip-path: inset(0px -15px 0px -15px);
-                }
-                /* Copy this css */
-                #hero-img {
-                    display: block;
-                    margin: auto;
-                    text-align: center;
-                }
-                #hero-img svg {
-                    display: unset;
-                }
-                @media (min-width: 640px) { .container { width: 100vw; max-width: 640px; } }
-                @media (min-width: 768px) { .container { width: 100vw; max-width: 768px; } }
-                @media (min-width: 1024px) { .container { width: 100vw; max-width: 1024px; } }
-                @media (min-width: 1280px) { .container { width: 100vw; max-width: 1280px; } }
-                #theme-toggle {
-                    position: fixed;
-                    bottom: 1.5rem;
-                    right: 1.5rem;
-                    z-index: 100;
-                    padding: 0.75rem;
-                    border-radius: 9999px;
-                    background-color: var(--low-contrast);
-                    color: var(--high-contrast);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                    transition: all 0.2s;
-                    border: none;
-                    cursor: pointer;
-                }
-                #theme-toggle:hover {
-                    background-color: var(--primary);
-                }
-                html[data-theme="dark"] #sun-icon { display: block; }
-                html[data-theme="dark"] #moon-icon { display: none; }
-                html[data-theme="light"] #sun-icon { display: none; }
-                html[data-theme="light"] #moon-icon { display: block; }
-                .modal-overlay {
-                    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-                    background-color: rgba(0, 0, 0, 0.75);
-                    z-index: 1000;
-                    display: none;
-                    align-items: center; justify-content: center;
-                    padding: 1rem;
-                }
-                .modal-overlay.active { display: flex; }
-                .modal-container {
-                    background-color: var(--background);
-                    color: var(--high-contrast);
-                    border-radius: 0.5rem;
-                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-                    width: 100%;
-                    max-width: 56rem; /* 896px */
-                    height: 90vh;
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    overflow: hidden;
-                }
-                .modal-content { overflow-y: auto; flex-grow: 1; }
-                .modal-close-btn {
-                    position: absolute; top: 0.5rem; right: 0.75rem;
-                    font-size: 2rem; line-height: 1;
-                    color: var(--text); background: none; border: none;
-                    cursor: pointer; z-index: 1010;
-                }
-                .modal-close-btn:hover { color: var(--high-contrast); }
-                .filter-button {
-                    background-color: var(--low-contrast);
-                    color: var(--text);
-                    cursor: pointer;
-                    border: none;
-                    transition: background-color 0.2s, color 0.2s;
-                }
-                .filter-button.active {
-                    background-color: var(--primary);
-                    color: var(--high-contrast);
-                }
-                /* Timeline Styles */
-                .timeline-container {
-                    position: relative;
-                    margin: 0 auto;
-                }
-                .timeline-container::after {
-                    content: '';
-                    position: absolute;
-                    width: 4px;
-                    background-color: var(--low-contrast);
-                    top: 0;
-                    bottom: 0;
-                    left: 50%;
-                    margin-left: -2px;
-                }
-                .timeline-event {
-                    padding: 10px 40px;
-                    position: relative;
-                    width: 50%;
-                }
-                .timeline-event:nth-child(odd) {
-                    left: 0;
-                }
-                .timeline-event:nth-child(even) {
-                    left: 50%;
-                }
-                .timeline-event::after {
-                    content: '';
-                    position: absolute;
-                    width: 20px;
-                    height: 20px;
-                    right: -10px;
-                    background-color: var(--background);
-                    border: 4px solid var(--primary);
-                    top: 15px;
-                    border-radius: 50%;
-                    z-index: 1;
-                }
-                .timeline-event:nth-child(even)::after {
-                    left: -10px;
-                }
-                .timeline-event-card {
-                    background-color: var(--low-contrast);
-                    border-radius: 6px;
-                    position: relative;
-                }
-            </style>
-        </head>
-        <body>
-            <div id="dotted-wave-bg"></div>
-            
-        <section class="relative" style="background-color: transparent;">
-            <div class="absolute top-6 left-6 z-20"><div class=""><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzk3IiBoZWlnaHQ9IjM3MyIgdmlld0JveD0iMCAwIDM5NyAzNzMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yNzIuNjc0IDEwOS4wNjNMMjcyLjg4IDEwOS4zNjZMMjczLjIzMyAxMDkuNDY0TDM5NS4wNSAxNDMuMTM3TDM0Mi4xMSAyNDYuNTQ0TDM0Mi4wMzggMjQ2LjY4NUwzNDIuMDEzIDI0Ni44NEwzMjEuNzU0IDM3MS4zNTRMMjY3LjAzIDMzNy4xNTJMMjY2Ljg4NyAzMzcuMDYyTDI2Ni43MjEgMzM3LjAyNEwyMTguMjIxIDMyNi4wMjRMMjE3Ljk1MSAzMjUuOTY0TDIxNy42ODggMzI2LjA1TDgwLjA2MjUgMzcxLjFMODUuOTk5IDIzNi41NDRMODYuMDEyNyAyMzYuMjQ0TDg1Ljg1ODQgMjM1Ljk4Nkw1Ni44NTg0IDE4Ny40ODZMNTYuNzY3NiAxODcuMzM1TDU2LjYyOTkgMTg3LjIyNEwyLjMxMTUyIDE0My4xODJMMTE0Ljk2MyA4NC4zODY3TDExNS4wOTUgODQuMzE3NEwxMTUuMjAxIDg0LjIxMjlMMTk5LjM0NyAxLjU1MDc4TDI3Mi42NzQgMTA5LjA2M1oiIGZpbGw9IiM0NEEwRDEiIGZpbGwtb3BhY2l0eT0iMC4xIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljc3NSAxNzAuNDhMMjQ0LjM4MSAyNjcuMTVMMTI3Ljk0IDMwNS4zMDNMMzguNzY2NiAxNTkuMTU3TDE5OS4zNDggMS41NDk4TDMxNC43NzUgMTcwLjQ4WiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM5NS4wNTUgMTQzLjEzN0wyOTMuNDYxIDM0My4zNTJMMTI4LjEzMyAzMDUuNjE5TDM4Ljk0NTMgMTU5LjQ1TDE5OC4wNzggODguNTU4NkwzOTUuMDU1IDE0My4xMzdaIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzU2Ljg4NyAxNTkuNTk4TDMyMS43NTggMzcxLjM2MkwxNTQuNTgzIDI2Ny42ODVMMi4xMjU5OCAxNDMuNDQyTDE5Ny45MjEgODguNTU5NkwzNTYuODg3IDE1OS41OThaIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljg3NyAxNzAuNzQyTDI3Mi4xOTcgMzA4LjIxMUw3OS41NTQ3IDM3MS42TDg3LjQ4NTQgMTY4Ljg4OEwxOTguNTEyIDQwLjAxNzZMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTMxNC44NzcgMTcwLjc0MkwyNzIuMzUyIDMwNy43MTRMMTU0Ljk5NyAyNjYuNjE0TDMuMzAxNzYgMTQzLjY3M0wxOTguMjc1IDM5Ljc1MjlMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTI3Mi4yMTggMjIyLjg4NkMyNzAuMDE5IDIyMi44ODYgMjY4LjEzNiAyMjIuMTEyIDI2Ni41NjggMjIwLjU2NUMyNjUuMDIxIDIxOS4wMTcgMjY0LjI1NyAyMTcuMTQ0IDI2NC4yNzggMjE0Ljk0NUMyNjQuMjU3IDIxMi43ODcgMjY1LjAyMSAyMTAuOTQ1IDI2Ni41NjggMjA5LjQxOEMyNjguMTM2IDIwNy44NyAyNzAuMDE5IDIwNy4wOTcgMjcyLjIxOCAyMDcuMDk3QzI3NC4yOTUgMjA3LjA5NyAyNzYuMTI3IDIwNy44NyAyNzcuNzE1IDIwOS40MThDMjc5LjMyNCAyMTAuOTQ1IDI4MC4xMzggMjEyLjc4NyAyODAuMTU4IDIxNC45NDVDMjgwLjEzOCAyMTYuNDExIDI3OS43NTEgMjE3Ljc0NSAyNzguOTk4IDIxOC45NDZDMjc4LjI2NSAyMjAuMTQ3IDI3Ny4yOTggMjIxLjEwNCAyNzYuMDk3IDIyMS44MTdDMjc0LjkxNiAyMjIuNTI5IDI3My42MjMgMjIyLjg4NiAyNzIuMjE4IDIyMi44ODZaIiBmaWxsPSIjMjEyNDI4Ii8+CjxwYXRoIGQ9Ik0yMzAuNTA4IDI0MC41NjhDMjI2LjA0OSAyNDAuNTY4IDIyMi4yMzIgMjM5Ljk0NyAyMTkuMDU2IDIzOC43MDVDMjE1Ljg4IDIzNy40NjMgMjEzLjM4NiAyMzUuNzYzIDIxMS41NzQgMjMzLjYwNUMyMDkuNzYyIDIzMS40NDcgMjA4LjY3MiAyMjkuMDA0IDIwOC4zMDYgMjI2LjI3NUwyMjIuNDQ2IDIyNS40ODFDMjIyLjcxIDIyNi40MzggMjIzLjE5OSAyMjcuMjczIDIyMy45MTIgMjI3Ljk4NkMyMjQuNjQ1IDIyOC42OTggMjI1LjU5MSAyMjkuMjQ4IDIyNi43NTIgMjI5LjYzNUMyMjcuOTMzIDIzMC4wMjIgMjI5LjMxNyAyMzAuMjE1IDIzMC45MDUgMjMwLjIxNUMyMzMuNDEgMjMwLjIxNSAyMzUuNDc2IDIyOS42MDQgMjM3LjEwNSAyMjguMzgzQzIzOC43NTQgMjI3LjE4MSAyMzkuNTc5IDIyNS4wNzQgMjM5LjU3OSAyMjIuMDYxVjIxMy44MTVIMjM5LjA1OUMyMzguNDY5IDIxNS4yNjEgMjM3LjU3MyAyMTYuNTU0IDIzNi4zNzIgMjE3LjY5NEMyMzUuMTcxIDIxOC44MzQgMjMzLjY3NCAyMTkuNzMgMjMxLjg4MyAyMjAuMzgxQzIzMC4xMTEgMjIxLjAzMyAyMjguMDc1IDIyMS4zNTkgMjI1Ljc3NSAyMjEuMzU5QzIyMi4zNTQgMjIxLjM1OSAyMTkuMjE5IDIyMC41NjQgMjE2LjM2OCAyMTguOTc2QzIxMy41MzggMjE3LjM2OCAyMTEuMjY4IDIxNC44ODQgMjA5LjU1OCAyMTEuNTI1QzIwNy44NjggMjA4LjE0NSAyMDcuMDIzIDIwMy43OTggMjA3LjAyMyAxOTguNDg0QzIwNy4wMjMgMTkzLjAwNyAyMDcuODk5IDE4OC40OTggMjA5LjY1IDE4NC45NTVDMjExLjQwMSAxODEuMzkyIDIxMy42OTEgMTc4Ljc1NiAyMTYuNTIxIDE3Ny4wNDVDMjE5LjM3MSAxNzUuMzM1IDIyMi40MzYgMTc0LjQ4IDIyNS43MTQgMTc0LjQ4QzIyOC4xNzcgMTc0LjQ4IDIzMC4yODQgMTc0LjkwOCAyMzIuMDM1IDE3NS43NjNDMjMzLjgwNyAxNzYuNTk3IDIzNS4yNjIgMTc3LjY3NiAyMzYuNDAyIDE3OUMyMzcuNTQzIDE4MC4zMjMgMjM4LjQwOCAxODEuNjk4IDIzOC45OTggMTgzLjEyM0gyMzkuNDI2VjE3NS4wOTFIMjU0LjI5OVYyMjIuMTgzQzI1NC4yOTkgMjI2LjE1MyAyNTMuMzAxIDIyOS41MDIgMjUxLjMwNiAyMzIuMjMxQzI0OS4zMTEgMjM0Ljk1OSAyNDYuNTIxIDIzNy4wMjUgMjQyLjkzOCAyMzguNDNDMjM5LjM1NSAyMzkuODU1IDIzNS4yMTEgMjQwLjU2OCAyMzAuNTA4IDI0MC41NjhaTTIzMC45NjYgMjEwLjQ4NkMyMzIuNzc4IDIxMC40ODYgMjM0LjMyNiAyMTAuMDA4IDIzNS42MDggMjA5LjA1MUMyMzYuODkxIDIwOC4wOTQgMjM3Ljg3OSAyMDYuNzIgMjM4LjU3MSAyMDQuOTI4QzIzOS4yNjMgMjAzLjEzNiAyMzkuNjA5IDIwMC45ODkgMjM5LjYwOSAxOTguNDg0QzIzOS42MDkgMTk1LjkzOSAyMzkuMjYzIDE5My43NTEgMjM4LjU3MSAxOTEuOTE4QzIzNy44OTkgMTkwLjA2NSAyMzYuOTExIDE4OC42NCAyMzUuNjA4IDE4Ny42NDNDMjM0LjMyNiAxODYuNjQ1IDIzMi43NzggMTg2LjE0NiAyMzAuOTY2IDE4Ni4xNDZDMjI5LjExNCAxODYuMTQ2IDIyNy41NDYgMTg2LjY1NSAyMjYuMjYzIDE4Ny42NzNDMjI0Ljk4MSAxODguNjkxIDIyNC4wMDMgMTkwLjEyNyAyMjMuMzMxIDE5MS45NzlDMjIyLjY4IDE5My44MTIgMjIyLjM1NCAxOTUuOTggMjIyLjM1NCAxOTguNDg0QzIyMi4zNTQgMjAwLjk4OSAyMjIuNjkgMjAzLjEzNiAyMjMuMzYyIDIwNC45MjhDMjI0LjAzNCAyMDYuNzIgMjI1LjAwMSAyMDguMDk0IDIyNi4yNjMgMjA5LjA1MUMyMjcuNTQ2IDIxMC4wMDggMjI5LjExNCAyMTAuNDg2IDIzMC45NjYgMjEwLjQ4NloiIGZpbGw9IiMyMTI0MjgiLz4KPHBhdGggZD0iTTE1OC43NjMgMjIySDE0Mi41MTZMMTYzLjYxOSAxNTkuNDU1SDE4My43NDRMMjA0Ljg0NyAyMjJIMTg4LjZMMTczLjkxMSAxNzUuMjEzSDE3My40MjJMMTU4Ljc2MyAyMjJaTTE1Ni41OTQgMTk3LjM4NUgxOTAuNTU1VjIwOC44NjhIMTU2LjU5NFYxOTcuMzg1WiIgZmlsbD0iIzIxMjQyOCIvPgo8L3N2Zz4K" alt="Company Logo" class="h-12 sm:h-14 logo-light"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzk3IiBoZWlnaHQ9IjM3MyIgdmlld0JveD0iMCAwIDM5NyAzNzMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yNzIuNjc0IDEwOS4wNjNMMjcyLjg4IDEwOS4zNjZMMjczLjIzMyAxMDkuNDY0TDM5NS4wNSAxNDMuMTM3TDM0Mi4xMSAyNDYuNTQ0TDM0Mi4wMzggMjQ2LjY4NUwzNDIuMDEzIDI0Ni44NEwzMjEuNzU0IDM3MS4zNTRMMjY3LjAzIDMzNy4xNTJMMjY2Ljg4NyAzMzcuMDYyTDI2Ni43MjEgMzM3LjAyNEwyMTguMjIxIDMyNi4wMjRMMjE3Ljk1MSAzMjUuOTY0TDIxNy42ODggMzI2LjA1TDgwLjA2MjUgMzcxLjFMODUuOTk5IDIzNi41NDRMODYuMDEyNyAyMzYuMjQ0TDg1Ljg1ODQgMjM1Ljk4Nkw1Ni44NTg0IDE4Ny40ODZMNTYuNzY3NiAxODcuMzM1TDU2LjYyOTkgMTg3LjIyNEwyLjMxMTUyIDE0My4xODJMMTE0Ljk2MyA4NC4zODY3TDExNS4wOTUgODQuMzE3NEwxMTUuMjAxIDg0LjIxMjlMMTk5LjM0NyAxLjU1MDc4TDI3Mi42NzQgMTA5LjA2M1oiIGZpbGw9IiM1NEMxRkIiIGZpbGwtb3BhY2l0eT0iMC4xIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljc3NSAxNzAuNDhMMjQ0LjM4MSAyNjcuMTVMMTI3Ljk0IDMwNS4zMDNMMzguNzY2NiAxNTkuMTU3TDE5OS4zNDggMS41NDk4TDMxNC43NzUgMTcwLjQ4WiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM5NS4wNTUgMTQzLjEzN0wyOTMuNDYxIDM0My4zNTJMMTI4LjEzMyAzMDUuNjE5TDM4Ljk0NTMgMTU5LjQ1TDE5OC4wNzggODguNTU4NkwzOTUuMDU1IDE0My4xMzdaIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzU2Ljg4NyAxNTkuNTk4TDMyMS43NTggMzcxLjM2MkwxNTQuNTgzIDI2Ny42ODVMMi4xMjU5OCAxNDMuNDQyTDE5Ny45MjEgODguNTU5NkwzNTYuODg3IDE1OS41OThaIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljg3NyAxNzAuNzQyTDI3Mi4xOTcgMzA4LjIxMUw3OS41NTQ3IDM3MS42TDg3LjQ4NTQgMTY4Ljg4OEwxOTguNTEyIDQwLjAxNzZMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTMxNC44NzcgMTcwLjc0MkwyNzIuMzUyIDMwNy43MTRMMTU0Ljk5NyAyNjYuNjE0TDMuMzAxNzYgMTQzLjY3M0wxOTguMjc1IDM5Ljc1MjlMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTI3Mi4yMTggMjIyLjg4NkMyNzAuMDE5IDIyMi44ODYgMjY4LjEzNiAyMjIuMTEyIDI2Ni41NjggMjIwLjU2NUMyNjUuMDIxIDIxOS4wMTcgMjY0LjI1NyAyMTcuMTQ0IDI2NC4yNzggMjE0Ljk0NUMyNjQuMjU3IDIxMi43ODcgMjY1LjAyMSAyMTAuOTQ1IDI2Ni41NjggMjA5LjQxOEMyNjguMTM2IDIwNy44NyAyNzAuMDE5IDIwNy4wOTcgMjcyLjIxOCAyMDcuMDk3QzI3NC4yOTUgMjA3LjA5NyAyNzYuMTI3IDIwNy44NyAyNzcuNzE1IDIwOS40MThDMjc5LjMyNCAyMTAuOTQ1IDI4MC4xMzggMjEyLjc4NyAyODAuMTU4IDIxNC45NDVDMjgwLjEzOCAyMTYuNDExIDI3OS43NTEgMjE3Ljc0NSAyNzguOTk4IDIxOC45NDZDMjc4LjI2NSAyMjAuMTQ3IDI3Ny4yOTggMjIxLjEwNCAyNzYuMDk3IDIyMS44MTdDMjc0LjkxNiAyMjIuNTI5IDI3My42MjMgMjIyLjg4NiAyNzIuMjE4IDIyMi44ODZaIiBmaWxsPSIjRTBFNUVDIi8+CjxwYXRoIGQ9Ik0yMzAuNTA4IDI0MC41NjhDMjI2LjA1IDI0MC41NjggMjIyLjIzMiAyMzkuOTQ3IDIxOS4wNTYgMjM4LjcwNUMyMTUuODggMjM3LjQ2MyAyMTMuMzg2IDIzNS43NjMgMjExLjU3NCAyMzMuNjA1QzIwOS43NjIgMjMxLjQ0NyAyMDguNjcyIDIyOS4wMDQgMjA4LjMwNiAyMjYuMjc1TDIyMi40NDYgMjI1LjQ4MUMyMjIuNzExIDIyNi40MzggMjIzLjE5OSAyMjcuMjczIDIyMy45MTIgMjI3Ljk4NkMyMjQuNjQ1IDIyOC42OTggMjI1LjU5MSAyMjkuMjQ4IDIyNi43NTIgMjI5LjYzNUMyMjcuOTMzIDIzMC4wMjIgMjI5LjMxNyAyMzAuMjE1IDIzMC45MDUgMjMwLjIxNUMyMzMuNDEgMjMwLjIxNSAyMzUuNDc2IDIyOS42MDQgMjM3LjEwNSAyMjguMzgzQzIzOC43NTQgMjI3LjE4MSAyMzkuNTc5IDIyNS4wNzQgMjM5LjU3OSAyMjIuMDYxVjIxMy44MTVIMjM5LjA1OUMyMzguNDY5IDIxNS4yNjEgMjM3LjU3MyAyMTYuNTU0IDIzNi4zNzIgMjE3LjY5NEMyMzUuMTcxIDIxOC44MzQgMjMzLjY3NCAyMTkuNzMgMjMxLjg4MyAyMjAuMzgxQzIzMC4xMTEgMjIxLjAzMyAyMjguMDc1IDIyMS4zNTkgMjI1Ljc3NSAyMjEuMzU5QzIyMi4zNTQgMjIxLjM1OSAyMTkuMjE5IDIyMC41NjQgMjE2LjM2OCAyMTguOTc2QzIxMy41MzggMjE3LjM2OCAyMTEuMjY4IDIxNC44ODQgMjA5LjU1OCAyMTEuNTI1QzIwNy44NjggMjA4LjE0NSAyMDcuMDIzIDIwMy43OTggMjA3LjAyMyAxOTguNDg0QzIwNy4wMjMgMTkzLjAwNyAyMDcuODk5IDE4OC40OTggMjA5LjY1IDE4NC45NTVDMjExLjQwMSAxODEuMzkyIDIxMy42OTEgMTc4Ljc1NiAyMTYuNTIxIDE3Ny4wNDVDMjE5LjM3MiAxNzUuMzM1IDIyMi40MzYgMTc0LjQ4IDIyNS43MTQgMTc0LjQ4QzIyOC4xNzcgMTc0LjQ4IDIzMC4yODQgMTc0LjkwOCAyMzIuMDM1IDE3NS43NjNDMjMzLjgwNyAxNzYuNTk3IDIzNS4yNjIgMTc3LjY3NiAyMzYuNDAzIDE3OUMyMzcuNTQzIDE4MC4zMjMgMjM4LjQwOCAxODEuNjk4IDIzOC45OTggMTgzLjEyM0gyMzkuNDI2VjE3NS4wOTFIMjU0LjI5OVYyMjIuMTgzQzI1NC4yOTkgMjI2LjE1MyAyNTMuMzAxIDIyOS41MDIgMjUxLjMwNiAyMzIuMjMxQzI0OS4zMTEgMjM0Ljk1OSAyNDYuNTIxIDIzNy4wMjUgMjQyLjkzOCAyMzguNDNDMjM5LjM1NSAyMzkuODU1IDIzNS4yMTEgMjQwLjU2OCAyMzAuNTA4IDI0MC41NjhaTTIzMC45NjYgMjEwLjQ4NkMyMzIuNzc4IDIxMC40ODYgMjM0LjMyNiAyMTAuMDA4IDIzNS42MDggMjA5LjA1MUMyMzYuODkxIDIwOC4wOTQgMjM3Ljg3OSAyMDYuNzIgMjM4LjU3MSAyMDQuOTI4QzIzOS4yNjMgMjAzLjEzNiAyMzkuNjA5IDIwMC45ODkgMjM5LjYwOSAxOTguNDg0QzIzOS42MDkgMTk1LjkzOSAyMzkuMjYzIDE5My43NTEgMjM4LjU3MSAxOTEuOTE4QzIzNy44OTkgMTkwLjA2NSAyMzYuOTEyIDE4OC42NCAyMzUuNjA4IDE4Ny42NDNDMjM0LjMyNiAxODYuNjQ1IDIzMi43NzggMTg2LjE0NiAyMzAuOTY2IDE4Ni4xNDZDMjI5LjExNCAxODYuMTQ2IDIyNy41NDYgMTg2LjY1NSAyMjYuMjYzIDE4Ny42NzNDMjI0Ljk4MSAxODguNjkxIDIyNC4wMDMgMTkwLjEyNyAyMjMuMzMxIDE5MS45NzlDMjIyLjY4IDE5My44MTIgMjIyLjM1NCAxOTUuOTggMjIyLjM1NCAxOTguNDg0QzIyMi4zNTQgMjAwLjk4OSAyMjIuNjkgMjAzLjEzNiAyMjMuMzYyIDIwNC45MjhDMjI0LjAzNCAyMDYuNzIgMjI1LjAwMSAyMDguMDk0IDIyNi4yNjMgMjA5LjA1MUMyMjcuNTQ2IDIxMC4wMDggMjI5LjExNCAyMTAuNDg2IDIzMC45NjYgMjEwLjQ4NloiIGZpbGw9IiNFMEU1RUMiLz4KPHBhdGggZD0iTTE1OC43NjMgMjIySDE0Mi41MTZMMTYzLjYxOSAxNTkuNDU1SDE4My43NDRMMjA0Ljg0NyAyMjJIMTg4LjZMMTczLjkxMSAxNzUuMjEzSDE3My40MjJMMTU4Ljc2MyAyMjJaTTE1Ni41OTQgMTk3LjM4NUgxOTAuNTU1VjIwOC44NjhIMTU2LjU5NFYxOTcuMzg1WiIgZmlsbD0iI0UwRTVFQyIvPgo8L3N2Zz4K" alt="Company Logo" class="h-12 sm:h-14 logo-dark"></div></div>
-            <div class="container mx-auto px-6 py-20 lg:py-32 grid grid-cols-1 gap-12 items-center">
-                <div class="text-center ">
-                  <!-- Copy this -->
-                   <div id="hero-img" class="space-y-4"><svg width="300" height="auto" viewBox="0 0 415 415" fill="none" xmlns="http://www.w3.org/2000/svg"
-				class="morphing-demo line-drawing-demo delay-3 animated fadeInDown" id="logo">
-				<g fill="none" fill-rule="evenodd" class="lines">
-					<polygon class="p00" fill="var(--primary)" fill-opacity="0.1"
-						points="207.500 0.000, 404.844 143.379, 329.465 375.371, 85.535 375.371, 10.156 143.379, 207.500 0.000">
-					</polygon>
-					<polygon class="p01" fill="var(--primary)" fill-opacity="0.1"
-						points="207.500 42.000, 365.851 157.049, 305.366 343.201, 109.634 343.201, 49.149 157.049, 207.500 42.000">
-					</polygon>
-					<polygon class="p02" fill="var(--primary)" fill-opacity="0.1"
-						points="207.500 87.000, 323.053 170.954, 278.916 306.796, 136.084 306.796, 91.947 170.954, 207.500 87.000">
-					</polygon>
-					<polygon class="p03" fill="var(--primary)" fill-opacity="0.1"
-						points="207.500 134.000, 278.354 185.478, 251.290 268.772, 163.710 268.772, 136.646 185.478, 207.500 134.000">
-					</polygon>
-					<polygon class="line" stroke="var(--primary)" stroke-width="3"
-						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
-					</polygon>
-					<polygon class="poli" stroke="var(--primary)" stroke-width="3"
-						points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
-					</polygon>
-				</g>
-			</svg><h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold !leading-tight" style="color: var(--high-contrast); ">August Gray Compositions</h1><p class="mt-4 text-lg md:text-xl" style="color: var(--text); ">Taller de Comunicación Visual</p></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Copy this and the assets folder -->
+    <link rel="stylesheet" href="./assets/css/animate.min.css">
+    <!-- AnimeJS for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section[id] {
+            scroll-margin-top: 4rem;
+            /* h-16 navbar height */
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--low-contrast);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--background);
+            border-radius: 10px;
+            border: 3px solid var(--low-contrast);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--text);
+        }
+
+        html[data-theme="light"] {
+            --primary: #44A8D1;
+            --secondary: #5AC549;
+            --background: #E0E5EC;
+            --low-contrast: #CED2D9;
+            --high-contrast: #212428;
+            --text: #464D56;
+            --tags: #212428;
+            --shadow: #464d5622;
+        }
+
+        html[data-theme="dark"] {
+            --primary: #54C1FB;
+            --secondary: #6DFB54;
+            --background: #212428;
+            --low-contrast: #464D56;
+            --high-contrast: #E0E5EC;
+            --text: #CED2D9;
+            --tags: #212428;
+            --shadow: #00000044;
+        }
+
+        html[data-theme="light"] .logo-dark {
+            display: none;
+        }
+
+        html[data-theme="light"] .logo-light {
+            display: inline-block;
+        }
+
+        html[data-theme="dark"] .logo-light {
+            display: none;
+        }
+
+        html[data-theme="dark"] .logo-dark {
+            display: inline-block;
+        }
+
+        body,
+        html {
+            background-color: transparent !important;
+            /* background-color: var(--background); */
+            color: var(--high-contrast);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        #dotted-wave-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Behind everything */
+            background-color: var(--background);
+            /* background-color: #212428; /* Your bg color */
+            overflow: hidden;
+            pointer-events: none;
+            /* Let clicks pass through */
+        }
+
+        .container {
+            background-color: var(--background);
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            box-shadow: 0 0 20px 5px var(--shadow);
+            clip-path: inset(0px -15px 0px -15px);
+        }
+
+        /* Copy this css */
+        #hero-img {
+            display: block;
+            margin: auto;
+            text-align: center;
+        }
+
+        #hero-img svg {
+            display: unset;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                width: 100vw;
+                max-width: 640px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                width: 100vw;
+                max-width: 768px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                width: 100vw;
+                max-width: 1024px;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container {
+                width: 100vw;
+                max-width: 1280px;
+            }
+        }
+
+        #theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            padding: 0.75rem;
+            border-radius: 9999px;
+            background-color: var(--low-contrast);
+            color: var(--high-contrast);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--primary);
+        }
+
+        html[data-theme="dark"] #sun-icon {
+            display: block;
+        }
+
+        html[data-theme="dark"] #moon-icon {
+            display: none;
+        }
+
+        html[data-theme="light"] #sun-icon {
+            display: none;
+        }
+
+        html[data-theme="light"] #moon-icon {
+            display: block;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background-color: var(--background);
+            color: var(--high-contrast);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 95%;
+            max-width: 56rem;
+            /* 896px */
+            /* 896px */
+            height: 90vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            max-width: 100%;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1010;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--high-contrast);
+        }
+
+        .filter-button {
+            background-color: var(--low-contrast);
+            color: var(--text);
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .filter-button.active {
+            background-color: var(--primary);
+            color: var(--high-contrast);
+        }
+
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--low-contrast);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-event {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+
+        .timeline-event:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-event:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-event::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--background);
+            border: 4px solid var(--primary);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-event:nth-child(even)::after {
+            left: -10px;
+        }
+
+        .timeline-event-card {
+            background-color: var(--low-contrast);
+            border-radius: 6px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="dotted-wave-bg"></div>
+
+    <section class="relative" style="background-color: transparent;">
+        <div class="absolute top-6 left-6 z-20">
+            <div class=""><img
+                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzk3IiBoZWlnaHQ9IjM3MyIgdmlld0JveD0iMCAwIDM5NyAzNzMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yNzIuNjc0IDEwOS4wNjNMMjcyLjg4IDEwOS4zNjZMMjczLjIzMyAxMDkuNDY0TDM5NS4wNSAxNDMuMTM3TDM0Mi4xMSAyNDYuNTQ0TDM0Mi4wMzggMjQ2LjY4NUwzNDIuMDEzIDI0Ni44NEwzMjEuNzU0IDM3MS4zNTRMMjY3LjAzIDMzNy4xNTJMMjY2Ljg4NyAzMzcuMDYyTDI2Ni43MjEgMzM3LjAyNEwyMTguMjIxIDMyNi4wMjRMMjE3Ljk1MSAzMjUuOTY0TDIxNy42ODggMzI2LjA1TDgwLjA2MjUgMzcxLjFMODUuOTk5IDIzNi41NDRMODYuMDEyNyAyMzYuMjQ0TDg1Ljg1ODQgMjM1Ljk4Nkw1Ni44NTg0IDE4Ny40ODZMNTYuNzY3NiAxODcuMzM1TDU2LjYyOTkgMTg3LjIyNEwyLjMxMTUyIDE0My4xODJMMTE0Ljk2MyA4NC4zODY3TDExNS4wOTUgODQuMzE3NEwxMTUuMjAxIDg0LjIxMjlMMTk5LjM0NyAxLjU1MDc4TDI3Mi42NzQgMTA5LjA2M1oiIGZpbGw9IiM0NEEwRDEiIGZpbGwtb3BhY2l0eT0iMC4xIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljc3NSAxNzAuNDhMMjQ0LjM4MSAyNjcuMTVMMTI3Ljk0IDMwNS4zMDNMMzguNzY2NiAxNTkuMTU3TDE5OS4zNDggMS41NDk4TDMxNC43NzUgMTcwLjQ4WiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM5NS4wNTUgMTQzLjEzN0wyOTMuNDYxIDM0My4zNTJMMTI4LjEzMyAzMDUuNjE5TDM4Ljk0NTMgMTU5LjQ1TDE5OC4wNzggODguNTU4NkwzOTUuMDU1IDE0My4xMzdaIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzU2Ljg4NyAxNTkuNTk4TDMyMS43NTggMzcxLjM2MkwxNTQuNTgzIDI2Ny42ODVMMi4xMjU5OCAxNDMuNDQyTDE5Ny45MjEgODguNTU5NkwzNTYuODg3IDE1OS41OThaIiBzdHJva2U9IiM0NEEwRDEiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljg3NyAxNzAuNzQyTDI3Mi4xOTcgMzA4LjIxMUw3OS41NTQ3IDM3MS42TDg3LjQ4NTQgMTY4Ljg4OEwxOTguNTEyIDQwLjAxNzZMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTMxNC44NzcgMTcwLjc0MkwyNzIuMzUyIDMwNy43MTRMMTU0Ljk5NyAyNjYuNjE0TDMuMzAxNzYgMTQzLjY3M0wxOTguMjc1IDM5Ljc1MjlMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNDRBMEQxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTI3Mi4yMTggMjIyLjg4NkMyNzAuMDE5IDIyMi44ODYgMjY4LjEzNiAyMjIuMTEyIDI2Ni41NjggMjIwLjU2NUMyNjUuMDIxIDIxOS4wMTcgMjY0LjI1NyAyMTcuMTQ0IDI2NC4yNzggMjE0Ljk0NUMyNjQuMjU3IDIxMi43ODcgMjY1LjAyMSAyMTAuOTQ1IDI2Ni41NjggMjA5LjQxOEMyNjguMTM2IDIwNy44NyAyNzAuMDE5IDIwNy4wOTcgMjcyLjIxOCAyMDcuMDk3QzI3NC4yOTUgMjA3LjA5NyAyNzYuMTI3IDIwNy44NyAyNzcuNzE1IDIwOS40MThDMjc5LjMyNCAyMTAuOTQ1IDI4MC4xMzggMjEyLjc4NyAyODAuMTU4IDIxNC45NDVDMjgwLjEzOCAyMTYuNDExIDI3OS43NTEgMjE3Ljc0NSAyNzguOTk4IDIxOC45NDZDMjc4LjI2NSAyMjAuMTQ3IDI3Ny4yOTggMjIxLjEwNCAyNzYuMDk3IDIyMS44MTdDMjc0LjkwNiAyMjIuNTI5IDI3My42MjMgMjIyLjg4NiAyNzIuMjE4IDIyMi44ODZaIiBmaWxsPSIjMjEyNDI4Ii8+CjxwYXRoIGQ9Ik0yMzAuNTA4IDI0MC41NjhDMjI2LjA0OSAyNDAuNTY4IDIyMi4yMzIgMjM5Ljk0NyAyMTkuMDU2IDIzOC43MDVDMjE1LjODggMjM3LjQ2MyAyMTMuMzg2IDIzNS43NjMgMjExLjU3NCAyMzMuNjA1QzIwOS43NjIgMjMxLjQ0NyAyMDguNjcyIDIyOS4wMDQgMjA4LjMwNiAyMjYuMjc1TDIyMi40NDYgMjI1LjQ4MUMyMjIuNzEgMjI2LjQzOCAyMjMuMTk5IDIyNy4yNzMgMjIzLjkxMiAyMjcuOTg2QzIyNC42NDUgMjI4LjY5OCAyMjUuNTkxIDIyOS4yNDggMjI2Ljc1MiAyMjkuNjM1QzIyNy45MzMgMjMwLjAyMiAyMjkuMzE3IDIzMC4yMTUgMjMwLjkwNSAyMzAuMjE1QzIzMy40MSAyMzAuMjE1IDIzNS40NzYgMjI5LjYwNCAyMzcuMTA1IDIyOC4zODNDMjM4LjczNCAyMjcuMTgxIDIzOS41NzkgMjI1LjA3NCAyMzkuNTc5IDIyMi4wNjFWMjEzLjgxNUgyMzkuMDU5QzIzOC40NjkgMjE1LjI2MSAyMzcuNTczIDIxNi41NTQgMjM2LjM3MiAyMTcuNjk0QzIzNS4xNzEgMjE4LjgzNCAyMzMuNjc0IDIxOS43MyAyMzEuODgzIDIyMC4zODFDMjMwLjExMSAyMjEuMDMzIDIyOC4wNzUgMjIxLjM1OSAyMjUuNzc1IDIyMS4zNTlDMjIyLjM1NCAyMjEuMzU5IDIxOS4yMTkgMjIwLjU2NCAyMTYuMzY4IDIxOC45NzZDMjEzLjUzOCAyMTcuMzY4IDIxMS4yNjggMjE0Ljg4NCAyMDkuNTU4IDIxMS41MjVDMjA3Ljg2OCAyMDguMTQ1IDIwNy4wMjMgMjAzLjc5OCAyMDcuMDIzIDE5OC40ODRDMjA3LjAyMyAxOTMuMDA3IDIwNy44OTkgMTg4LjQ5OCAyMDkuNjUgMTg0LjY1NUNyMjEuNDA1IDE4MS4zOTIgMjEzLjY5MSAxNzguNzU2IDIxNi41MjEgMTc3LjA0NUMyMTkuMzcxIDE3NS4zMzUgMjIyLjQzNiAxNzQuNDggMjI1LjcxNCAxNzQuNDhDMjI4LjE3NyAxNzQuNDggMjMwLjI4NCAxNzQuOTA4IDIzMi4wMzUgMTc1Ljc2M0MyMzMuODA3IDE3Ni41OTcgMjM1LjI2MiAxNzcuNjc2IDIzNi40MDIgMTc5QzIzNy41NDMgMTgwLjMyMyAyMzguNDA4IDE4MS42OTggMjM4Ljk5OCAxODMuMTIzSDIzOS40MjZWMTc1LjA5MUgyNTQuMjk5VjIyMi4xODNDMjU0LjI5OSAyMjYuMTUzIDI1My4zMDEgMjI5LjUwMiAyNTEuMzA2IDIzMi4yMzFDMjQ5LjMxMSAyMzQuOTU5IDI0Ni41MjEgMjM3LjAyNSAyNDIuOTM4IDIzOC40M0MyMzkuMzU1IDIzOS44NTUgMjM1LjIxMSAyNDAuNTY4IDIzMC41MDggMjQwLjU2OFpNMjMwLjk2NiAyMTAuNDg2QzIzMi43NzggMjEwLjQ4NiAyMzQuMzI2IDIxMC4wMDggMjM1LjYwOCAyMDkuMDUxQzIzNi44OTEgMjA4LjA5NCAyMzcuODc5IDIwNi43MiAyMzguNTcxIDIwNC45MjhDMjM5LjI2MyAyMDMuMTM2IDIzOS42MDkgMjAwLjk4OSAyMzkuNjA5IDE5OC40ODRDMjM5LjYwOSAxOTUuOTM5IDIzOS4yNjMgMTkzLjc1MSAyMzguNTcxIDE5MS45MThDMjM3Ljg5OSAxOTAuMDY1IDIzNi45MTEgMTg4LjY0IDIzNS42MDggMTg3LjY0M0MyMzQuMzI2IDE4Ni42NDUgMjMyLjc3OCAxODYuMTQ2IDIzMC45NjYgMTg2LjE0NkMyMjkuMTE0IDE4Ni4xNDYgMjI3LjU0NiAxODYuNjU1IDIyNi4yNjMgMTg3LjY3M0MyMjQuOTgxIDE4OC42OTEgMjI0LjAwMyAxOTAuMTI3IDIyMy4zMzEgMTkxLjY3OUMyMjIuNjggMTkzLjYxMiAyMjIuMzU0IDE5NS45OCAyMjIuMzU0IDE5OC40ODRDMjIyLjM1NCAyMDAuOTg5IDIyMi42OSAyMDMuMTM2IDIyMy4zNjIgMjA0LjkyOEMyMjQuMDM0IDIwNi43MiAyMjUuMDAxIDIwOC4wOTQgMjI2LjI2MyAyMDkuMDUxQzIyNy41NDYgMjEwLjAwOCAyMjkuMTE0IDIxMC40ODYgMjMwLjk2NiAyMTAuNDg2WiIgZmlsbD0iIzIxMjQyOCIvPgo8cGF0aCBkPSJNMTE1OC43NjMgMjIySDE0Mi41MTZMMTYzLjYxOSAxNTkuNDU1SDE4My43NDRMMjA0Ljg0NyAyMjJIMTg4LjZMMTczLjkxMSAxNzUuMjEzSDE3My40MjJMMTU4Ljc2MyAyMjJaTTE1Ni41OTQgMTk3LjM4NUgxOTAuNTU1VjIwOC44NjhIMTU2LjU5NFYxOTcuMzg1WiIgZmlsbD0iIzIxMjQyOCIvPgo8L3N2Zz4K"
+                    alt="Company Logo" class="h-12 sm:h-14 logo-light"><img
+                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzk3IiBoZWlnaHQ9IjM3MyIgdmlld0JveD0iMCAwIDM5NyAzNzMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yNzIuNjc0IDEwOS4wNjNMMjcyLjg4IDEwOS4zNjZMMjczLjIzMyAxMDkuNDY0TDM5NS4wNSAxNDMuMTM3TDM0Mi4xMSAyNDYuNTQ0TDM0Mi4wMzggMjQ2LjY4NUwzNDIuMDEzIDI0Ni44NEwzMjEuNzU0IDM3MS4zNTRMMjY3LjAzIDMzNy4xNTJMMjY2Ljg4NyAzMzcuMDYyTDI2Ni43MjEgMzM3LjAyNEwyMTguMjIxIDMyNi4wMjRMMjE3Ljk1MSAzMjUuOTY0TDIxNy42ODggMzI2LjA1TDgwLjA2MjUgMzcxLjFMODUuOTk5IDIzNi41NDRMODYuMDEyNyAyMzYuMjQ0TDg1Ljg1ODQgMjM1Ljk4Nkw1Ni44NTg0IDE4Ny40ODZMNTYuNzY3NiAxODcuMzM1TDU2LjYyOTkgMTg3LjIyNEwyLjMxMTUyIDE0My4xODJMMTE0Ljk2MyA4NC4zODY3TDExNS4wOTUgODQuMzE3NEwxMTUuMjAxIDg0LjIxMjlMMTk5LjM0NyAxLjU1MDc4TDI3Mi42NzQgMTA5LjA2M1oiIGZpbGw9IiM1NEMxRkIiIGZpbGwtb3BhY2l0eT0iMC4xIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljc3NSAxNzAuNDhMMjQ0LjM4MSAyNjcuMTVMMTI3Ljk0IDMwNS4zMDNMMzguNzY2NiAxNTkuMTU3TDE5OS4zNDggMS41NDk4TDMxNC43NzUgMTcwLjQ4WiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTM5NS4wNTUgMTQzLjEzN0wyOTMuNDYxIDM0My4zNTJMMTI4LjEzMyAzMDUuNjE5TDM4Ljk0NTMgMTU5LjQ1TDE5OC4wNzggODguNTU4NkwzOTUuMDU1IDE0My4xMzdaIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzU2Ljg4NyAxNTkuNTk4TDMyMS43NTggMzcxLjM2MkwxNTQuNTgzIDI2Ny42ODVMMi4xMjU5OCAxNDMuNDQyTDE5Ny45MjEgODguNTU5NkwzNTYuODg3IDE1OS41OThaIiBzdHJva2U9IiM1NEMxRkIiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNMzE0Ljg3NyAxNzAuNzQyTDI3Mi4xOTcgMzA4LjIxMUw3OS41NTQ3IDM3MS42TDg3LjQ4NTQgMTY4Ljg4OEwxOTguNTEyIDQwLjAxNzZMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTMxNC44NzcgMTcwLjc0MkwyNzIuMzUyIDMwNy43MTRMMTU0Ljk5NyAyNjYuNjE0TDMuMzAxNzYgMTQzLjY3M0wxOTguMjc1IDM5Ljc1MjlMMzE0Ljg3NyAxNzAuNzQyWiIgc3Ryb2tlPSIjNTRDMUZCIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTI3Mi4yMTggMjIyLjg4NkMyNzAuMDE5IDIyMi44ODYgMjY4LjEzNiAyMjIuMTEyIDI2Ni41NjggMjIwLjU2NUMyNjUuMDIxIDIxOS4wMTcgMjY0LjI1NyAyMTcuMTQ0IDI2NC4yNzggMjE0Ljk0NUMyNjQuMjU3IDIxMi43ODcgMjY1LjAyMSAyMTAuOTQ1IDI2Ni41NjggMjA5LjQxOEMyNjguMTM2IDIwNy44NyAyNzAuMDE5IDIwNy4wOTcgMjcyLjIxOCAyMDcuMDk3QzI3NC4yOTUgMjA3LjA5NyAyNzYuMTI3IDIwNy44NyAyNzcuNzE1IDIwOS40MThDMjc5LjMyNCAyMTAuOTQ1IDI4MCu1MzggMjEyLjc4NyAyODAuMTU4IDIxNC45NDVDMjgwLjEzOCAyMTYuNDExIDI3OS43NTEgMjE3Ljc0NSAyNzguOTk4IDIxOC45NDZDMjc4LjI2NSAyMjAuMTQ3IDI3Ny4yOTggMjIxLjEwNCAyNzYuMDk3IDIyMS44MTdDMjc0LjkwNiAyMjIuNTI5IDI3My42MjMgMjIyLjg4NiAyNzIuMjE4IDIyMi44ODZaIiBmaWxsPSIjRTBFNUVDIi8+CjxwYXRoIGQ9Ik0yMzAuNTA4IDI0MC41NjhDMjI2LjA1IDI0MC41NjhDMjIyLjIzMiAyMzkuOTQ3IDIxOS4wNTYgMjM4LjcwNSAyMTUuODggMjM3LjQ2MyAyMTMuMzg2IDIzNS43NjMgMjExLjU3NCAyMzMuNjA1QzIwOS43NjIgMjMxLjQ0NyAyMDguNjcyIDIyOS4wMDQgMjA4LjMwNiAyMjYuMjc1TDIyMi40NDYgMjI1LjQ4MUMyMjIuNzExIDIyNi40MzggMjIzLjE5OSAyMjcuMjczIDIyMy45MTIgMjI3Ljk4NkMyMjQuNjQ1IDIyOC42OTggMjI1LjU5MSAyMjkuMjQ4IDIyNi43NTIgMjI5LjYzNUMyMjcuOTMzIDIzMC4wMjIgMjI5LjMxNyAyMzAuMjE1IDIzMC45MDUgMjMwLjIxNUMyMzMuNDEgMjMwLjIxNSAyMzUuNDc2IDIyOS42MDQgMjM3LjEwNSAyMjguMzgzQzIzOC43NTQgMjI3LjE4MSAyMzkuNTc5IDIyNS4wNzQgMjM5LjU3OSAyMjIuMDYxVjIxMy44MTVIMjM5LjA1OUMyMzguNDY5IDIxNS4yNjEgMjM3LjU3MyAyMTYuNTU0IDIzNi4zNzIgMjE3LjY5NEMyMzUuMTcxIDIxOC44MzQgMjMzLjY3NCAyMTkuNzMgMjMxLjg4MyAyMjAuMzgxQzIzMC4xMTEgMjIxLjAzMyAyMjguMDc1IDIyMS4zNTkgMjI1Ljc3NSAyMjEuMzU5QzIyMi4zNTQgMjIxLjM1OSAyMTkuMjE5IDIyMC41NjQgMjE2LjM2OCAyMTguOTc2QzIxMy41MzggMjE3LjM2OCAyMTEuMjY4IDIxNC44ODQgMjA5LjU1OCAyMTEuNTI1QzIwNy44NjggMjA4LjE0NSAyMDcuMDIzIDIwMy43OTggMjA3LjAyMyAxOTguNDg0QzIwNy4wMjMgMTkzLjAwNyAyMDcuODk5IDE4OC40OTggMjA5LjY1IDE4NC45NTVDMjExLjQwMSAxODEuMzkyIDIxMy42OTEgMTc4Ljc1NiAyMTYuNTIxIDE3Ny4wNDVDMjE5LjM3MiAxNzUuMzM1IDIyMi40MzYgMTc0LjQ4IDIyNS43MTQgMTc0LjQ4QzIyOC4xNzcgMTc0LjQ4IDIzMC4yODQgMTc0LjkwOCAyMzIuMDM1IDE3NS43NjNDMjMzLjgwNyAxNzYuNTk3IDIzNS4yNjIgMTc3LjY3NiAyMzYuNDAzIDE3OUMyMzcuNTQzIDE4MC4zMjMgMjM4LjQwOCAxODEuNjk4IDIzOC45OTggMTgzLjEyM0gyMzkuNDI2VjE3NS4wOTFIMjU0LjI5OVYyMjIuMTgzQzI1NC4yOTkgMjI2LjE1MyAyNTMuMzAxIDIyOS41MDIgMjUxLjMwNiAyMzIuMjMxQzI0OS4zMTEgMjM0LjY1OSAyNDYuNTIxIDIzNy4wMjUgMjQyLjkzOCAyMzguNDNDMjM5LjM1NSAyMzkuODU1IDIzNS4yMTEgMjQwLjU2OCAyMzAuNTA4IDI0MC41NjhaTTIzMC45NjYgMjEwLjQ4NkMyMzIuNzc4IDIxMC40ODYgMjM0LjMyNiAyMTAuMDA4IDIzNS42MDggMjA5LjA1MUMyMzYuODkxIDIwOC4wOTQgMjM3Ljg3OSAyMDYuNzIgMjM4LjU3MSAyMDQuOTI4QzIzOS4yNjMgMjAzLjEzNiAyMzkuNjA5IDIwMC45ODkgMjM5LjYwOSAxOTguNDg0QzIzOS42MDkgMTk1LjkzOSAyMzkuMjYzIDE5My43NTEgMjM4LjU3MSAxOTEuOTE4QzIzNy44OTkgMTkwLjA2NSAyMzYuOTEyIDE4OC42NCAyMzUuNjA4IDE4Ny42NDNDMjM0LjMyNiAxODYuNjQ1IDIzMi43NzggMTg2LjE0NiAyMzAuOTY2IDE4Ni4xNDZDMjI5LjExNCAxODYuMTQ2IDIyNy41NDYgMTg2LjY1NSAyMjYuMjYzIDE4Ny42NzNDMjI0Ljk4MSAxODguNjkxIDIyNC4wMDMgMTkwLjEyNyAyMjMuMzMxIDE5MS45NzlDMjIyLjY4IDE5My44MTIgMjIyLjM1NCAxOTUuOTggMjIyLjM1NCAxOTguNDg0QzIyMi4zNTQgMjAwLjk4OSAyMjIuNjkgMjAzLjEzNiAyMjMuMzYyIDIwNC45MjhDMjI0LjAzNCAyMDYuNzIgMjI1LjAwMSAyMDguMDk0IDIyNi4yNjMgMjA5LjA1MUMyMjcuNTQ2IDIxMC4wMDggMjI5LjExNCAyMTAuNDg2IDIzMC45NjYgMjEwLjQ4NloiIGZpbGw9IiNFMEU1RUMiLz4KPHBhdGothZD0iTTE1OC43NjMgMjIySDE0Mi41MTZMMTYzLjYxOSAxNTkuNDU1SDE4My43NDRMMjA0Ljg0NyAyMjJIMTg4LjZMMTczLjkwMSAxNzUuMjEzSDE3My40MjJMMTU4Ljc2MyAyMjJaTTE1Ni41OTQgMTk3LjM4NUgxOTAuNTU1VjIwOC44NjhIMTU2LjU5NFYxOTcuMzg1WiIgZmlsbD0iI0UwRTVFQyIvPgo8L3N2Zz4K"
+                    alt="Company Logo" class="h-12 sm:h-14 logo-dark"></div>
+        </div>
+        <div class="container mx-auto px-6 py-20 lg:py-32 grid grid-cols-1 gap-12 items-center">
+            <div class="text-center ">
+                <!-- Copy this -->
+                <div id="hero-img" class="space-y-4"><svg width="300" height="auto" viewBox="0 0 415 415" fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="morphing-demo line-drawing-demo delay-3 animated fadeInDown" id="logo">
+                        <g fill="none" fill-rule="evenodd" class="lines">
+                            <polygon class="p00" fill="var(--primary)" fill-opacity="0.1"
+                                points="207.500 0.000, 404.844 143.379, 329.465 375.371, 85.535 375.371, 10.156 143.379, 207.500 0.000">
+                            </polygon>
+                            <polygon class="p01" fill="var(--primary)" fill-opacity="0.1"
+                                points="207.500 42.000, 365.851 157.049, 305.366 343.201, 109.634 343.201, 49.149 157.049, 207.500 42.000">
+                            </polygon>
+                            <polygon class="p02" fill="var(--primary)" fill-opacity="0.1"
+                                points="207.500 87.000, 323.053 170.954, 278.916 306.796, 136.084 306.796, 91.947 170.954, 207.500 87.000">
+                            </polygon>
+                            <polygon class="p03" fill="var(--primary)" fill-opacity="0.1"
+                                points="207.500 134.000, 278.354 185.478, 251.290 268.772, 163.710 268.772, 136.646 185.478, 207.500 134.000">
+                            </polygon>
+                            <polygon class="line" stroke="var(--primary)" stroke-width="3"
+                                points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
+                            </polygon>
+                            <polygon class="poli" stroke="var(--primary)" stroke-width="3"
+                                points="12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104">
+                            </polygon>
+                        </g>
+                    </svg>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold !leading-tight"
+                        style="color: var(--high-contrast); ">August Gray Compositions</h1>
+                    <p class="mt-4 text-lg md:text-xl" style="color: var(--text); ">Taller de Comunicación Visual</p>
                 </div>
-                
-            </div>
-        </section>
-    
-
-        <section style="background-color: transparent; color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="color: var(--high-contrast);">Nosotros</h2>
-                <div class="grid md:grid-cols-2 gap-10">
-        <div class="space-y-4">
-            
-        <div id="tabs-tabs-1763478917633" class="w-full">
-            <div role="tablist" aria-label="Content Tabs" class="border-b flex flex-wrap" style="border-color: var(--low-contrast);">
-                
-        <button 
-            role="tab" 
-            aria-selected="true" 
-            aria-controls="panel-tabs-1763478917633-0" 
-            id="tab-tabs-1763478917633-0"
-            class="tab-button py-2 px-4 text-sm font-medium border-b-2"
-            style="border-color: var(--primary); color: var(--primary);"
-        >
-            Historia
-        </button>
-    
-        <button 
-            role="tab" 
-            aria-selected="false" 
-            aria-controls="panel-tabs-1763478917633-1" 
-            id="tab-tabs-1763478917633-1"
-            class="tab-button py-2 px-4 text-sm font-medium border-b-2"
-            style="border-color: transparent; color: var(--text);"
-        >
-            Misión
-        </button>
-    
-        <button 
-            role="tab" 
-            aria-selected="false" 
-            aria-controls="panel-tabs-1763478917633-2" 
-            id="tab-tabs-1763478917633-2"
-            class="tab-button py-2 px-4 text-sm font-medium border-b-2"
-            style="border-color: transparent; color: var(--text);"
-        >
-            Visión
-        </button>
-    
-        <button 
-            role="tab" 
-            aria-selected="false" 
-            aria-controls="panel-tabs-1763478917633-3" 
-            id="tab-tabs-1763478917633-3"
-            class="tab-button py-2 px-4 text-sm font-medium border-b-2"
-            style="border-color: transparent; color: var(--text);"
-        >
-            Valores
-        </button>
-    
-            </div>
-            <div>
-                
-        <div 
-            role="tabpanel" 
-            id="panel-tabs-1763478917633-0" 
-            tabindex="0" 
-            aria-labelledby="tab-tabs-1763478917633-0"
-            class="tab-panel p-4"
-            
-        >
-            <p style="color: var(--text);">August Gray Compositions fue fundado en 2019 en la ciudad de Chihuahua en respuesta a una creciente demanda en el mercado local, una ciudad que ha experimentado un notable aumento en el número de egresados en la licenciatura de Arquitectura. Estos nuevos profesionales buscan establecerse y prosperar en un entorno competitivo. Observando esta necesidad, decidimos crear un espacio que ofrezca servicios integrales de comunicación visual y expresión gráfica, específicamente diseñados para ayudar a despachos de arquitectura a proyectar una imagen profesional, coherente y atractiva. Desde nuestra fundación, nos hemos comprometido a brindar soluciones creativas y de alta calidad que impulsen el éxito comercial de nuestros clientes.</p>
-        </div>
-    
-        <div 
-            role="tabpanel" 
-            id="panel-tabs-1763478917633-1" 
-            tabindex="0" 
-            aria-labelledby="tab-tabs-1763478917633-1"
-            class="tab-panel p-4"
-            hidden
-        >
-            <p style="color: var(--text);">Empoderamos a los despachos de arquitectura de Chihuahua mediante servicios integrales de comunicación visual y expresión gráfica de la más alta calidad. Nos especializamos en diseño gráfico y editorial, diseño web, fotografía arquitectónica y visualización arquitectónica, ayudando a nuestros clientes a proyectar una imagen profesional, coherente y atractiva, contribuyendo así a su éxito comercial y posicionamiento en el mercado.</p>
-        </div>
-    
-        <div 
-            role="tabpanel" 
-            id="panel-tabs-1763478917633-2" 
-            tabindex="0" 
-            aria-labelledby="tab-tabs-1763478917633-2"
-            class="tab-panel p-4"
-            hidden
-        >
-            <p style="color: var(--text);">Aspiramos a ser el socio estratégico líder en comunicación visual para despachos de arquitectura en Chihuahua y la región, reconocidos por nuestra innovación, creatividad y compromiso con la excelencia. Queremos ser el referente en servicios de diseño y visualización arquitectónica.</p>
-        </div>
-    
-        <div 
-            role="tabpanel" 
-            id="panel-tabs-1763478917633-3" 
-            tabindex="0" 
-            aria-labelledby="tab-tabs-1763478917633-3"
-            class="tab-panel p-4"
-            hidden
-        >
-            <p style="color: var(--text);">
-                <ul>
-                    <li>- <b>Creatividad:</b> Innovamos y buscamos soluciones únicas y efectivas.</li>
-                    <li>- <b>Calidad:</b> Compromiso con la excelencia en todos nuestros servicios.</li>
-                    <li>- <b>Colaboración:</b> Trabajo en equipo y comunicación cercana con los clientes.</li>
-                    <li>- <b>Integridad:</b> Honestidad y transparencia en todas nuestras interacciones.</li>
-                    <li>- <b>Innovación:</b> Uso de las últimas tendencias y tecnologías en comunicación visual y diseño. - Sostenibilidad: Promoción de prácticas sostenibles y diseño responsable.</li>
-                    <li>- <b>Compromiso con el cliente:</b> Dedicación para superar las expectativas y alcanzar las metas de nuestros clientes.</li>
-                </ul>
-            </p>
-        </div>
-    
-            </div>
-        </div>
-    <h1  class="text-xl md:text-2xl lg:text-3xl font-extrabold !leading-tight anime-element" style="color: var(--high-contrast); text-align: center;">Contacto</h1><div  class="mt-8 anime-element" style="text-align: center;"><a href="https://ag-compositions.com/link-tree" class="inline-block rounded-lg font-bold py-3 px-8" style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none;">Link-Tree</a></div>
-        </div>
-    
-        <div class="space-y-4">
-            
-        <div class="carousel-container relative group w-full rounded-lg overflow-hidden shadow-lg" id="carousel-carousel-1763478958941" data-total-slides="6" style="background-color: var(--low-contrast);">
-             <div class="overflow-hidden ">
-                <div class="carousel-track flex transition-transform duration-500 ease-out " style="transform: translateX(0%);">
-        
-            <div class="carousel-slide w-full flex-shrink-0 relative ">
-                
-            <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
-                 <img src="assets/img-2.png" alt="carousel slide" class="w-full h-full object-cover">
-                 
-            </div>
-        
-                
-            <div class="p-6" style="background-color: var(--low-contrast);">
-                <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">gD.</h3><p class="text-sm mt-1" style="color: var(--text);">Diseño gráfico (graphic Design) para arquitectura. Tiene el objetivo de generar una imagen corporativa integral para el despacho arquitectónico a través de distintos recursos como pueden ser: Logotipo, norte, escala gráfica, paletas de colores, plantillas para diversos planos y documentos (carta, doble carta, 90x60), tarjetas de presentación. Así como diseño editorial para sus portafolios profesionales.</p>
-            </div>
-        
             </div>
 
-            <div class="carousel-slide w-full flex-shrink-0 relative ">
-                
-            <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
-                 <img src="assets/img-1.png" alt="carousel slide" class="w-full h-full object-cover">
-                 
-            </div>
-        
-                
-            <div class="p-6" style="background-color: var(--low-contrast);">
-                <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">wD.</h3><p class="text-sm mt-1" style="color: var(--text);">Diseño web (web Design). Cómo complementaria al diseño de la imagen corporativa, se puede realizar el diseño de un sitio web y de publicaciones que ayuden al despacho a ser relevante en redes sociales y mantener una presencia en línea sólida.</p>
-            </div>
-        
-            </div>
-        
-            <div class="carousel-slide w-full flex-shrink-0 relative ">
-                
-            <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
-                 <img src="assets/img-3.png" alt="carousel slide" class="w-full h-full object-cover">
-                 
-            </div>
-        
-                
-            <div class="p-6" style="background-color: var(--low-contrast);">
-                <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aV.</h3><p class="text-sm mt-1" style="color: var(--text);">Visualización arquitectónica (archViz). Se refiere a elementos de representación como renders o diagramas, los cuales pueden ser realistas, ilustrativos o técnicos. Los cuales dependen de la imagen que el despacho busca reflejar así como la función misma del elemento.</p>
-            </div>
-        
-            </div>
-        
-            <div class="carousel-slide w-full flex-shrink-0 relative ">
-                
-            <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
-                 <img src="assets/img-4.jpeg" alt="carousel slide" class="w-full h-full object-cover">
-                 
-            </div>
-        
-                
-            <div class="p-6" style="background-color: var(--low-contrast);">
-                <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aP.</h3><p class="text-sm mt-1" style="color: var(--text);">Fotografía arquitectónica (architectural Photography). Fotografía del proceso de obra, o fotografía de proyecto terminado, tanto para su documentación como para publicaciones en línea o editorial.</p>
-            </div>
-        
-            </div>
-            <!--
+        </div>
+    </section>
+
+
+    <section style="background-color: transparent; color: var(--high-contrast);" class="">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="color: var(--high-contrast);">Nosotros
+            </h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="space-y-4" style="min-width: 0;">
+
+                    <div id="tabs-tabs-1763478917633" class="w-full">
+                        <div role="tablist" aria-label="Content Tabs" class="border-b flex flex-wrap"
+                            style="border-color: var(--low-contrast); max-width: 100%; overflow-x: auto;">
+
+                            <button role="tab" aria-selected="true" aria-controls="panel-tabs-1763478917633-0"
+                                id="tab-tabs-1763478917633-0"
+                                class="tab-button py-2 px-4 text-sm font-medium border-b-2"
+                                style="border-color: var(--primary); color: var(--primary);">
+                                Historia
+                            </button>
+
+                            <button role="tab" aria-selected="false" aria-controls="panel-tabs-1763478917633-1"
+                                id="tab-tabs-1763478917633-1"
+                                class="tab-button py-2 px-4 text-sm font-medium border-b-2"
+                                style="border-color: transparent; color: var(--text);">
+                                Misión
+                            </button>
+
+                            <button role="tab" aria-selected="false" aria-controls="panel-tabs-1763478917633-2"
+                                id="tab-tabs-1763478917633-2"
+                                class="tab-button py-2 px-4 text-sm font-medium border-b-2"
+                                style="border-color: transparent; color: var(--text);">
+                                Visión
+                            </button>
+
+                            <button role="tab" aria-selected="false" aria-controls="panel-tabs-1763478917633-3"
+                                id="tab-tabs-1763478917633-3"
+                                class="tab-button py-2 px-4 text-sm font-medium border-b-2"
+                                style="border-color: transparent; color: var(--text);">
+                                Valores
+                            </button>
+
+                        </div>
+                        <div>
+
+                            <div role="tabpanel" id="panel-tabs-1763478917633-0" tabindex="0"
+                                aria-labelledby="tab-tabs-1763478917633-0" class="tab-panel p-4">
+                                <p style="color: var(--text);">August Gray Compositions fue fundado en 2019 en la ciudad
+                                    de Chihuahua en respuesta a una creciente demanda en el mercado local, una ciudad
+                                    que ha experimentado un notable aumento en el número de egresados en la licenciatura
+                                    de Arquitectura. Estos nuevos profesionales buscan establecerse y prosperar en un
+                                    entorno competitivo. Observando esta necesidad, decidimos crear un espacio que
+                                    ofrezca servicios integrales de comunicación visual y expresión gráfica,
+                                    específicamente diseñados para ayudar a despachos de arquitectura a proyectar una
+                                    imagen profesional, coherente y atractiva. Desde nuestra fundación, nos hemos
+                                    comprometido a brindar soluciones creativas y de alta calidad que impulsen el éxito
+                                    comercial de nuestros clientes.</p>
+                            </div>
+
+                            <div role="tabpanel" id="panel-tabs-1763478917633-1" tabindex="0"
+                                aria-labelledby="tab-tabs-1763478917633-1" class="tab-panel p-4" hidden>
+                                <p style="color: var(--text);">Empoderamos a los despachos de arquitectura de Chihuahua
+                                    mediante servicios integrales de comunicación visual y expresión gráfica de la más
+                                    alta calidad. Nos especializamos en diseño gráfico y editorial, diseño web,
+                                    fotografía arquitectónica y visualización arquitectónica, ayudando a nuestros
+                                    clientes a proyectar una imagen profesional, coherente y atractiva, contribuyendo
+                                    así a su éxito comercial y posicionamiento en el mercado.</p>
+                            </div>
+
+                            <div role="tabpanel" id="panel-tabs-1763478917633-2" tabindex="0"
+                                aria-labelledby="tab-tabs-1763478917633-2" class="tab-panel p-4" hidden>
+                                <p style="color: var(--text);">Aspiramos a ser el socio estratégico líder en
+                                    comunicación visual para despachos de arquitectura en Chihuahua y la región,
+                                    reconocidos por nuestra innovación, creatividad y compromiso con la excelencia.
+                                    Queremos ser el referente en servicios de diseño y visualización arquitectónica.</p>
+                            </div>
+
+                            <div role="tabpanel" id="panel-tabs-1763478917633-3" tabindex="0"
+                                aria-labelledby="tab-tabs-1763478917633-3" class="tab-panel p-4" hidden>
+                                <p style="color: var(--text);">
+                                <ul>
+                                    <li>- <b>Creatividad:</b> Innovamos y buscamos soluciones únicas y efectivas.</li>
+                                    <li>- <b>Calidad:</b> Compromiso con la excelencia en todos nuestros servicios.</li>
+                                    <li>- <b>Colaboración:</b> Trabajo en equipo y comunicación cercana con los
+                                        clientes.</li>
+                                    <li>- <b>Integridad:</b> Honestidad y transparencia en todas nuestras interacciones.
+                                    </li>
+                                    <li>- <b>Innovación:</b> Uso de las últimas tendencias y tecnologías en comunicación
+                                        visual y diseño. - Sostenibilidad: Promoción de prácticas sostenibles y diseño
+                                        responsable.</li>
+                                    <li>- <b>Compromiso con el cliente:</b> Dedicación para superar las expectativas y
+                                        alcanzar las metas de nuestros clientes.</li>
+                                </ul>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                        style="color: var(--high-contrast); text-align: center;">Contacto</h1>
+                    <div class="mt-8 anime-element" style="text-align: center;"><a
+                            href="https://ag-compositions.com/link-tree"
+                            class="inline-block rounded-lg font-bold py-3 px-8"
+                            style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none;">Link-Tree</a>
+                    </div>
+                </div>
+
+                <div class="space-y-4" style="min-width: 0;">
+
+                    <div class="carousel-container relative group w-full rounded-lg overflow-hidden shadow-lg"
+                        id="carousel-carousel-1763478958941" data-total-slides="6"
+                        style="background-color: var(--low-contrast); max-width: 100%;">
+                        <div class="overflow-hidden ">
+                            <div class="carousel-track flex transition-transform duration-500 ease-out "
+                                style="transform: translateX(0%);">
+
+                                <div class="carousel-slide w-full flex-shrink-0 relative ">
+
+                                    <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                                        <img src="assets/img-2.png" alt="carousel slide"
+                                            class="w-full h-full object-cover">
+
+                                    </div>
+
+
+                                    <div class="p-6" style="background-color: var(--low-contrast);">
+                                        <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">gD.</h3>
+                                        <p class="text-sm mt-1" style="color: var(--text);">Diseño gráfico (graphic
+                                            Design) para arquitectura. Tiene el objetivo de generar una imagen
+                                            corporativa integral para el despacho arquitectónico a través de distintos
+                                            recursos como pueden ser: Logotipo, norte, escala gráfica, paletas de
+                                            colores, plantillas para diversos planos y documentos (carta, doble carta,
+                                            90x60), tarjetas de presentación. Así como diseño editorial para sus
+                                            portafolios profesionales.</p>
+                                    </div>
+
+                                </div>
+
+                                <div class="carousel-slide w-full flex-shrink-0 relative ">
+
+                                    <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                                        <img src="assets/img-1.png" alt="carousel slide"
+                                            class="w-full h-full object-cover">
+
+                                    </div>
+
+
+                                    <div class="p-6" style="background-color: var(--low-contrast);">
+                                        <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">wD.</h3>
+                                        <p class="text-sm mt-1" style="color: var(--text);">Diseño web (web Design).
+                                            Cómo complementaria al diseño de la imagen corporativa, se puede realizar el
+                                            diseño de un sitio web y de publicaciones que ayuden al despacho a ser
+                                            relevante en redes sociales y mantener una presencia en línea sólida.</p>
+                                    </div>
+
+                                </div>
+
+                                <div class="carousel-slide w-full flex-shrink-0 relative ">
+
+                                    <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                                        <img src="assets/img-3.png" alt="carousel slide"
+                                            class="w-full h-full object-cover">
+
+                                    </div>
+
+
+                                    <div class="p-6" style="background-color: var(--low-contrast);">
+                                        <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aV.</h3>
+                                        <p class="text-sm mt-1" style="color: var(--text);">Visualización arquitectónica
+                                            (archViz). Se refiere a elementos de representación como renders o
+                                            diagramas, los cuales pueden ser realistas, ilustrativos o técnicos. Los
+                                            cuales dependen de la imagen que el despacho busca reflejar así como la
+                                            función misma del elemento.</p>
+                                    </div>
+
+                                </div>
+
+                                <div class="carousel-slide w-full flex-shrink-0 relative ">
+
+                                    <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                                        <img src="assets/img-4.jpeg" alt="carousel slide"
+                                            class="w-full h-full object-cover">
+
+                                    </div>
+
+
+                                    <div class="p-6" style="background-color: var(--low-contrast);">
+                                        <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aP.</h3>
+                                        <p class="text-sm mt-1" style="color: var(--text);">Fotografía arquitectónica
+                                            (architectural Photography). Fotografía del proceso de obra, o fotografía de
+                                            proyecto terminado, tanto para su documentación como para publicaciones en
+                                            línea o editorial.</p>
+                                    </div>
+
+                                </div>
+                                <!--
             <div class="carousel-slide w-full flex-shrink-0 relative ">
                 
             <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
@@ -447,47 +583,77 @@
         
             </div>
             -->
-        
-            <div class="carousel-slide w-full flex-shrink-0 relative ">
-                
-            <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
-                 <img src="assets/img-5.png" alt="carousel slide" class="w-full h-full object-cover">
-                 
-            </div>
-        
-                
-            <div class="p-6" style="background-color: var(--low-contrast);">
-                <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aiD.</h3><p class="text-sm mt-1" style="color: var(--text);">Diseño + AI (ai + Design). Diseñamos herramientas que optimizan el flujo de trabajo a través de modelos Inteligencia Artificial, estás herramientas están pensadas para utilizar modelos locals o servicios en la nube según las necesidades.</p>
-            </div>
-        
-            </div>
-        
-                </div>
-             </div>
-             
-        <button class="carousel-prev absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity" style="border:none; cursor:pointer;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-        </button>
-        <button class="carousel-next absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity" style="border:none; cursor:pointer;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-        </button>
-        <div class="absolute bottom-auto top-[calc(100%-20px)] left-1/2 -translate-x-1/2 flex gap-2 z-10">
-             <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-[var(--primary)]" data-index="0"></div><div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50" data-index="1"></div><div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50" data-index="2"></div><div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50" data-index="3"></div><div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50" data-index="4"></div><div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50" data-index="5"></div>
-        </div>
-    
-        </div>
-    
-        </div>
-    </div>
-            </div>
-        </section>
-    
 
-        <section style="background-color: transparent; color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4" style="color: var(--high-contrast);">Proyectos</h2>
-                <br>
-                <!-- <div class="filter-controls flex justify-center flex-wrap items-center gap-2 mb-12">
+                                <div class="carousel-slide w-full flex-shrink-0 relative ">
+
+                                    <div class="relative w-full" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                                        <img src="assets/img-5.png" alt="carousel slide"
+                                            class="w-full h-full object-cover">
+
+                                    </div>
+
+
+                                    <div class="p-6" style="background-color: var(--low-contrast);">
+                                        <h3 class="text-2xl font-bold" style="color: var(--high-contrast);">aiD.</h3>
+                                        <p class="text-sm mt-1" style="color: var(--text);">Diseño + AI (ai + Design).
+                                            Diseñamos herramientas que optimizan el flujo de trabajo a través de modelos
+                                            Inteligencia Artificial, estás herramientas están pensadas para utilizar
+                                            modelos locals o servicios en la nube según las necesidades.</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <button
+                            class="carousel-prev absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            style="border:none; cursor:pointer;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button
+                            class="carousel-next absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            style="border:none; cursor:pointer;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <div
+                            class="absolute bottom-auto top-[calc(100%-20px)] left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-[var(--primary)]"
+                                data-index="0"></div>
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50"
+                                data-index="1"></div>
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50"
+                                data-index="2"></div>
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50"
+                                data-index="3"></div>
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50"
+                                data-index="4"></div>
+                            <div class="carousel-dot w-2 h-2 rounded-full cursor-pointer transition-colors bg-white/50"
+                                data-index="5"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section style="background-color: transparent; color: var(--high-contrast);" class="">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4" style="color: var(--high-contrast);">Proyectos
+            </h2>
+            <br>
+            <!-- <div class="filter-controls flex justify-center flex-wrap items-center gap-2 mb-12">
         <button class="filter-button px-4 py-2 rounded-full text-sm font-semibold active" data-category="All">All</button>
     
         <button class="filter-button px-4 py-2 rounded-full text-sm font-semibold " data-category="gD.">gD.</button>
@@ -502,619 +668,708 @@
     
         <button class="filter-button px-4 py-2 rounded-full text-sm font-semibold " data-category="aiD.">aiD.</button>
     </div> -->
-                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="product-card rounded-lg shadow-lg flex flex-col" data-categories="gD.,wD." style="background-color: var(--low-contrast);">
-                <div class="rounded-t-lg overflow-hidden" style="aspect-ratio: 1 / 1;"><img src="assets/img-6.png" alt="AG:Compositions Web" class="w-full h-full object-cover"></div>
-                <div class="p-4 flex-grow flex flex-col">
-                    <div class="mb-2 flex flex-wrap items-center gap-1">
-                <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
-                    gD.
-                </span>
-            
-                <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
-                    wD.
-                </span>
-            </div>
-                    <div class="flex-grow space-y-2">
-                        <h3 class="font-bold text-lg" style="color: var(--high-contrast);">AG:Compositions: Branding</h3><p style="color: var(--text); ">De la Investigación a la Identidad Visual: Branding Estratégico para Taller de comunicación visual.</p>
-                    </div>
-                    <div class="mt-auto pt-4"><button data-modal-target="#modal-p3" class="w-full text-center block rounded-lg font-bold py-3 px-4" style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver más</button></div>
-                </div>
-            </div>
-        
-            <div class="product-card rounded-lg shadow-lg flex flex-col" data-categories="gD.,wD.,aiD." style="background-color: var(--low-contrast);">
-                <div class="rounded-t-lg overflow-hidden" style="aspect-ratio: 1 / 1;"><img src="assets/img-7.png" alt="AI Moodboard to Product" class="w-full h-full object-cover"></div>
-                <div class="p-4 flex-grow flex flex-col">
-                    <div class="mb-2 flex flex-wrap items-center gap-1">
-                <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
-                    gD.
-                </span>
-            
-                <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
-                    wD.
-                </span>
-            
-                <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
-                    aiD.
-                </span>
-            </div>
-                    <div class="flex-grow space-y-2">
-                        <h3 class="font-bold text-lg" style="color: var(--high-contrast);">AI Moodboard to Product</h3><p style="color: var(--text); ">De la Inspiración a la Imagen: Una Aplicación Web que Conecta Moodboards con Inteligencia Artificial.</p>
-                    </div>
-                    <div class="mt-auto pt-4"><button data-modal-target="#modal-prod-1763659854694" class="w-full text-center block rounded-lg font-bold py-3 px-4" style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver más</button></div>
-                </div>
-            </div>
-        </div>
-            </div>
-        </section>
-    
-            
-                        <div id="modal-p3" class="modal-overlay">
-                            <div class="modal-container">
-                                <button class="modal-close-btn">&times;</button>
-                                <div class="modal-content">
-                                    
-        <section style="background-color: var(--background); color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                
-                <div class="grid md:grid-cols-1 gap-10">
-        <div class="space-y-4">
-            <div  class="mt-6 max-w-lg mx-auto aspect-video anime-element" style=""><img src="assets/img-8.png" alt="content" class="rounded-lg w-full h-full object-cover"></div><h2  class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element" style="color: var(--high-contrast); ">Desarrollo de Marca: August Gray Compositions</h2><p  class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto de branding fue un viaje desde la investigación hasta la creación de una identidad visual completa.  Nuestro proceso incluyó:
-                <ul>
-                    <li><b>Investigación y Análisis:</b> Estudio de mercado, análisis de competencia, identificación del buyer persona y mapeo del customer journey.</li>
-                    <li><b>Definición Estratégica:</b> Definimos su historia, misión, visión, valores y ventaja competitiva para asegurar que la marca refleje sus principios fundamentales.</li>
-                    <li><b>Desarrollo Visual:</b> Diseñamos un logotipo único, una paleta de colores armoniosa y recursos gráficos adaptados a todas sus necesidades (papelería corporativa, presentaciones, contenido digital).</li>
-                    <li><b>Planificación de Marketing:</b> Desarrollamos estrategias para comunicar la nueva identidad visual y alcanzar al público objetivo del taller.</li>
-                </ul>
-            </p>
-        </div>
-    </div>
-            </div>
-        </section>
-    
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="product-card rounded-lg shadow-lg flex flex-col" data-categories="gD.,wD."
+                    style="background-color: var(--low-contrast);">
+                    <div class="rounded-t-lg overflow-hidden" style="aspect-ratio: 1 / 1;"><img src="assets/img-6.png"
+                            alt="AG:Compositions Web" class="w-full h-full object-cover"></div>
+                    <div class="p-4 flex-grow flex flex-col">
+                        <div class="mb-2 flex flex-wrap items-center gap-1">
+                            <span class="text-xs px-2 py-0.5 rounded-full"
+                                style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
+                                gD.
+                            </span>
 
-        <section style="background-color: var(--background); color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">Mockups</h2>
-                <div class="grid md:grid-cols-1 gap-10">
-        <div class="space-y-4">
-            <div class="w-full"><div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 2; grid-row: span 2;">
-                <img src="assets/img-9.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Landing Page</h3>
+                            <span class="text-xs px-2 py-0.5 rounded-full"
+                                style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
+                                wD.
+                            </span>
+                        </div>
+                        <div class="flex-grow space-y-2">
+                            <h3 class="font-bold text-lg" style="color: var(--high-contrast);">AG:Compositions: Branding
+                            </h3>
+                            <p style="color: var(--text); ">De la Investigación a la Identidad Visual: Branding
+                                Estratégico para Taller de comunicación visual.</p>
+                        </div>
+                        <div class="mt-auto pt-4"><button data-modal-target="#modal-p3"
+                                class="w-full text-center block rounded-lg font-bold py-3 px-4"
+                                style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver
+                                más</button></div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg shadow-lg flex flex-col" data-categories="gD.,wD.,aiD."
+                    style="background-color: var(--low-contrast);">
+                    <div class="rounded-t-lg overflow-hidden" style="aspect-ratio: 1 / 1;"><img src="assets/img-7.png"
+                            alt="AI Moodboard to Product" class="w-full h-full object-cover"></div>
+                    <div class="p-4 flex-grow flex flex-col">
+                        <div class="mb-2 flex flex-wrap items-center gap-1">
+                            <span class="text-xs px-2 py-0.5 rounded-full"
+                                style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
+                                gD.
+                            </span>
+
+                            <span class="text-xs px-2 py-0.5 rounded-full"
+                                style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
+                                wD.
+                            </span>
+
+                            <span class="text-xs px-2 py-0.5 rounded-full"
+                                style="background-color: var(--primary); color: var(--tags); opacity: 0.8;">
+                                aiD.
+                            </span>
+                        </div>
+                        <div class="flex-grow space-y-2">
+                            <h3 class="font-bold text-lg" style="color: var(--high-contrast);">AI Moodboard to Product
+                            </h3>
+                            <p style="color: var(--text); ">De la Inspiración a la Imagen: Una Aplicación Web que
+                                Conecta Moodboards con Inteligencia Artificial.</p>
+                        </div>
+                        <div class="mt-auto pt-4"><button data-modal-target="#modal-prod-1763659854694"
+                                class="w-full text-center block rounded-lg font-bold py-3 px-4"
+                                style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver
+                                más</button></div>
+                    </div>
                 </div>
             </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 1;">
-                <img src="assets/img-10.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Sección</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 1;">
-                <img src="assets/img-11.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Formulario</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 2;">
-                <img src="assets/img-12.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">New Item</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 2;">
-                <img src="assets/img-13.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Paleta de Color: Light</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 2;">
-                <img src="assets/img-14.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Paleta de Color: Dark</h3>
-                </div>
-            </div>
-        </div></div>
         </div>
-    </div>
-            </div>
-        </section>
-    
+    </section>
+
+
+    <div id="modal-p3" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+
+                <div class="p-6">
+
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="mt-6 max-w-lg mx-auto aspect-video anime-element" style=""><img
+                                    src="assets/img-8.png" alt="content" class="rounded-lg w-full h-full object-cover"
+                                    style="max-width: 100%;">
+                            </div>
+                            <h2 class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                                style="color: var(--high-contrast); ">Desarrollo de Marca: August Gray Compositions</h2>
+                            <p class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto de branding
+                                fue un viaje desde la investigación hasta la creación de una identidad visual completa.
+                                Nuestro proceso incluyó:
+                            <ul>
+                                <li><b>Investigación y Análisis:</b> Estudio de mercado, análisis de competencia,
+                                    identificación del buyer persona y mapeo del customer journey.</li>
+                                <li><b>Definición Estratégica:</b> Definimos su historia, misión, visión, valores y
+                                    ventaja competitiva para asegurar que la marca refleje sus principios fundamentales.
+                                </li>
+                                <li><b>Desarrollo Visual:</b> Diseñamos un logotipo único, una paleta de colores
+                                    armoniosa y recursos gráficos adaptados a todas sus necesidades (papelería
+                                    corporativa, presentaciones, contenido digital).</li>
+                                <li><b>Planificación de Marketing:</b> Desarrollamos estrategias para comunicar la nueva
+                                    identidad visual y alcanzar al público objetivo del taller.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">
+                        Mockups</h2>
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="w-full">
+                                <div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 2; grid-row: span 2;">
+                                        <img src="assets/img-9.png" alt="bento item" class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Landing Page</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-10.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Sección</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-11.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Formulario</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-12.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">New Item</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-13.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Paleta de Color: Light</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-14.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Paleta de Color: Dark</h3>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    
-                        <div id="modal-prod-1763659854694" class="modal-overlay">
-                            <div class="modal-container">
-                                <button class="modal-close-btn">&times;</button>
-                                <div class="modal-content">
-                                    
-        <section style="background-color: var(--background); color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                
-                <div class="grid md:grid-cols-1 gap-10">
-        <div class="space-y-4">
-            <div  class="mt-6 max-w-lg mx-auto aspect-video anime-element" style=""><img src="assets/img-15.png" alt="content" class="rounded-lg w-full h-full object-cover"></div><h1  class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element" style="color: var(--high-contrast); ">Moodboard to Product AI Synthetizer</h1><p  class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto es una solución innovadora para diseñadores y creativos que buscan aprovechar el poder de la inteligencia artificial para generar imágenes impactantes. Desarrollamos una aplicación web que actúa como un puente entre la inspiración visual de un moodboard y las capacidades generativas de modelos de IA. Con esta herramienta, podrás:
-                <ul>
-                    <li><b>Capturar tu Visión:</b> Crea un moodboard digital que refleje la esencia de tu proyecto.</li>
-                    <li><b>Extraer Información Clave:</b> La aplicación analiza tus imágenes, identificando paletas de colores, estilos y texturas.</li>
-                    <li><b>Generar Prompts Precisos:</b> Combina el análisis visual con información adicional (como una lista de objetos en CSV) para crear prompts detallados y optimizados.</li>
-                    <li><b>Dar Vida a tu Imaginación:</b> Utiliza los prompts generados en modelos de IA como Nano Banana, ChatGPT o Stable Diffusion para crear imágenes que capturen la esencia de tu proyecto.</li>
-                </ul>
-            </p>
-        </div>
-    </div>
-            </div>
-        </section>
-    
+                    </div>
+                </div>
 
-        <section style="background-color: var(--background); color: var(--high-contrast);" class="">
-            <div class="container mx-auto px-6">
-                <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">Características</h2>
-                <div class="grid md:grid-cols-1 gap-10">
-        <div class="space-y-4">
-            <div class="w-full"><div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 2; grid-row: span 2;">
-                <img src="assets/img-16.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">UI</h3>
-                </div>
             </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 1;">
-                <img src="assets/img-17.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Concept Nodes</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 1;">
-                <img src="assets/img-18.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">Local LLM + APIs</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 2;">
-                <img src="assets/img-19.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">by Midori</h3>
-                </div>
-            </div>
-        
-            <div class="relative rounded-lg overflow-hidden" style="grid-column: span 1; grid-row: span 2;">
-                <img src="assets/img-20.png" alt="bento item" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end" style="color: white;">
-                    <h3 class="text-lg font-bold">by Midori</h3>
-                </div>
-            </div>
-        </div></div>
         </div>
     </div>
-            </div>
-        </section>
-    
+
+    <div id="modal-prod-1763659854694" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+
+                <div class="p-6">
+
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="mt-6 max-w-lg mx-auto aspect-video anime-element" style=""><img
+                                    src="assets/img-15.png" alt="content" class="rounded-lg w-full h-full object-cover"
+                                    style="max-width: 100%;">
+                            </div>
+                            <h1 class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                                style="color: var(--high-contrast); ">Moodboard to Product AI Synthetizer</h1>
+                            <p class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto es una
+                                solución innovadora para diseñadores y creativos que buscan aprovechar el poder de la
+                                inteligencia artificial para generar imágenes impactantes. Desarrollamos una aplicación
+                                web que actúa como un puente entre la inspiración visual de un moodboard y las
+                                capacidades generativas de modelos de IA. Con esta herramienta, podrás:
+                            <ul>
+                                <li><b>Capturar tu Visión:</b> Crea un moodboard digital que refleje la esencia de tu
+                                    proyecto.</li>
+                                <li><b>Extraer Información Clave:</b> La aplicación analiza tus imágenes, identificando
+                                    paletas de colores, estilos y texturas.</li>
+                                <li><b>Generar Prompts Precisos:</b> Combina el análisis visual con información
+                                    adicional (como una lista de objetos en CSV) para crear prompts detallados y
+                                    optimizados.</li>
+                                <li><b>Dar Vida a tu Imaginación:</b> Utiliza los prompts generados en modelos de IA
+                                    como Nano Banana, ChatGPT o Stable Diffusion para crear imágenes que capturen la
+                                    esencia de tu proyecto.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">
+                        Características</h2>
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="w-full">
+                                <div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 2; grid-row: span 2;">
+                                        <img src="assets/img-16.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">UI</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-17.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Concept Nodes</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-18.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Local LLM + APIs</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-19.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">by Midori</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-20.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">by Midori</h3>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    
-            
-        <button id="theme-toggle" title="Toggle theme">
-            <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-            <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-        </button>
-    
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Animation Observer
-                    const observerOptions = {
-                        root: null,
-                        rootMargin: '0px',
-                        threshold: 0.2
-                    };
+                    </div>
+                </div>
 
-                    const observer = new IntersectionObserver((entries, observer) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                const el = entry.target;
-                                const type = el.dataset.animeType;
-                                const duration = parseInt(el.dataset.animeDuration || '1000');
-                                const delay = parseInt(el.dataset.animeDelay || '0');
-                                const loop = el.dataset.animeLoop === 'true';
-                                const easing = el.dataset.animeEasing || 'easeOutQuad';
+            </div>
+        </div>
+    </div>
 
-                                // Remove opacity 0 override
-                                el.style.opacity = '';
 
-                                let animConfig = {
-                                    targets: el,
-                                    duration: duration,
-                                    delay: delay,
-                                    loop: loop,
-                                    easing: easing
-                                };
+    <button id="theme-toggle" title="Toggle theme">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
 
-                                if (type === 'fade-in') {
-                                    animConfig.opacity = [0, 1];
-                                } else if (type === 'slide-up') {
-                                    animConfig.opacity = [0, 1];
-                                    animConfig.translateY = [50, 0];
-                                } else if (type === 'slide-down') {
-                                    animConfig.opacity = [0, 1];
-                                    animConfig.translateY = [-50, 0];
-                                } else if (type === 'scale-up') {
-                                    animConfig.opacity = [0, 1];
-                                    animConfig.scale = [0.8, 1];
-                                } else if (type === 'draw-stroke') {
-                                     const paths = el.querySelectorAll('path, circle, rect, line, polyline, polygon, ellipse');
-                                     if (paths.length > 0) {
-                                         animConfig = {
-                                             targets: paths,
-                                             strokeDashoffset: [anime.setDashoffset, 0],
-                                             easing: 'easeInOutSine',
-                                             duration: duration,
-                                             delay: function(el, i) { return i * 250 + delay },
-                                             direction: 'alternate',
-                                             loop: loop
-                                         };
-                                     }
-                                }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animation Observer
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2
+            };
 
-                                anime(animConfig);
-                                observer.unobserve(el);
-                            }
-                        });
-                    }, observerOptions);
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const type = el.dataset.animeType;
+                        const duration = parseInt(el.dataset.animeDuration || '1000');
+                        const delay = parseInt(el.dataset.animeDelay || '0');
+                        const loop = el.dataset.animeLoop === 'true';
+                        const easing = el.dataset.animeEasing || 'easeOutQuad';
 
-                    document.querySelectorAll('.anime-element').forEach(el => {
-                        observer.observe(el);
-                    });
+                        // Remove opacity 0 override
+                        el.style.opacity = '';
 
-                    // Tabs Logic
-                    const tabContainers = document.querySelectorAll('[id^="tabs-"]');
-                    tabContainers.forEach(container => {
-                        const tabs = container.querySelectorAll('[role="tab"]');
-                        const panels = container.querySelectorAll('[role="tabpanel"]');
-                        
-                        tabs.forEach(tab => {
-                            tab.addEventListener('click', () => {
-                                tabs.forEach(t => {
-                                    t.setAttribute('aria-selected', 'false');
-                                    t.style.borderColor = 'transparent';
-                                    t.style.color = 'var(--text)';
-                                });
-                                panels.forEach(p => p.hidden = true);
-                                
-                                tab.setAttribute('aria-selected', 'true');
-                                tab.style.borderColor = 'var(--primary)';
-                                tab.style.color = 'var(--primary)';
-                                const controlledPanelId = tab.getAttribute('aria-controls');
-                                const controlledPanel = document.getElementById(controlledPanelId);
-                                if (controlledPanel) {
-                                    controlledPanel.hidden = false;
-                                }
-                            });
-                        });
-                    });
-
-                    // Carousel Logic
-                    document.querySelectorAll('.carousel-container').forEach(carousel => {
-                        const track = carousel.querySelector('.carousel-track');
-                        const prevBtn = carousel.querySelector('.carousel-prev');
-                        const nextBtn = carousel.querySelector('.carousel-next');
-                        const dots = carousel.querySelectorAll('.carousel-dot');
-                        let currentSlide = 0;
-                        const totalSlides = parseInt(carousel.dataset.totalSlides);
-
-                        const updateCarousel = () => {
-                            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-                            dots.forEach((dot, index) => {
-                                dot.style.backgroundColor = index === currentSlide ? 'var(--primary)' : 'rgba(255,255,255,0.5)';
-                            });
+                        let animConfig = {
+                            targets: el,
+                            duration: duration,
+                            delay: delay,
+                            loop: loop,
+                            easing: easing
                         };
 
-                        if(prevBtn) {
-                            prevBtn.addEventListener('click', () => {
-                                currentSlide = (currentSlide === 0) ? totalSlides - 1 : currentSlide - 1;
-                                updateCarousel();
-                            });
-                        }
-
-                        if(nextBtn) {
-                            nextBtn.addEventListener('click', () => {
-                                currentSlide = (currentSlide === totalSlides - 1) ? 0 : currentSlide + 1;
-                                updateCarousel();
-                            });
-                        }
-                        
-                        dots.forEach(dot => {
-                            dot.addEventListener('click', (e) => {
-                                currentSlide = parseInt(e.target.dataset.index);
-                                updateCarousel();
-                            });
-                        });
-                    });
-                    
-                    // Theme Toggle
-                    const themeToggleBtn = document.getElementById('theme-toggle');
-                    const htmlEl = document.documentElement;
-
-                    const storedTheme = localStorage.getItem('theme');
-                    if (storedTheme) {
-                        htmlEl.setAttribute('data-theme', storedTheme);
-                    }
-
-                    themeToggleBtn.addEventListener('click', () => {
-                        const currentTheme = htmlEl.getAttribute('data-theme');
-                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                        htmlEl.setAttribute('data-theme', newTheme);
-                        localStorage.setItem('theme', newTheme);
-                    });
-
-                    // Modal Logic
-                    const openModal = (modal) => {
-                        if (modal == null) return;
-                        modal.classList.add('active');
-                        document.body.classList.add('modal-open');
-                    };
-
-                    const closeModal = (modal) => {
-                        if (modal == null) return;
-                        modal.classList.remove('active');
-                        document.body.classList.remove('modal-open');
-                    };
-
-                    const openModalButtons = document.querySelectorAll('[data-modal-target]');
-                    
-                    openModalButtons.forEach(button => {
-                        button.addEventListener('click', () => {
-                            const modal = document.querySelector(button.dataset.modalTarget);
-                            openModal(modal);
-                        });
-                    });
-
-                    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                        overlay.addEventListener('click', (e) => {
-                            if (e.target === overlay) {
-                                closeModal(overlay);
+                        if (type === 'fade-in') {
+                            animConfig.opacity = [0, 1];
+                        } else if (type === 'slide-up') {
+                            animConfig.opacity = [0, 1];
+                            animConfig.translateY = [50, 0];
+                        } else if (type === 'slide-down') {
+                            animConfig.opacity = [0, 1];
+                            animConfig.translateY = [-50, 0];
+                        } else if (type === 'scale-up') {
+                            animConfig.opacity = [0, 1];
+                            animConfig.scale = [0.8, 1];
+                        } else if (type === 'draw-stroke') {
+                            const paths = el.querySelectorAll('path, circle, rect, line, polyline, polygon, ellipse');
+                            if (paths.length > 0) {
+                                animConfig = {
+                                    targets: paths,
+                                    strokeDashoffset: [anime.setDashoffset, 0],
+                                    easing: 'easeInOutSine',
+                                    duration: duration,
+                                    delay: function (el, i) { return i * 250 + delay },
+                                    direction: 'alternate',
+                                    loop: loop
+                                };
                             }
-                        });
-                    });
-                    
-                    document.querySelectorAll('.modal-close-btn, .modal-close-btn-secondary').forEach(button => {
-                        button.addEventListener('click', () => {
-                            const modal = button.closest('.modal-overlay');
-                            closeModal(modal);
-                        });
-                    });
+                        }
 
-                    // Product Grid Filtering Logic
-                    document.querySelectorAll('.product-grid-section').forEach(grid => {
-                        const filterControls = grid.querySelector('.filter-controls');
-                        if (!filterControls) return;
+                        anime(animConfig);
+                        observer.unobserve(el);
+                    }
+                });
+            }, observerOptions);
 
-                        filterControls.addEventListener('click', (event) => {
-                            const button = event.target.closest('.filter-button');
-                            if (!button) return;
+            document.querySelectorAll('.anime-element').forEach(el => {
+                observer.observe(el);
+            });
 
-                            const category = button.dataset.category;
-                            
-                            filterControls.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                            button.classList.add('active');
-                            
-                            grid.querySelectorAll('.product-card').forEach(card => {
-                                const cardCategories = (card.dataset.categories || '').split(',');
-                                if (category === 'All' || cardCategories.includes(category)) {
-                                    card.classList.remove('hidden');
-                                } else {
-                                    card.classList.add('hidden');
-                                }
-                            });
+            // Tabs Logic
+            const tabContainers = document.querySelectorAll('[id^="tabs-"]');
+            tabContainers.forEach(container => {
+                const tabs = container.querySelectorAll('[role="tab"]');
+                const panels = container.querySelectorAll('[role="tabpanel"]');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => {
+                            t.setAttribute('aria-selected', 'false');
+                            t.style.borderColor = 'transparent';
+                            t.style.color = 'var(--text)';
                         });
+                        panels.forEach(p => p.hidden = true);
+
+                        tab.setAttribute('aria-selected', 'true');
+                        tab.style.borderColor = 'var(--primary)';
+                        tab.style.color = 'var(--primary)';
+                        const controlledPanelId = tab.getAttribute('aria-controls');
+                        const controlledPanel = document.getElementById(controlledPanelId);
+                        if (controlledPanel) {
+                            controlledPanel.hidden = false;
+                        }
                     });
                 });
-            </script>
-            <!-- And also copy this -->
-            <script src="./assets/js/anime.min.js"></script>
-            	<script>
-		// Create a timeline with default parameters
-		anime({
-			targets: '.line-drawing-demo .lines .line',
-			strokeDashoffset: [anime.setDashoffset, 0],
-			easing: 'easeInOutSine',
-			duration: 1500,
-			delay: function (el, i) { return i * 250 },
-			direction: 'alternate',
-			loop: true
-		});
-		anime({
-			targets: '.morphing-demo .poli',
-			opacity: ['0%', '100%'],
-			duration: 100,
-			delay: 1500
-		});
-		anime({
-			targets: '.line-drawing-demo .lines .line',
-			opacity: ['100%', '0%'],
-			duration: 100,
-			delay: 1500
-		});
-		anime({
-			targets: '.morphing-demo .poli',
-			points: [
-				{
-					value: [
-						'12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104',
-						'13.897 145.203, 206.409 134.508, 363.694 157.682, 328.032 372.626, 167.174 265.878, 13.897 145.203']
-				},
-				{ value: '51.636 157.699, 207.203 3.610, 321.541 170.947, 249.603 267.029, 86.483 376.595, 51.636 157.699' },
-				{ value: '52.982 156.645, 207.647 88.122, 403.590 144.106, 278.782 303.175, 163.567 266.740, 52.982 156.645' },
-				{ value: '138.405 184.119, 208.269 3.556, 363.986 156.336, 277.640 303.865, 88.448 372.192, 138.405 184.119' },
-				{ value: '94.973 171.282, 208.464 41.508, 402.839 144.355, 303.681 343.163, 87.620 373.063, 94.973 171.282' },
-				{ value: '12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104' }
-			],
-			easing: 'easeOutQuad',
-			duration: 5000,
-			delay: 2000,
-			loop: true
-		});
+            });
 
-		// graph animation
-		anime({
-			targets: '.morphing-graph .graph-line',
-			points: [
-				{
-					value: [
-						'340.405 232.119, 410.269 51.556, 565.986 204.336, 479.640 351.865, 290.448 420.192, 340.405 232.119',
-						'296.973 219.282, 410.463 89.508, 604.839 192.355, 505.681 391.163, 289.620 421.063, 296.973 219.282']
-				},
-				{ value: '215.897 193.203, 408.409 182.508, 565.694 205.682, 530.032 420.626, 369.174 313.878, 215.897 193.203' },
-				{ value: '253.636 204.699, 409.203 50.610, 523.541 217.947, 451.603 314.029, 288.483 423.595, 253.636 204.699' },
-				{ value: '254.982 204.645, 409.647 136.122, 605.590 192.106, 480.782 351.175, 365.567 314.740, 254.982 204.645' },
-				{ value: '214.894 192.104, 409.502 136.081, 605.590 192.106, 480.527 351.500, 338.978 351.500, 214.894 192.104' },
-				{ value: '340.405 232.119, 410.269 51.556, 565.986 204.336, 479.640 351.865, 290.448 420.192, 340.405 232.119' }
-			],
-			easing: 'easeOutQuad',
-			duration: 6000,
-			loop: true
-		});
-	</script>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('dotted-wave-bg');
-        
-        // --- CONFIGURATION ---
-        const PALETTES = {
-            dark: {
-                bg: '#212428',
-                dotBase: '#464D56',
-                dotHighlight: '#54C1FB'
-            },
-            light: {
-                bg: '#E0E5EC',
-                dotBase: '#CED2B9',
-                dotHighlight: '#44A0D1'
+            // Carousel Logic
+            document.querySelectorAll('.carousel-container').forEach(carousel => {
+                const track = carousel.querySelector('.carousel-track');
+                const prevBtn = carousel.querySelector('.carousel-prev');
+                const nextBtn = carousel.querySelector('.carousel-next');
+                const dots = carousel.querySelectorAll('.carousel-dot');
+                let currentSlide = 0;
+                const totalSlides = parseInt(carousel.dataset.totalSlides);
+
+                const updateCarousel = () => {
+                    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                    dots.forEach((dot, index) => {
+                        dot.style.backgroundColor = index === currentSlide ? 'var(--primary)' : 'rgba(255,255,255,0.5)';
+                    });
+                };
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        currentSlide = (currentSlide === 0) ? totalSlides - 1 : currentSlide - 1;
+                        updateCarousel();
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        currentSlide = (currentSlide === totalSlides - 1) ? 0 : currentSlide + 1;
+                        updateCarousel();
+                    });
+                }
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', (e) => {
+                        currentSlide = parseInt(e.target.dataset.index);
+                        updateCarousel();
+                    });
+                });
+            });
+
+            // Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlEl = document.documentElement;
+
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme) {
+                htmlEl.setAttribute('data-theme', storedTheme);
             }
-        };
 
-        let animationTimeline = null;
-        let resizeTimer;
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = htmlEl.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                htmlEl.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
 
-        // --- CORE FUNCTIONS ---
+            // Modal Logic
+            const openModal = (modal) => {
+                if (modal == null) return;
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            };
 
-        function createGrid() {
-            // 1. Read the current theme from the HTML tag (set by your other script)
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const colors = PALETTES[currentTheme];
+            const closeModal = (modal) => {
+                if (modal == null) return;
+                modal.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            };
 
-            // 2. Apply Background Color
-            // We don't touch the button here, your other script handles that!
-            container.style.backgroundColor = colors.bg;
+            const openModalButtons = document.querySelectorAll('[data-modal-target]');
 
-            // 3. Reset
-            container.innerHTML = ''; 
-            if (animationTimeline) animationTimeline.pause(); 
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = document.querySelector(button.dataset.modalTarget);
+                    openModal(modal);
+                });
+            });
 
-            // 4. Build Grid
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            const DOT_SPACING = 25;
-            const DOT_RADIUS = 1;
-            const cols = Math.floor(width / DOT_SPACING);
-            const rows = Math.floor(height / DOT_SPACING);
-            const isBottomHalfStart = Math.floor(rows / 2);
-
-            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svg.setAttribute('width', '100%');
-            svg.setAttribute('height', '100%');
-
-            let hasDots = false;
-
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                    circle.setAttribute('cx', j * DOT_SPACING + DOT_SPACING / 2);
-                    circle.setAttribute('cy', i * DOT_SPACING + DOT_SPACING / 2);
-                    circle.setAttribute('r', DOT_RADIUS);
-                    circle.setAttribute('fill', colors.dotBase); 
-
-                    if (i > isBottomHalfStart) {
-                        circle.classList.add('wave-dot');
-                        hasDots = true;
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        closeModal(overlay);
                     }
-                    svg.appendChild(circle);
-                }
-            }
-            container.appendChild(svg);
-
-            if (hasDots) startAnimation(colors);
-        }
-
-        function startAnimation(colors) {
-            const targets = document.querySelectorAll('.wave-dot');
-            
-            animationTimeline = anime.timeline({
-                loop: true,
-                direction: 'normal',
+                });
             });
 
-            // Phase 1: Rise
-            animationTimeline.add({
-                targets: targets,
-                fill: [
-                    { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
-                    { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
-                ],
-                delay: function(el, i, total) {
-                    const reverseIndex = total - i;
-                    return (reverseIndex * 10) + anime.random(0, 800);
-                }
-            })
-            // Phase 2: Fall
-            .add({
-                targets: targets,
-                fill: [
-                    { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
-                    { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
-                ],
-                delay: function(el, i, total) {
-                    return (i * 10) + anime.random(0, 800);
+            document.querySelectorAll('.modal-close-btn, .modal-close-btn-secondary').forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal-overlay');
+                    closeModal(modal);
+                });
+            });
+
+            // Product Grid Filtering Logic
+            document.querySelectorAll('.product-grid-section').forEach(grid => {
+                const filterControls = grid.querySelector('.filter-controls');
+                if (!filterControls) return;
+
+                filterControls.addEventListener('click', (event) => {
+                    const button = event.target.closest('.filter-button');
+                    if (!button) return;
+
+                    const category = button.dataset.category;
+
+                    filterControls.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    grid.querySelectorAll('.product-card').forEach(card => {
+                        const cardCategories = (card.dataset.categories || '').split(',');
+                        if (category === 'All' || cardCategories.includes(category)) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <!-- And also copy this -->
+    <script src="./assets/js/anime.min.js"></script>
+    <script>
+        // Create a timeline with default parameters
+        anime({
+            targets: '.line-drawing-demo .lines .line',
+            strokeDashoffset: [anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 1500,
+            delay: function (el, i) { return i * 250 },
+            direction: 'alternate',
+            loop: true
+        });
+        anime({
+            targets: '.morphing-demo .poli',
+            opacity: ['0%', '100%'],
+            duration: 100,
+            delay: 1500
+        });
+        anime({
+            targets: '.line-drawing-demo .lines .line',
+            opacity: ['100%', '0%'],
+            duration: 100,
+            delay: 1500
+        });
+        anime({
+            targets: '.morphing-demo .poli',
+            points: [
+                {
+                    value: [
+                        '12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104',
+                        '13.897 145.203, 206.409 134.508, 363.694 157.682, 328.032 372.626, 167.174 265.878, 13.897 145.203']
                 },
-                offset: '-=500'
-            });
-        }
+                { value: '51.636 157.699, 207.203 3.610, 321.541 170.947, 249.603 267.029, 86.483 376.595, 51.636 157.699' },
+                { value: '52.982 156.645, 207.647 88.122, 403.590 144.106, 278.782 303.175, 163.567 266.740, 52.982 156.645' },
+                { value: '138.405 184.119, 208.269 3.556, 363.986 156.336, 277.640 303.865, 88.448 372.192, 138.405 184.119' },
+                { value: '94.973 171.282, 208.464 41.508, 402.839 144.355, 303.681 343.163, 87.620 373.063, 94.973 171.282' },
+                { value: '12.894 144.104, 207.502 88.081, 403.590 144.106, 278.527 303.500, 136.978 303.500, 12.894 144.104' }
+            ],
+            easing: 'easeOutQuad',
+            duration: 5000,
+            delay: 2000,
+            loop: true
+        });
 
-        // --- THE MAGIC GLUE ---
-        
-        // 1. Initial Draw
-        createGrid();
+        // graph animation
+        anime({
+            targets: '.morphing-graph .graph-line',
+            points: [
+                {
+                    value: [
+                        '340.405 232.119, 410.269 51.556, 565.986 204.336, 479.640 351.865, 290.448 420.192, 340.405 232.119',
+                        '296.973 219.282, 410.463 89.508, 604.839 192.355, 505.681 391.163, 289.620 421.063, 296.973 219.282']
+                },
+                { value: '215.897 193.203, 408.409 182.508, 565.694 205.682, 530.032 420.626, 369.174 313.878, 215.897 193.203' },
+                { value: '253.636 204.699, 409.203 50.610, 523.541 217.947, 451.603 314.029, 288.483 423.595, 253.636 204.699' },
+                { value: '254.982 204.645, 409.647 136.122, 605.590 192.106, 480.782 351.175, 365.567 314.740, 254.982 204.645' },
+                { value: '214.894 192.104, 409.502 136.081, 605.590 192.106, 480.527 351.500, 338.978 351.500, 214.894 192.104' },
+                { value: '340.405 232.119, 410.269 51.556, 565.986 204.336, 479.640 351.865, 290.448 420.192, 340.405 232.119' }
+            ],
+            easing: 'easeOutQuad',
+            duration: 6000,
+            loop: true
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('dotted-wave-bg');
 
-        // 2. Watch for Theme Changes (MutationObserver)
-        // This waits for your Main Script to update 'data-theme' on the <html> tag
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-                    createGrid(); // Repaint grid when theme changes
+            // --- CONFIGURATION ---
+            const PALETTES = {
+                dark: {
+                    bg: '#212428',
+                    dotBase: '#464D56',
+                    dotHighlight: '#54C1FB'
+                },
+                light: {
+                    bg: '#E0E5EC',
+                    dotBase: '#CED2B9',
+                    dotHighlight: '#44A0D1'
                 }
+            };
+
+            let animationTimeline = null;
+            let resizeTimer;
+
+            // --- CORE FUNCTIONS ---
+
+            function createGrid() {
+                // 1. Read the current theme from the HTML tag (set by your other script)
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                const colors = PALETTES[currentTheme];
+
+                // 2. Apply Background Color
+                // We don't touch the button here, your other script handles that!
+                container.style.backgroundColor = colors.bg;
+
+                // 3. Reset
+                container.innerHTML = '';
+                if (animationTimeline) animationTimeline.pause();
+
+                // 4. Build Grid
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                const DOT_SPACING = 25;
+                const DOT_RADIUS = 1;
+                const cols = Math.floor(width / DOT_SPACING);
+                const rows = Math.floor(height / DOT_SPACING);
+                const isBottomHalfStart = Math.floor(rows / 2);
+
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute('width', '100%');
+                svg.setAttribute('height', '100%');
+
+                let hasDots = false;
+
+                for (let i = 0; i < rows; i++) {
+                    for (let j = 0; j < cols; j++) {
+                        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                        circle.setAttribute('cx', j * DOT_SPACING + DOT_SPACING / 2);
+                        circle.setAttribute('cy', i * DOT_SPACING + DOT_SPACING / 2);
+                        circle.setAttribute('r', DOT_RADIUS);
+                        circle.setAttribute('fill', colors.dotBase);
+
+                        if (i > isBottomHalfStart) {
+                            circle.classList.add('wave-dot');
+                            hasDots = true;
+                        }
+                        svg.appendChild(circle);
+                    }
+                }
+                container.appendChild(svg);
+
+                if (hasDots) startAnimation(colors);
+            }
+
+            function startAnimation(colors) {
+                const targets = document.querySelectorAll('.wave-dot');
+
+                animationTimeline = anime.timeline({
+                    loop: true,
+                    direction: 'normal',
+                });
+
+                // Phase 1: Rise
+                animationTimeline.add({
+                    targets: targets,
+                    fill: [
+                        { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                        { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
+                    ],
+                    delay: function (el, i, total) {
+                        const reverseIndex = total - i;
+                        return (reverseIndex * 10) + anime.random(0, 800);
+                    }
+                })
+                    // Phase 2: Fall
+                    .add({
+                        targets: targets,
+                        fill: [
+                            { value: colors.dotHighlight, duration: 1000, easing: 'easeOutQuad' },
+                            { value: colors.dotBase, duration: 1000, easing: 'easeInQuad' }
+                        ],
+                        delay: function (el, i, total) {
+                            return (i * 10) + anime.random(0, 800);
+                        },
+                        offset: '-=500'
+                    });
+            }
+
+            // --- THE MAGIC GLUE ---
+
+            // 1. Initial Draw
+            createGrid();
+
+            // 2. Watch for Theme Changes (MutationObserver)
+            // This waits for your Main Script to update 'data-theme' on the <html> tag
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                        createGrid(); // Repaint grid when theme changes
+                    }
+                });
+            });
+
+            // Start watching the <html> tag
+            observer.observe(document.documentElement, { attributes: true });
+
+            // 3. Resize Handler
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(createGrid, 200);
             });
         });
-        
-        // Start watching the <html> tag
-        observer.observe(document.documentElement, { attributes: true });
+    </script>
+</body>
 
-        // 3. Resize Handler
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(createGrid, 200);
-        });
-    });
-</script>
-        </body>
-        </html>
-    
+</html>
