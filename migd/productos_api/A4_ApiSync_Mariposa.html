@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APISYNC — Economía Circular · Esquema Mariposa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #e0e5ec;
+    --ink: #212428;
+    --ink-muted: #464d56;
+    --ink-faint: #8A9098;
+    --border: #ced2d9;
+    --accent: #44a0d1;
+    --column-accent: #dbe0e7;
+
+    /* Ciclos */
+    --col-tec:   #2a6496;   /* Ciclo Técnico  — azul acero */
+    --col-bio:   #3a7d44;   /* Ciclo Biológico — verde */
+    --col-tec-lt: #dbeaf5;
+    --col-bio-lt: #d6eedd;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 32px 64px;
+  }
+
+  /* ── Header ── */
+  header {
+    max-width: 1040px;
+    margin: 0 auto 36px;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* ── Legend bar ── */
+  .legend-bar {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+  }
+
+  .legend-bar strong { font-weight: 500; color: var(--ink); margin-right: 4px; }
+
+  .leg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px 3px 6px;
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    background: white;
+  }
+
+  .leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  /* ── Section label ── */
+  .section-label {
+    max-width: 1040px;
+    margin: 0 auto 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ── Table wrap ── */
+  .table-wrap {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--column-accent);
+    text-align: left;
+    vertical-align: bottom;
+  }
+
+  tbody tr {
+    border-bottom: 0.5px solid var(--border);
+    transition: background .15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--column-accent); }
+
+  td {
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    vertical-align: top;
+  }
+
+  td.col-a {
+    font-weight: 600;
+    font-size: 12px;
+    background: var(--column-accent);
+    border-right: 0.5px solid var(--border);
+    color: var(--ink);
+    width: 18%;
+  }
+
+  td.col-b { width: 20%; border-right: 0.5px solid var(--border); color: var(--ink-muted); }
+  td.col-c { width: 14%; border-right: 0.5px solid var(--border); }
+  td.col-d { width: 16%; border-right: 0.5px solid var(--border); color: var(--ink-muted); }
+  td.col-e { color: var(--ink-muted); }
+
+  .badge-tec {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    background: var(--col-tec-lt);
+    color: var(--col-tec);
+    border-radius: 20px;
+    padding: 2px 8px;
+    border: 0.5px solid #b3cfe0;
+  }
+
+  .badge-bio {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    background: var(--col-bio-lt);
+    color: var(--col-bio);
+    border-radius: 20px;
+    padding: 2px 8px;
+    border: 0.5px solid #a4cead;
+  }
+
+  .badge-both {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    background: #f5f0e0;
+    color: #7a6a30;
+    border-radius: 20px;
+    padding: 2px 8px;
+    border: 0.5px solid #d4c87a;
+  }
+
+  /* ── Hero split ── */
+  .hero-split {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ── Cycle cards ── */
+  .cycle-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .cycle-header {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cycle-accent-tec { background: var(--col-tec); }
+  .cycle-accent-bio { background: var(--col-bio); }
+
+  .cycle-title-wrap { padding: 14px 16px; background: var(--column-accent); }
+
+  .cycle-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .cycle-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cycle-desc {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+
+  /* ── Image inside cycle card ── */
+  .cycle-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .cycle-body { padding: 14px 16px 16px; }
+
+  .kv-row {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .kv-row:last-child { border-bottom: none; }
+
+  .kv-key {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    width: 100px;
+    padding-top: 1px;
+  }
+
+  .kv-val {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .kv-val strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Phase tables ── */
+  .phase-section {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .phase-stripe {
+    width: 4px;
+    height: 22px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .phase-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .phase-sub {
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin-left: 2px;
+  }
+
+  .phase-table-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .phase-row {
+    display: grid;
+    grid-template-columns: 160px 180px 1fr 1fr;
+    border-bottom: 0.5px solid var(--border);
+    transition: background .15s;
+  }
+
+  .phase-row:last-child { border-bottom: none; }
+  .phase-row:hover { background: var(--column-accent); }
+
+  .phase-row-head {
+    display: grid;
+    grid-template-columns: 160px 180px 1fr 1fr;
+    background: var(--column-accent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ph-cell {
+    padding: 10px 14px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    vertical-align: top;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .ph-cell:last-child { border-right: none; }
+
+  .ph-head {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 9px 14px;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .ph-head:last-child { border-right: none; }
+
+  .ph-phase {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--column-accent);
+    border-right: 0.5px solid var(--border);
+  }
+
+  .ph-phase .step-num {
+    display: block;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+
+  .ph-mat {
+    color: var(--ink-muted);
+    border-right: 0.5px solid var(--border);
+  }
+
+  .ph-action { color: var(--ink-muted); border-right: 0.5px solid var(--border); }
+  .ph-impact { color: var(--ink-muted); }
+
+  .ph-action strong, .ph-impact strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Conclusion card ── */
+  .conclusion-card {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .conclusion-inner {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+  }
+
+  .conclusion-accent { background: var(--accent); }
+
+  .conclusion-body { padding: 16px 20px; }
+
+  .conclusion-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 5px;
+  }
+
+  .conclusion-text {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+
+  .conclusion-text strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Packaging gallery ── */
+  .pkg-gallery {
+    max-width: 1040px;
+    margin: 0 auto 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .pkg-img-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .pkg-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* height: 220px; */
+    object-fit: cover;
+    display: block;
+  }
+
+  .pkg-img-h {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    /* height: 220px; */
+    object-fit: cover;
+    display: block;
+  }
+
+  .pkg-caption {
+    padding: 10px 14px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    border-top: 0.5px solid var(--border);
+  }
+
+  .pkg-caption strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Footer ── */
+  footer {
+    max-width: 1040px;
+    margin: 20px auto 0;
+    font-size: 11px;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-top: 0.5px solid var(--border);
+    padding-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>APISYNC — <span>Economía Circular</span><br>Esquema Mariposa · Ellen MacArthur Foundation</h1>
+  <div class="subtitle">
+    2 ciclos · Técnico &amp; Biológico · Diseño para la Circularidad<br>
+    MIGD @ISAD · Proyecto Estrategias y Escenarios Futuros
+  </div>
+</header>
+
+<!-- ── Legend ── -->
+<div class="legend-bar">
+  <strong>Ciclos:</strong>
+  <div class="leg"><span class="leg-dot" style="background:var(--col-tec)"></span>Ciclo Técnico (Smart Hive)</div>
+  <div class="leg"><span class="leg-dot" style="background:var(--col-bio)"></span>Ciclo Biológico (Empaques &amp; Productos)</div>
+  <div class="leg"><span class="leg-dot" style="background:#c5a22a"></span>Ciclo Compartido</div>
+</div>
+
+<!-- ── 01 Sistema General ── -->
+<div class="section-label">01 · Mapeo General del Sistema — Mariposa Circular</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:18%">Elemento del Sistema</th>
+        <th style="width:20%">Componente del Proyecto</th>
+        <th style="width:12%">Ciclo Dominante</th>
+        <th style="width:24%">Estrategia Circular Implícita</th>
+        <th>Principio Rector</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-a">Inputs / Materias Primas</td>
+        <td class="col-b">Flores, abejas, madera certificada, aluminio reciclado</td>
+        <td class="col-c"><span class="badge-both">Ambos</span></td>
+        <td class="col-d">Minimización de residuos. Uso de fuentes locales certificadas.</td>
+        <td class="col-e">Diseño regenerativo desde el origen. Insumos con trazabilidad verificada por IoT.</td>
+      </tr>
+      <tr>
+        <td class="col-a">Proceso Productivo</td>
+        <td class="col-b">Monitoreo continuo Smart Hives; manejo predictivo por analítica de datos</td>
+        <td class="col-c"><span class="badge-tec">Técnico</span></td>
+        <td class="col-d">Optimización de uso de recursos: agua, tiempo, energía. Reducción de mermas.</td>
+        <td class="col-e">El dato es el recurso. La plataforma IoT convierte el comportamiento de la colonia en decisiones de gestión precisas.</td>
+      </tr>
+      <tr>
+        <td class="col-a">Output (Producto Final)</td>
+        <td class="col-b">Miel, Jalea Real, Polen — <em>Certificados</em> por trazabilidad de datos</td>
+        <td class="col-c"><span class="badge-bio">Biológico</span></td>
+        <td class="col-d">Alto valor añadido basado en la calidad garantizada por el sistema IoT.</td>
+        <td class="col-e">La certificación digital eleva el precio de mercado del producto natural. El sensor valida lo que la naturaleza produce.</td>
+      </tr>
+      <tr>
+        <td class="col-a">Embalaje / Post-Venta</td>
+        <td class="col-b">Paneles de cera natural; materiales compostables certificados en empaque hexagonal</td>
+        <td class="col-c"><span class="badge-bio">Biológico</span></td>
+        <td class="col-d">Cierre del ciclo: el envase se convierte en recurso biológico para el consumidor (composta).</td>
+        <td class="col-e">El empaque comunica sostenibilidad activamente. Instrucción al consumidor: "Compóstate en 90 días."</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── 02 Hero split: dos productos ── -->
+<div class="section-label">02 · Dos Productos, Dos Ciclos — Propuesta de Valor Central</div>
+
+<div class="hero-split">
+
+  <!-- Técnico -->
+  <div class="cycle-card">
+    <div class="cycle-header">
+      <div class="cycle-accent-tec"></div>
+      <div class="cycle-title-wrap">
+        <div class="cycle-eyebrow" style="color:var(--col-tec)">Ciclo Técnico · Hardware</div>
+        <div class="cycle-title">Colmena Inteligente Modular</div>
+        <div class="cycle-desc">Smart Hive · APISYNC</div>
+      </div>
+    </div>
+    <img class="cycle-img" src="./ChatGPT Image Apr 24, 2026, 06_37_19 PM.png" alt="APISYNC Smart Hive — producto individual con pantalla IoT">
+    <div class="cycle-body">
+      <div class="kv-row">
+        <div class="kv-key">Valor Principal</div>
+        <div class="kv-val">La <strong>información y la resiliencia</strong>. El producto no es la colmena, sino el servicio de gestión predictiva.</div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Materiales</div>
+        <div class="kv-val">Madera reusada certificada · Aluminio reciclado · Electrónica modular IoT</div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Principio</div>
+        <div class="kv-val"><strong>Diseño para el Desensamblaje (DfD).</strong> Cada componente puede separarse sin daño al final de su vida útil.</div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Logística Inversa</div>
+        <div class="kv-val">El fabricante gestiona la recogida, clasificación y reacondicionamiento de sus propios productos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Biológico -->
+  <div class="cycle-card">
+    <div class="cycle-header">
+      <div class="cycle-accent-bio"></div>
+      <div class="cycle-title-wrap">
+        <div class="cycle-eyebrow" style="color:var(--col-bio)">Ciclo Biológico · Packaging</div>
+        <div class="cycle-title">Empaque Natural Hexagonal</div>
+        <div class="cycle-desc">Packaging Compostable · APISYNC Natural Honey</div>
+      </div>
+    </div>
+    <img class="cycle-img" src="ChatGPT Image Apr 24, 2026, 06_44_36 PM.png" alt="APISYNC Raw Honey — empaque hexagonal de corcho y materiales naturales">
+    <div class="cycle-body">
+      <div class="kv-row">
+        <div class="kv-key">Valor Principal</div>
+        <div class="kv-val"><strong>Experiencia premium + diferenciador cero desperdicio.</strong> El empaque refuerza la promesa del producto.</div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Materiales</div>
+        <div class="kv-val">Panales tratados · Cera natural · Fibra vegetal · Papel kraft compostable</div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Principio</div>
+        <div class="kv-val">Sustitución de plástico por material que se integra al ciclo natural: <strong>descomposición sin toxicidad.</strong></div>
+      </div>
+      <div class="kv-row">
+        <div class="kv-key">Mensaje al usuario</div>
+        <div class="kv-val">"Úsanos como fuente de semillas" o "Compóstate en 90 días." El empaque cierra el ciclo activamente.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── 03 Ciclo Técnico Fases ── -->
+<div class="section-label">03 · Mapeo Detallado — Ciclo Técnico (Hardware &amp; Estructura)</div>
+
+<div class="phase-section">
+  <div class="phase-header">
+    <div class="phase-stripe" style="background:var(--col-tec)"></div>
+    <span class="phase-title" style="color:var(--col-tec)">Ciclo Técnico</span>
+    <span class="phase-sub">Madera reusada · Aluminio · Electrónica modular</span>
+  </div>
+
+  <div class="phase-table-wrap">
+    <div class="phase-row-head">
+      <div class="ph-head">Fase del Ciclo</div>
+      <div class="ph-head">Material / Componente</div>
+      <div class="ph-head">Acción Propuesta en el Proyecto</div>
+      <div class="ph-head">Impacto Circular (Académico)</div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 1</span>
+        Reuso<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Re-use</em>
+      </div>
+      <div class="ph-cell ph-mat">Madera · Aluminio estructural</div>
+      <div class="ph-cell ph-action">Cuando el apicultor renueva su colmena, el <strong>esqueleto estructural se devuelve</strong> al programa de mantenimiento central. Se inspecciona y reacondiciona inmediatamente para otro usuario.</div>
+      <div class="ph-cell ph-impact">Extiende la vida útil del recurso sin gastar energía en manufactura nueva. <strong>Mínimo impacto técnico.</strong></div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 2</span>
+        Remanufacturación<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Remanufacturing</em>
+      </div>
+      <div class="ph-cell ph-mat">Componentes electrónicos · Marcos de aluminio dañados · Bisagras y soportes</div>
+      <div class="ph-cell ph-action">Se reemplazan partes críticas y desgastadas (ej.: <strong>panel IoT obsoleto</strong>) manteniendo la estructura base. Genera un producto "como nuevo" con garantía plena.</div>
+      <div class="ph-cell ph-impact">Aumenta dramáticamente el <strong>valor percibido y funcional</strong> de la colmena sin crear material nuevo. Es el paso más avanzado antes del reciclaje.</div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 3</span>
+        Reciclaje<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Recycling</em>
+      </div>
+      <div class="ph-cell ph-mat">Aluminio puro · Tablón de madera inutilizable por daño biológico extremo</div>
+      <div class="ph-cell ph-action"><strong>Aluminio:</strong> Fundición especializada para recuperar pureza máxima. <strong>Madera:</strong> Desintegración para biomasa (combustible o compostaje de alta calidad).</div>
+      <div class="ph-cell ph-impact">Cierre del ciclo cuando es imposible el reuso. <strong>Reduce la necesidad de extracción virgen.</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- Conclusión técnica -->
+<div class="conclusion-card">
+  <div class="conclusion-inner">
+    <div class="conclusion-accent"></div>
+    <div class="conclusion-body">
+      <div class="conclusion-label">Conclusión Técnica</div>
+      <div class="conclusion-text">
+        El valor aquí está en establecer una <strong>Logística Inversa eficiente</strong>, donde el fabricante gestiona no solo la venta, sino la <strong>recogida y clasificación de sus propios productos</strong> al final de su ciclo. La colmena nunca es "basura": es un activo recuperable en alguna de las tres fases descritas.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 04 Ciclo Biológico Fases ── -->
+<div class="section-label">04 · Mapeo Detallado — Ciclo Biológico (Empaques &amp; Materiales Orgánicos)</div>
+
+<div class="phase-section">
+  <div class="phase-header">
+    <div class="phase-stripe" style="background:var(--col-bio)"></div>
+    <span class="phase-title" style="color:var(--col-bio)">Ciclo Biológico</span>
+    <span class="phase-sub">Panales desechados · Residuos de cera · Polen sobrante</span>
+  </div>
+
+  <div class="phase-table-wrap">
+    <div class="phase-row-head">
+      <div class="ph-head">Fase del Ciclo</div>
+      <div class="ph-head">Material / Residuo</div>
+      <div class="ph-head">Acción Propuesta en el Proyecto</div>
+      <div class="ph-head">Impacto Circular (Académico)</div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 1</span>
+        Recolección<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Collection</em>
+      </div>
+      <div class="ph-cell ph-mat">Panales viejos · Cera de desecho</div>
+      <div class="ph-cell ph-action">El sistema de embalaje se diseña para que la extracción del producto principal deje inevitablemente un <strong>subproducto</strong> (panal viejo y cera residual).</div>
+      <div class="ph-cell ph-impact">El residuo deja de ser "basura" y se convierte en <strong>materia prima secundaria</strong> bajo control de calidad.</div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 2</span>
+        Valorización<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Upcycling</em>
+      </div>
+      <div class="ph-cell ph-mat">Panales limpios · Estructuras de cera</div>
+      <div class="ph-cell ph-action">Los panales se limpian, esterilizan y tratan para mejorar su <strong>durabilidad como material estético/estructural</strong> en empaques rígidos. La cera sobrante se funde y mezcla con resinas naturales.</div>
+      <div class="ph-cell ph-impact"><strong>Alto Valor Añadido:</strong> Se pasa de "residuo" a "material premium". Esto justifica el precio del producto final (miel certificada).</div>
+    </div>
+
+    <div class="phase-row">
+      <div class="ph-cell ph-phase">
+        <span class="step-num">Fase 3</span>
+        Embalaje Final<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Packaging</em>
+      </div>
+      <div class="ph-cell ph-mat">Panales tratados · Paneles de cera compostable · Corcho natural</div>
+      <div class="ph-cell ph-action">El empaque hexagonal se diseña con instrucciones claras al consumidor: <strong>"Úsanos como fuente de semillas"</strong> o <strong>"Compóstate en 90 días"</strong>.</div>
+      <div class="ph-cell ph-impact"><strong>Cierre del ciclo biológico:</strong> La vida útil termina en la tierra, sin toxicidad ni microplásticos. El empaque comunica sostenibilidad activamente.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 05 Packaging gallery ── -->
+<div class="section-label">05 · Packaging Natural · Línea de Productos APISYNC</div>
+
+<div class="pkg-gallery">
+  <div class="pkg-img-wrap">
+    <img class="pkg-img" src="ChatGPT Image Apr 24, 2026, 06_38_48 PM.png" alt="APISYNC — línea de productos: miel cruda y jalea real en empaque hexagonal de corcho">
+    <div class="pkg-caption"><strong>Línea completa.</strong> Raw Honey 250g · Royal Jelly 10×10g · en empaque hexagonal de panal reciclado, cera de abeja y fibra vegetal. Cada contenedor es compostable al 100%.</div>
+  </div>
+  <div class="pkg-img-wrap">
+    <img class="pkg-img" src="ChatGPT Image Apr 24, 2026, 06_44_36 PM.png" alt="APISYNC Raw Honey — detalle del empaque hexagonal cerrado, producto individual">
+    <div class="pkg-caption"><strong>Raw Honey · 100% Pure · 250g.</strong> El empaque hexagonal de panal reciclado, cera de abeja y fibra vegetal imita la celda de panal. La etiqueta kraft comunica: origen trazado por Smart Hive, cero plástico.</div>
+  </div>
+</div>
+
+<!-- ── 06 Fleet ── -->
+<div class="section-label">06 · Infraestructura de Campo — Flota Modular Smart Hives</div>
+
+<div class="pkg-gallery" style="margin-bottom:28px;">
+  <div class="pkg-img-wrap" style="grid-column: 1 / -1;">
+    <img class="pkg-img-h" src="ChatGPT Image Apr 24, 2026, 06_31_30 PM.png" alt="APISYNC — flota de Smart Hives modulares en campo abierto con pantallas de monitoreo">
+    <div class="pkg-caption"><strong>Flota modular APISYNC.</strong> Cada unidad muestra en tiempo real: Salud de Colonia 94% · Temperatura 32.1°C · Humedad 45% · CO₂ 425ppm. Las unidades son apilables y comparten componentes estandarizados para facilitar el Diseño para el Desensamblaje (DfD).</div>
+  </div>
+</div>
+
+<!-- Conclusión biológica -->
+<div class="conclusion-card">
+  <div class="conclusion-inner">
+    <div class="conclusion-accent" style="background:var(--col-bio)"></div>
+    <div class="conclusion-body">
+      <div class="conclusion-label">Conclusión Biológica</div>
+      <div class="conclusion-text">
+        El valor aquí está en el <strong>principio de residuos cero</strong>: cada subproducto apícola (cera, panal, propóleo) se convierte en insumo del empaque. La promesa al consumidor es completa: la abeja produce la miel, el panal construye la caja, la caja regresa a la tierra.
+        <strong>El ciclo cierra en la tierra sin dejar huella.</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>* Esquema Mariposa basado en el marco de la Ellen MacArthur Foundation · Economía Circular aplicada a Apicultura</span>
+  <span>Elaboración propia · APISYNC · Maestría en Innovación y Gestión del Diseño · @ISAD</span>
+</footer>
+
+</body>
+</html>

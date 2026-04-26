@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transporte Público CUU — Movilidad Urbana Sostenible</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #e0e5ec;
+    --ink: #212428;
+    --ink-muted: #464d56;
+    --ink-faint: #8A9098;
+    --border: #ced2d9;
+    --accent: #44a0d1;
+    --column-accent: #dbe0e7;
+    --column-accent3: #d2d6de;
+    --column-accent2: #e0e5ec;
+    --col-a: #1d7a55;
+    --col-b: #d4883a;
+    --col-c: #c8472a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 32px 64px;
+  }
+
+  header {
+    max-width: 900px;
+    margin: 0 auto 36px;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .content-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    background: var(--column-accent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    color: var(--ink-faint);
+    border-right: 0.5px solid var(--border);
+    padding: 12px 0;
+  }
+
+  .card-title-wrap {
+    padding: 12px 20px;
+  }
+
+  .card-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 3px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .card-title em {
+    font-style: normal;
+    color: var(--accent);
+    background: var(--ink);
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 13px;
+  }
+
+  .card-body {
+    padding: 16px 20px 16px 72px;
+  }
+
+  .card-body p {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  .card-body p:last-child { margin-bottom: 0; }
+
+  .card-body strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── Sub-sections inside a card ── */
+  .subsection {
+    border-top: 0.5px solid var(--border);
+    padding: 12px 20px 12px 72px;
+  }
+
+  .subsection-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .subsection p {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+
+  /* ── Tag pill ── */
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    border: 0.5px solid var(--border);
+    background: var(--column-accent2);
+    color: var(--ink-muted);
+  }
+
+  .tag:hover {
+    background-color: var(--column-accent3);
+  }
+
+  /* ── Escenarios ── */
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .scenario {
+    padding: 18px 20px;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .scenario:last-child { border-right: none; }
+
+  .scenario-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .scenario-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .scenario-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .scenario-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .scenario-list li {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .scenario-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--ink-faint);
+  }
+
+  /* ── Horizontes: timeline row ── */
+  .timeline-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .timeline-item {
+    flex: 1;
+    padding: 14px 20px;
+    border-right: 0.5px solid var(--border);
+  }
+
+  .timeline-item:last-child { border-right: none; }
+
+  .timeline-year {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .timeline-year span { color: var(--accent); }
+
+  .timeline-desc {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  footer {
+    max-width: 900px;
+    margin: 20px auto 0;
+    font-size: 11px;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-top: 0.5px solid var(--border);
+    padding-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Transporte Público<br><span>CUU · Movilidad Urbana</span></h1>
+  <div class="subtitle">
+    Planeación por escenarios · 2026–2036<br>
+    MIGD @ISAD
+  </div>
+</header>
+
+<div class="content-wrap">
+
+  <!-- 1. Tema focal -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">01</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Identificación del tema focal</div>
+        <div class="card-title">Transición hacia un sistema de movilidad urbana sostenible en Chihuahua <em>2036</em></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Objetivo -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">02</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Definición del objetivo</div>
+        <div class="card-title">Reducción del 30–40 % en el uso del vehículo particular</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Analizar escenarios que permitan proyectar una reducción del <strong>30–40 %</strong> en el uso del vehículo particular en la ciudad de Chihuahua para el año <strong>2036</strong> mediante la mejora del transporte público, infraestructura de movilidad activa y políticas urbanas.</p>
+    </div>
+  </div>
+
+  <!-- 3. Descripción del presente -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">03</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Descripción del presente</div>
+        <div class="card-title">Problemática, causas y contexto actual</div>
+      </div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Problemática general</div>
+      <p>Alta dependencia del automóvil particular. El transporte público se percibe como ineficiente, inseguro y desarticulado. Baja o nula infraestructura ciclista. Urbanización dispersa.</p>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Causas</div>
+      <p>
+        <span class="tag">Crecimiento urbano horizontal</span>
+        <span class="tag">Baja inversión pública</span>
+        <span class="tag">Cultura del automóvil</span>
+        <span class="tag">Discontinuidad administrativa</span>
+        <span class="tag">Clima extremo</span>
+      </p>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Contexto</div>
+      <p>Oportunidad de nuevas tecnologías para mejorar el transporte público. Aumento de temperaturas y niveles de contaminación en años recientes. Costo creciente de combustibles y desigualdad de acceso al transporte.</p>
+    </div>
+  </div>
+
+  <!-- 4. Horizontes temporales -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">04</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Horizontes Temporales</div>
+        <div class="card-title">Origen documentado de la problemática · Proyección del plan</div>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2007</span></div>
+        <div class="timeline-desc">Identificación y documentación notoria de la baja calidad del aire en Chihuahua.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2018–20</span></div>
+        <div class="timeline-desc">Informe Nacional de Calidad del Aire y datos de monitoreo confirman incumplimiento de normas PM10.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2026</span></div>
+        <div class="timeline-desc">Inicio del horizonte de planeación y proyección estratégica.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">20<span>36</span></div>
+        <div class="timeline-desc">Meta de reducción del 30–40 % en uso del vehículo particular.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Escenarios -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">05</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Identificación de Escenarios</div>
+        <div class="card-title">Tres conjeturas proyectadas al horizonte 2036</div>
+      </div>
+    </div>
+    <div class="scenarios-grid">
+
+      <div class="scenario">
+        <div class="scenario-badge">
+          <span class="scenario-dot" style="background:var(--col-a); box-shadow: 0 0 0 2px white, 0 0 0 3.5px var(--col-a);"></span>
+          <span style="color:var(--col-a)">Escenario A</span>
+        </div>
+        <div class="scenario-name">Movilidad Integrada</div>
+        <ul class="scenario-list">
+          <li>Sistema BRT eficiente</li>
+          <li>Digitalización del transporte</li>
+          <li>Infraestructura ciclista conectada</li>
+          <li>Reducción significativa del uso del auto</li>
+          <li>Mejor calidad del aire</li>
+          <li>Menor tiempo de traslado</li>
+          <li>Mayor equidad urbana</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-badge">
+          <span class="scenario-dot" style="background:var(--col-b); box-shadow: 0 0 0 2px white, 0 0 0 3.5px var(--col-b);"></span>
+          <span style="color:var(--col-b)">Escenario B</span>
+        </div>
+        <div class="scenario-name">Mejoras Parciales</div>
+        <ul class="scenario-list">
+          <li>Renovación de unidades</li>
+          <li>Apps informativas</li>
+          <li>Algunas rutas optimizadas</li>
+          <li>Sigue dominio del auto</li>
+          <li>Congestión sigue creciendo</li>
+          <li>Mejoras marginales</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-badge">
+          <span class="scenario-dot" style="background:var(--col-c); box-shadow: 0 0 0 2px white, 0 0 0 3.5px var(--col-c);"></span>
+          <span style="color:var(--col-c)">Escenario C</span>
+        </div>
+        <div class="scenario-name">Colapso de Movilidad Urbana</div>
+        <ul class="scenario-list">
+          <li>Crecimiento urbano descontrolado</li>
+          <li>Transporte público en deterioro</li>
+          <li>Saturación vial</li>
+          <li>Incremento de emisiones</li>
+          <li>Pérdida de calidad de vida</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 6. Variables -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">06</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Identificación de Variables</div>
+        <div class="card-title">Factores que pueden ayudar o afectar el plan de movilidad</div>
+      </div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Política pública y regulación</div>
+      <p>
+        <span class="tag">Inversión en transporte público</span>
+        <span class="tag">Regulación de concesiones</span>
+        <span class="tag">Planeación urbana</span>
+        <span class="tag">Políticas de movilidad</span>
+      </p>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Costo económico de movilidad</div>
+      <p>
+        <span class="tag">Precio del combustible</span>
+        <span class="tag">Costo del transporte público</span>
+        <span class="tag">Costo de mantenimiento del auto</span>
+      </p>
+    </div>
+    <div class="subsection">
+      <div class="subsection-label">Cultura y percepción social</div>
+      <p>
+        <span class="tag">Estatus del automóvil</span>
+        <span class="tag">Percepción de seguridad del transporte público</span>
+        <span class="tag">Hábitos urbanos</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- 7. Actores -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">07</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Establecimiento de Actores</div>
+        <div class="card-title">Organizaciones y grupos involucrados en la problemática</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 0.5px solid #ece8df;">
+      <div class="subsection" style="border-top: none; border-right: 0.5px solid #ece8df;">
+        <div class="subsection-label">Actores globales</div>
+        <p>
+          <span class="tag">ONU (ODS)</span>
+          <span class="tag">Banco Mundial</span>
+          <span class="tag">ONGs ambientales</span>
+        </p>
+      </div>
+      <div class="subsection" style="border-top: none;">
+        <div class="subsection-label">Actores nacionales</div>
+        <p>
+          <span class="tag">Gobierno Federal</span>
+          <span class="tag">SEDATU</span>
+          <span class="tag">SEMARNAT</span>
+        </p>
+      </div>
+      <div class="subsection" style="border-right: 0.5px solid #ece8df;">
+        <div class="subsection-label">Actores locales</div>
+        <p>
+          <span class="tag">Gobierno Municipal</span>
+          <span class="tag">Gobierno Estatal</span>
+          <span class="tag">Secretaría de Transporte</span>
+        </p>
+      </div>
+      <div class="subsection">
+        <div class="subsection-label">Actores sociales</div>
+        <p>
+          <span class="tag">Usuarios</span>
+          <span class="tag">Ciclistas</span>
+          <span class="tag">Peatones</span>
+          <span class="tag">Ciudadanía general</span>
+        </p>
+      </div>
+      <div class="subsection" style="grid-column: 1 / -1;">
+        <div class="subsection-label">Actores privados</div>
+        <p>
+          <span class="tag">Desarrolladores inmobiliarios</span>
+          <span class="tag">Empresas tecnológicas</span>
+          <span class="tag">Plataformas de movilidad</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Eventos fijos -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">08</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Eventos Fijos del Espacio Temporal</div>
+        <div class="card-title">Brechas y rupturas que influyen en la construcción del escenario</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 0.5px solid #ece8df;">
+      <div class="subsection" style="border-top: none; border-right: 0.5px solid #ece8df;">
+        <div class="subsection-label">Eventos clave</div>
+        <ul class="scenario-list" style="padding-left: 0;">
+          <li>Crecimiento urbano de CUU</li>
+          <li>Aumento de temperatura (cambio climático)</li>
+          <li>Variación de precios del combustible</li>
+          <li>Nuevos desarrollos urbanos periféricos</li>
+          <li>Incremento en cantidad de vehículos</li>
+        </ul>
+      </div>
+      <div class="subsection" style="border-top: none;">
+        <div class="subsection-label">Eventos de ruptura</div>
+        <ul class="scenario-list" style="padding-left: 0;">
+          <li>Sistema BRT</li>
+          <li>Crisis ambiental (contaminación crítica)</li>
+          <li>Subsidio o impuesto fuerte al automóvil</li>
+          <li>Inversión privada en movilidad</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Línea de tiempo -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-num">09</div>
+      <div class="card-title-wrap">
+        <div class="card-label">Espacio Temporal — Línea de Tiempo</div>
+        <div class="card-title">Fases de proyección del escenario futuro · 2026–2036</div>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2026</span>–28</div>
+        <div class="timeline-desc" style="font-weight:600; color:var(--ink); margin-bottom:6px;">Inicio / Diagnóstico</div>
+        <div class="timeline-desc">Reconocimiento del problema · Primeros ajustes al sistema · Digitalización básica</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2028</span>–31</div>
+        <div class="timeline-desc" style="font-weight:600; color:var(--ink); margin-bottom:6px;">Transición</div>
+        <div class="timeline-desc">Inversión en infraestructura · Mejora parcial del transporte · Inicio de movilidad alternativa</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2030</span>–34</div>
+        <div class="timeline-desc" style="font-weight:600; color:var(--ink); margin-bottom:6px;">Consolidación</div>
+        <div class="timeline-desc">Integración de sistemas · Cambios en comportamiento social · Políticas más fuertes</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span>2034</span>–36</div>
+        <div class="timeline-desc" style="font-weight:600; color:var(--ink); margin-bottom:6px;">Resultado</div>
+        <div class="timeline-desc">Sistema eficiente · Mejoras parciales · Colapso — según escenario</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Transición hacia movilidad urbana sostenible · Chihuahua 2026–2036</span>
+  <span>Elaboración propia · Planeación por Escenarios · Maestría en Innovación y Gestión del Diseño</span>
+</footer>
+
+</body>
+</html>
