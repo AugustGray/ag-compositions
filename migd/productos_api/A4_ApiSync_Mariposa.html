@@ -107,7 +107,8 @@
     background: white;
     border: 1px solid var(--border);
     border-radius: 4px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   table {
@@ -322,25 +323,25 @@
     background: white;
     border: 1px solid var(--border);
     border-radius: 4px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .phase-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .phase-row-head {
+    background: var(--column-accent);
   }
 
   .phase-row {
-    display: grid;
-    grid-template-columns: 160px 180px 1fr 1fr;
-    border-bottom: 0.5px solid var(--border);
     transition: background .15s;
   }
 
-  .phase-row:last-child { border-bottom: none; }
-  .phase-row:hover { background: var(--column-accent); }
-
-  .phase-row-head {
-    display: grid;
-    grid-template-columns: 160px 180px 1fr 1fr;
-    background: var(--column-accent);
-    border-bottom: 1px solid var(--border);
-  }
+  .phase-table-wrap tbody tr:last-child td { border-bottom: none; }
+  .phase-table-wrap tbody tr:hover { background: var(--column-accent); }
 
   .ph-cell {
     padding: 10px 14px;
@@ -348,6 +349,7 @@
     line-height: 1.5;
     vertical-align: top;
     border-right: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
   }
 
   .ph-cell:last-child { border-right: none; }
@@ -360,6 +362,7 @@
     color: var(--ink-muted);
     padding: 9px 14px;
     border-right: 0.5px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
   .ph-head:last-child { border-right: none; }
@@ -391,6 +394,9 @@
   .ph-impact { color: var(--ink-muted); }
 
   .ph-action strong, .ph-impact strong { font-weight: 600; color: var(--ink); }
+
+  .phase-table-wrap th:first-child { width: 160px; }
+  .phase-table-wrap th:nth-child(2) { width: 180px; }
 
   /* ── Conclusion card ── */
   .conclusion-card {
@@ -481,6 +487,48 @@
     justify-content: space-between;
     border-top: 0.5px solid var(--border);
     padding-top: 12px;
+  }
+
+  /* ── Responsive: portrait / phone ── */
+  @media (max-width: 768px) {
+    body { padding: 24px 16px 48px; }
+
+    header { flex-direction: column; align-items: flex-start; }
+    header h1 { font-size: 20px; }
+    .subtitle { text-align: left; }
+
+    .hero-split { grid-template-columns: 1fr; }
+
+    .pkg-gallery { grid-template-columns: 1fr; }
+
+    td { padding: 10px 10px; }
+    thead th { padding: 8px 10px; }
+
+    .phase-table-wrap th:first-child { width: 120px; }
+    .phase-table-wrap th:nth-child(2) { width: 140px; }
+    .ph-cell,
+    .ph-head { padding: 8px 10px; font-size: 10.5px; }
+    .ph-phase { font-size: 11px; }
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 16px 12px 36px; }
+
+    header h1 { font-size: 17px; }
+    .legend-bar { font-size: 10px; }
+
+    td { padding: 8px 8px; font-size: 10.5px; }
+    td.col-a { font-size: 10.5px; }
+    thead th { padding: 6px 8px; font-size: 9.5px; }
+
+    .phase-table-wrap th:first-child { width: 100px; }
+    .phase-table-wrap th:nth-child(2) { width: 120px; }
+    .ph-cell,
+    .ph-head { padding: 6px 8px; font-size: 9.5px; }
+    .ph-phase { font-size: 10px; }
+
+    .conclusion-body { padding: 12px 14px; }
+    .conclusion-text { font-size: 11.5px; }
   }
 </style>
 </head>
@@ -629,42 +677,45 @@
   </div>
 
   <div class="phase-table-wrap">
-    <div class="phase-row-head">
-      <div class="ph-head">Fase del Ciclo</div>
-      <div class="ph-head">Material / Componente</div>
-      <div class="ph-head">Acción Propuesta en el Proyecto</div>
-      <div class="ph-head">Impacto Circular (Académico)</div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 1</span>
-        Reuso<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Re-use</em>
-      </div>
-      <div class="ph-cell ph-mat">Madera · Aluminio estructural</div>
-      <div class="ph-cell ph-action">Cuando el apicultor renueva su colmena, el <strong>esqueleto estructural se devuelve</strong> al programa de mantenimiento central. Se inspecciona y reacondiciona inmediatamente para otro usuario.</div>
-      <div class="ph-cell ph-impact">Extiende la vida útil del recurso sin gastar energía en manufactura nueva. <strong>Mínimo impacto técnico.</strong></div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 2</span>
-        Remanufacturación<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Remanufacturing</em>
-      </div>
-      <div class="ph-cell ph-mat">Componentes electrónicos · Marcos de aluminio dañados · Bisagras y soportes</div>
-      <div class="ph-cell ph-action">Se reemplazan partes críticas y desgastadas (ej.: <strong>panel IoT obsoleto</strong>) manteniendo la estructura base. Genera un producto "como nuevo" con garantía plena.</div>
-      <div class="ph-cell ph-impact">Aumenta dramáticamente el <strong>valor percibido y funcional</strong> de la colmena sin crear material nuevo. Es el paso más avanzado antes del reciclaje.</div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 3</span>
-        Reciclaje<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Recycling</em>
-      </div>
-      <div class="ph-cell ph-mat">Aluminio puro · Tablón de madera inutilizable por daño biológico extremo</div>
-      <div class="ph-cell ph-action"><strong>Aluminio:</strong> Fundición especializada para recuperar pureza máxima. <strong>Madera:</strong> Desintegración para biomasa (combustible o compostaje de alta calidad).</div>
-      <div class="ph-cell ph-impact">Cierre del ciclo cuando es imposible el reuso. <strong>Reduce la necesidad de extracción virgen.</strong></div>
-    </div>
+    <table>
+      <thead>
+        <tr class="phase-row-head">
+          <th class="ph-head">Fase del Ciclo</th>
+          <th class="ph-head">Material / Componente</th>
+          <th class="ph-head">Acción Propuesta en el Proyecto</th>
+          <th class="ph-head">Impacto Circular (Académico)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 1</span>
+            Reuso<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Re-use</em>
+          </td>
+          <td class="ph-cell ph-mat">Madera · Aluminio estructural</td>
+          <td class="ph-cell ph-action">Cuando el apicultor renueva su colmena, el <strong>esqueleto estructural se devuelve</strong> al programa de mantenimiento central. Se inspecciona y reacondiciona inmediatamente para otro usuario.</td>
+          <td class="ph-cell ph-impact">Extiende la vida útil del recurso sin gastar energía en manufactura nueva. <strong>Mínimo impacto técnico.</strong></td>
+        </tr>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 2</span>
+            Remanufacturación<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Remanufacturing</em>
+          </td>
+          <td class="ph-cell ph-mat">Componentes electrónicos · Marcos de aluminio dañados · Bisagras y soportes</td>
+          <td class="ph-cell ph-action">Se reemplazan partes críticas y desgastadas (ej.: <strong>panel IoT obsoleto</strong>) manteniendo la estructura base. Genera un producto "como nuevo" con garantía plena.</td>
+          <td class="ph-cell ph-impact">Aumenta dramáticamente el <strong>valor percibido y funcional</strong> de la colmena sin crear material nuevo. Es el paso más avanzado antes del reciclaje.</td>
+        </tr>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 3</span>
+            Reciclaje<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Recycling</em>
+          </td>
+          <td class="ph-cell ph-mat">Aluminio puro · Tablón de madera inutilizable por daño biológico extremo</td>
+          <td class="ph-cell ph-action"><strong>Aluminio:</strong> Fundición especializada para recuperar pureza máxima. <strong>Madera:</strong> Desintegración para biomasa (combustible o compostaje de alta calidad).</td>
+          <td class="ph-cell ph-impact">Cierre del ciclo cuando es imposible el reuso. <strong>Reduce la necesidad de extracción virgen.</strong></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -692,42 +743,45 @@
   </div>
 
   <div class="phase-table-wrap">
-    <div class="phase-row-head">
-      <div class="ph-head">Fase del Ciclo</div>
-      <div class="ph-head">Material / Residuo</div>
-      <div class="ph-head">Acción Propuesta en el Proyecto</div>
-      <div class="ph-head">Impacto Circular (Académico)</div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 1</span>
-        Recolección<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Collection</em>
-      </div>
-      <div class="ph-cell ph-mat">Panales viejos · Cera de desecho</div>
-      <div class="ph-cell ph-action">El sistema de embalaje se diseña para que la extracción del producto principal deje inevitablemente un <strong>subproducto</strong> (panal viejo y cera residual).</div>
-      <div class="ph-cell ph-impact">El residuo deja de ser "basura" y se convierte en <strong>materia prima secundaria</strong> bajo control de calidad.</div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 2</span>
-        Valorización<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Upcycling</em>
-      </div>
-      <div class="ph-cell ph-mat">Panales limpios · Estructuras de cera</div>
-      <div class="ph-cell ph-action">Los panales se limpian, esterilizan y tratan para mejorar su <strong>durabilidad como material estético/estructural</strong> en empaques rígidos. La cera sobrante se funde y mezcla con resinas naturales.</div>
-      <div class="ph-cell ph-impact"><strong>Alto Valor Añadido:</strong> Se pasa de "residuo" a "material premium". Esto justifica el precio del producto final (miel certificada).</div>
-    </div>
-
-    <div class="phase-row">
-      <div class="ph-cell ph-phase">
-        <span class="step-num">Fase 3</span>
-        Embalaje Final<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Packaging</em>
-      </div>
-      <div class="ph-cell ph-mat">Panales tratados · Paneles de cera compostable · Corcho natural</div>
-      <div class="ph-cell ph-action">El empaque hexagonal se diseña con instrucciones claras al consumidor: <strong>"Úsanos como fuente de semillas"</strong> o <strong>"Compóstate en 90 días"</strong>.</div>
-      <div class="ph-cell ph-impact"><strong>Cierre del ciclo biológico:</strong> La vida útil termina en la tierra, sin toxicidad ni microplásticos. El empaque comunica sostenibilidad activamente.</div>
-    </div>
+    <table>
+      <thead>
+        <tr class="phase-row-head">
+          <th class="ph-head">Fase del Ciclo</th>
+          <th class="ph-head">Material / Residuo</th>
+          <th class="ph-head">Acción Propuesta en el Proyecto</th>
+          <th class="ph-head">Impacto Circular (Académico)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 1</span>
+            Recolección<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Collection</em>
+          </td>
+          <td class="ph-cell ph-mat">Panales viejos · Cera de desecho</td>
+          <td class="ph-cell ph-action">El sistema de embalaje se diseña para que la extracción del producto principal deje inevitablemente un <strong>subproducto</strong> (panal viejo y cera residual).</td>
+          <td class="ph-cell ph-impact">El residuo deja de ser "basura" y se convierte en <strong>materia prima secundaria</strong> bajo control de calidad.</td>
+        </tr>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 2</span>
+            Valorización<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Upcycling</em>
+          </td>
+          <td class="ph-cell ph-mat">Panales limpios · Estructuras de cera</td>
+          <td class="ph-cell ph-action">Los panales se limpian, esterilizan y tratan para mejorar su <strong>durabilidad como material estético/estructural</strong> en empaques rígidos. La cera sobrante se funde y mezcla con resinas naturales.</td>
+          <td class="ph-cell ph-impact"><strong>Alto Valor Añadido:</strong> Se pasa de "residuo" a "material premium". Esto justifica el precio del producto final (miel certificada).</td>
+        </tr>
+        <tr class="phase-row">
+          <td class="ph-cell ph-phase">
+            <span class="step-num">Fase 3</span>
+            Embalaje Final<br><em style="font-size:10.5px;font-weight:400;color:var(--ink-faint)">Packaging</em>
+          </td>
+          <td class="ph-cell ph-mat">Panales tratados · Paneles de cera compostable · Corcho natural</td>
+          <td class="ph-cell ph-action">El empaque hexagonal se diseña con instrucciones claras al consumidor: <strong>"Úsanos como fuente de semillas"</strong> o <strong>"Compóstate en 90 días"</strong>.</td>
+          <td class="ph-cell ph-impact"><strong>Cierre del ciclo biológico:</strong> La vida útil termina en la tierra, sin toxicidad ni microplásticos. El empaque comunica sostenibilidad activamente.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
