@@ -290,6 +290,92 @@
     border-top: 0.5px solid var(--border);
     padding-top: 12px;
   }
+
+  /* ── Actores & Eventos grids (replaces inline styles) ── */
+  .actors-grid,
+  .events-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .actors-grid .subsection,
+  .events-grid .subsection {
+    border-top: none;
+  }
+
+  .actors-grid .subsection:nth-child(-n+4) {
+    border-right: 0.5px solid var(--border);
+  }
+
+  .actors-grid .subsection:nth-child(even) {
+    border-right: none;
+  }
+
+  .events-grid .subsection:first-child {
+    border-right: 0.5px solid var(--border);
+  }
+
+  .full-row { grid-column: 1 / -1; }
+
+  /* ── Portrait responsive ── */
+  @media (orientation: portrait) and (max-width: 800px) {
+    body {
+      padding: 28px 16px 48px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .subsection {
+      padding: 12px 16px;
+    }
+
+    .scenarios-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .scenario {
+      border-right: none;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .scenario:last-child { border-bottom: none; }
+
+    .timeline-row {
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      border-right: none;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .actors-grid,
+    .events-grid {
+      grid-template-columns: 1fr;
+      border-top: none;
+    }
+
+    .actors-grid .subsection,
+    .events-grid .subsection {
+      border-top: 0.5px solid var(--border);
+    }
+
+    .actors-grid .subsection:nth-child(-n+4),
+    .actors-grid .subsection:nth-child(even),
+    .events-grid .subsection:first-child {
+      border-right: none;
+    }
+
+    .actors-grid .subsection:last-child,
+    .events-grid .subsection:last-child {
+      border-bottom: none;
+    }
+  }
 </style>
 </head>
 <body>
@@ -495,8 +581,8 @@
         <div class="card-title">Organizaciones y grupos involucrados en la problemática</div>
       </div>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 0.5px solid #ece8df;">
-      <div class="subsection" style="border-top: none; border-right: 0.5px solid #ece8df;">
+    <div class="actors-grid">
+      <div class="subsection">
         <div class="subsection-label">Actores globales</div>
         <p>
           <span class="tag">ONU (ODS)</span>
@@ -504,7 +590,7 @@
           <span class="tag">ONGs ambientales</span>
         </p>
       </div>
-      <div class="subsection" style="border-top: none;">
+      <div class="subsection">
         <div class="subsection-label">Actores nacionales</div>
         <p>
           <span class="tag">Gobierno Federal</span>
@@ -512,7 +598,7 @@
           <span class="tag">SEMARNAT</span>
         </p>
       </div>
-      <div class="subsection" style="border-right: 0.5px solid #ece8df;">
+      <div class="subsection">
         <div class="subsection-label">Actores locales</div>
         <p>
           <span class="tag">Gobierno Municipal</span>
@@ -529,7 +615,7 @@
           <span class="tag">Ciudadanía general</span>
         </p>
       </div>
-      <div class="subsection" style="grid-column: 1 / -1;">
+      <div class="subsection full-row">
         <div class="subsection-label">Actores privados</div>
         <p>
           <span class="tag">Desarrolladores inmobiliarios</span>
@@ -549,8 +635,8 @@
         <div class="card-title">Brechas y rupturas que influyen en la construcción del escenario</div>
       </div>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 0.5px solid #ece8df;">
-      <div class="subsection" style="border-top: none; border-right: 0.5px solid #ece8df;">
+    <div class="events-grid">
+      <div class="subsection">
         <div class="subsection-label">Eventos clave</div>
         <ul class="scenario-list" style="padding-left: 0;">
           <li>Crecimiento urbano de CUU</li>
@@ -560,7 +646,7 @@
           <li>Incremento en cantidad de vehículos</li>
         </ul>
       </div>
-      <div class="subsection" style="border-top: none;">
+      <div class="subsection">
         <div class="subsection-label">Eventos de ruptura</div>
         <ul class="scenario-list" style="padding-left: 0;">
           <li>Sistema BRT</li>
