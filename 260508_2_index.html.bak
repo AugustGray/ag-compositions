@@ -33,11 +33,7 @@
 
         @media (max-width: 640px) {
             #navbar {
-                padding: 0 !important;
-            }
-            .navbar-inner {
-                padding-top: 0.5rem !important;
-                padding-bottom: 0.5rem !important;
+                padding: 0.5rem 1rem !important;
             }
             #navbar img {
                 height: 2rem !important;
@@ -122,49 +118,11 @@
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow-x: clip;
+            overflow-x: hidden;
         }
 
 
-        #navbar {
-            width: 100%;
-        }
-
-        .navbar-inner {
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (min-width: 640px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 640px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 768px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 1024px;
-            }
-        }
-
-        @media (min-width: 1280px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 1280px;
-            }
-        }
-
-        #dotted-wave-bg {
+#dotted-wave-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -338,18 +296,16 @@
 <body>
     <div id="dotted-wave-bg"></div>
 
-    <nav id="navbar"
+    <nav id="navbar" class="flex items-center justify-between px-6 py-3"
          style="position: sticky; top: 0; z-index: 50; background-color: var(--background); border-bottom: 1px solid var(--low-contrast);">
-        <div class="navbar-inner flex items-center justify-between py-3">
-            <a href="#hero">
-                <img src="./assets/AG-Outline_Light.svg" alt="Company Logo" class="h-10 sm:h-12 logo-light">
-                <img src="./assets/AG-Outline_Dark.svg" alt="Company Logo" class="h-10 sm:h-12 logo-dark">
-            </a>
-            <div class="flex gap-4 sm:gap-6 items-center">
-                <a href="#nosotros" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Nosotros</a>
-                <a href="#proyectos" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Proyectos</a>
-                <a href="https://ag-compositions.com/link-tree" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Contacto</a>
-            </div>
+        <a href="#hero">
+            <img src="./assets/AG-Outline_Light.svg" alt="Company Logo" class="h-10 sm:h-12 logo-light">
+            <img src="./assets/AG-Outline_Dark.svg" alt="Company Logo" class="h-10 sm:h-12 logo-dark">
+        </a>
+        <div class="flex gap-4 sm:gap-6 items-center">
+            <a href="#nosotros" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Nosotros</a>
+            <a href="#proyectos" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Proyectos</a>
+            <a href="#contacto" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Contacto</a>
         </div>
     </nav>
 
@@ -485,6 +441,13 @@
                             </div>
 
                         </div>
+                    </div>
+                    <h1 id="contacto" class="text-xl md:text-2xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                        style="color: var(--high-contrast); text-align: center;">Contacto</h1>
+                    <div class="mt-8 anime-element" style="text-align: center;"><a
+                            href="https://ag-compositions.com/link-tree"
+                            class="inline-block rounded-lg font-bold py-3 px-8"
+                            style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none;">Link-Tree</a>
                     </div>
                 </div>
 

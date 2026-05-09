@@ -19,34 +19,6 @@
             scroll-behavior: smooth;
         }
 
-        #navbar {
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        #navbar.scrolled {
-            box-shadow: 0 2px 12px var(--shadow);
-        }
-
-        .nav-link:hover {
-            color: var(--primary) !important;
-        }
-
-        @media (max-width: 640px) {
-            #navbar {
-                padding: 0 !important;
-            }
-            .navbar-inner {
-                padding-top: 0.5rem !important;
-                padding-bottom: 0.5rem !important;
-            }
-            #navbar img {
-                height: 2rem !important;
-            }
-            .nav-link {
-                font-size: 0.8125rem !important;
-            }
-        }
-
         section[id] {
             scroll-margin-top: 4rem;
             /* h-16 navbar height */
@@ -122,46 +94,11 @@
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow-x: clip;
+            overflow-x: hidden;
         }
 
-
-        #navbar {
-            width: 100%;
-        }
-
-        .navbar-inner {
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (min-width: 640px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 640px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 768px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 1024px;
-            }
-        }
-
-        @media (min-width: 1280px) {
-            .navbar-inner {
-                width: 100vw;
-                max-width: 1280px;
-            }
+        body.modal-open {
+            overflow: hidden;
         }
 
         #dotted-wave-bg {
@@ -266,6 +203,63 @@
             display: block;
         }
 
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background-color: var(--background);
+            color: var(--high-contrast);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 95%;
+            max-width: 56rem;
+            /* 896px */
+            /* 896px */
+            height: 90vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            max-width: 100%;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1010;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--high-contrast);
+        }
+
         .filter-button {
             background-color: var(--low-contrast);
             color: var(--text);
@@ -338,22 +332,14 @@
 <body>
     <div id="dotted-wave-bg"></div>
 
-    <nav id="navbar"
-         style="position: sticky; top: 0; z-index: 50; background-color: var(--background); border-bottom: 1px solid var(--low-contrast);">
-        <div class="navbar-inner flex items-center justify-between py-3">
-            <a href="#hero">
-                <img src="./assets/AG-Outline_Light.svg" alt="Company Logo" class="h-10 sm:h-12 logo-light">
-                <img src="./assets/AG-Outline_Dark.svg" alt="Company Logo" class="h-10 sm:h-12 logo-dark">
-            </a>
-            <div class="flex gap-4 sm:gap-6 items-center">
-                <a href="#nosotros" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Nosotros</a>
-                <a href="#proyectos" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Proyectos</a>
-                <a href="https://ag-compositions.com/link-tree" class="nav-link font-medium" style="color: var(--text); text-decoration: none; font-size: 0.9375rem;">Contacto</a>
-            </div>
+    <section class="relative" style="background-color: transparent;">
+        <div class="absolute top-6 left-6 z-20">
+            <div class=""><img
+                    src="./assets/AG-Outline_Light.svg"
+                    alt="Company Logo" class="h-12 sm:h-14 logo-light"><img
+                    src="./assets/AG-Outline_Dark.svg"
+                    alt="Company Logo" class="h-12 sm:h-14 logo-dark"></div>
         </div>
-    </nav>
-
-    <section id="hero" class="relative" style="background-color: transparent;">
         <div class="container mx-auto px-6 py-20 lg:py-32 grid grid-cols-1 gap-12 items-center">
             <div class="text-center ">
                 <!-- Copy this -->
@@ -391,7 +377,7 @@
     </section>
 
 
-    <section id="nosotros" style="background-color: transparent; color: var(--high-contrast);" class="">
+    <section style="background-color: transparent; color: var(--high-contrast);" class="">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="color: var(--high-contrast);">Nosotros
             </h2>
@@ -485,6 +471,13 @@
                             </div>
 
                         </div>
+                    </div>
+                    <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                        style="color: var(--high-contrast); text-align: center;">Contacto</h1>
+                    <div class="mt-8 anime-element" style="text-align: center;"><a
+                            href="https://ag-compositions.com/link-tree"
+                            class="inline-block rounded-lg font-bold py-3 px-8"
+                            style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none;">Link-Tree</a>
                     </div>
                 </div>
 
@@ -655,7 +648,7 @@
     </section>
 
 
-    <section id="proyectos" style="background-color: transparent; color: var(--high-contrast);" class="">
+    <section style="background-color: transparent; color: var(--high-contrast);" class="">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4" style="color: var(--high-contrast);">Proyectos
             </h2>
@@ -698,10 +691,10 @@
                             <p style="color: var(--text); ">De la Investigación a la Identidad Visual: Branding
                                 Estratégico para Taller de comunicación visual.</p>
                         </div>
-                        <div class="mt-auto pt-4"><a href="proyectos/ag-compositions-branding.html"
+                        <div class="mt-auto pt-4"><button data-modal-target="#modal-p3"
                                 class="w-full text-center block rounded-lg font-bold py-3 px-4"
                                 style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver
-                                más</a></div>
+                                más</button></div>
                     </div>
                 </div>
 
@@ -732,10 +725,10 @@
                             <p style="color: var(--text); ">De la Inspiración a la Imagen: Una Aplicación Web que
                                 Conecta Moodboards con Inteligencia Artificial.</p>
                         </div>
-                        <div class="mt-auto pt-4"><a href="proyectos/ai-moodboard-to-product.html"
+                        <div class="mt-auto pt-4"><button data-modal-target="#modal-prod-1763659854694"
                                 class="w-full text-center block rounded-lg font-bold py-3 px-4"
                                 style="background-color: var(--primary); color: var(--high-contrast); text-decoration: none; border: none; cursor: pointer;">Ver
-                                más</a></div>
+                                más</button></div>
                     </div>
                 </div>
             </div>
@@ -743,6 +736,220 @@
     </section>
 
 
+    <div id="modal-p3" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+
+                <div class="p-6">
+
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="mt-6 max-w-lg mx-auto aspect-video anime-element"><img
+                                    src="assets/img-8.png" alt="content" class="rounded-lg w-full h-full object-cover"
+                                    style="max-width: 100%;">
+                            </div>
+                            <h2 class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                                style="color: var(--high-contrast); ">Desarrollo de Marca: August Gray Compositions</h2>
+                            <p class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto de branding
+                                fue un viaje desde la investigación hasta la creación de una identidad visual completa.
+                                Nuestro proceso incluyó:
+                            <ul>
+                                <li><b>Investigación y Análisis:</b> Estudio de mercado, análisis de competencia,
+                                    identificación del buyer persona y mapeo del customer journey.</li>
+                                <li><b>Definición Estratégica:</b> Definimos su historia, misión, visión, valores y
+                                    ventaja competitiva para asegurar que la marca refleje sus principios fundamentales.
+                                </li>
+                                <li><b>Desarrollo Visual:</b> Diseñamos un logotipo único, una paleta de colores
+                                    armoniosa y recursos gráficos adaptados a todas sus necesidades (papelería
+                                    corporativa, presentaciones, contenido digital).</li>
+                                <li><b>Planificación de Marketing:</b> Desarrollamos estrategias para comunicar la nueva
+                                    identidad visual y alcanzar al público objetivo del taller.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">
+                        Mockups</h2>
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="w-full">
+                                <div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 2; grid-row: span 2;">
+                                        <img src="assets/img-9.png" alt="bento item" class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Landing Page</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-10.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Sección</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-11.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Formulario</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-12.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">New Item</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-13.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Paleta de Color: Light</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-14.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Paleta de Color: Dark</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-prod-1763659854694" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-content">
+
+                <div class="p-6">
+
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="mt-6 max-w-lg mx-auto aspect-video anime-element"><img
+                                    src="assets/img-15.png" alt="content" class="rounded-lg w-full h-full object-cover"
+                                    style="max-width: 100%;">
+                            </div>
+                            <h1 class="text-2xl md:text-3xl lg:text-3xl font-extrabold !leading-tight anime-element"
+                                style="color: var(--high-contrast); ">Moodboard to Product AI Synthetizer</h1>
+                            <p class="mt-4 text-md anime-element" style="color: var(--text); ">Este proyecto es una
+                                solución innovadora para diseñadores y creativos que buscan aprovechar el poder de la
+                                inteligencia artificial para generar imágenes impactantes. Desarrollamos una aplicación
+                                web que actúa como un puente entre la inspiración visual de un moodboard y las
+                                capacidades generativas de modelos de IA. Con esta herramienta, podrás:
+                            <ul>
+                                <li><b>Capturar tu Visión:</b> Crea un moodboard digital que refleje la esencia de tu
+                                    proyecto.</li>
+                                <li><b>Extraer Información Clave:</b> La aplicación analiza tus imágenes, identificando
+                                    paletas de colores, estilos y texturas.</li>
+                                <li><b>Generar Prompts Precisos:</b> Combina el análisis visual con información
+                                    adicional (como una lista de objetos en CSV) para crear prompts detallados y
+                                    optimizados.</li>
+                                <li><b>Dar Vida a tu Imaginación:</b> Utiliza los prompts generados en modelos de IA
+                                    como Nano Banana, ChatGPT o Stable Diffusion para crear imágenes que capturen la
+                                    esencia de tu proyecto.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-center mb-12" style="color: var(--high-contrast);">
+                        Características</h2>
+                    <div class="grid md:grid-cols-1 gap-10">
+                        <div class="space-y-4">
+                            <div class="w-full">
+                                <div class="grid grid-cols-3 gap-4 auto-rows-fr aspect-[4/3]">
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 2; grid-row: span 2;">
+                                        <img src="assets/img-16.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">UI</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-17.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Concept Nodes</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 1;">
+                                        <img src="assets/img-18.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">Local LLM + APIs</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-19.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">by Midori</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative rounded-lg overflow-hidden"
+                                        style="grid-column: span 1; grid-row: span 2;">
+                                        <img src="assets/img-20.png" alt="bento item"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-4 flex flex-col justify-end"
+                                            style="color: white;">
+                                            <h3 class="text-lg font-bold">by Midori</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <button id="theme-toggle" title="Toggle theme">
@@ -905,14 +1112,41 @@
                 localStorage.setItem('theme', newTheme);
             });
 
-            // Navbar scroll shadow
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 10) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
+            // Modal Logic
+            const openModal = (modal) => {
+                if (modal == null) return;
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            };
+
+            const closeModal = (modal) => {
+                if (modal == null) return;
+                modal.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            };
+
+            const openModalButtons = document.querySelectorAll('[data-modal-target]');
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = document.querySelector(button.dataset.modalTarget);
+                    openModal(modal);
+                });
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        closeModal(overlay);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.modal-close-btn, .modal-close-btn-secondary').forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal-overlay');
+                    closeModal(modal);
+                });
             });
 
             // Product Grid Filtering Logic
