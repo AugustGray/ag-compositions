@@ -74,7 +74,7 @@
   .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
   .bar-label { font-size:13px; color:var(--text2); width:200px; flex-shrink:0; line-height:1.35; }
   .bar-track { flex:1; background:var(--surface2); border-radius:4px; height:22px; overflow:hidden; position:relative; }
-  .bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:500; white-space:nowrap; transition:width .5s ease; }
+  .bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:500; color:#fff; white-space:nowrap; transition:width .5s ease; }
   .bar-val { font-size:12px; color:var(--text2); width:80px; text-align:right; flex-shrink:0; font-family:'DM Mono',monospace; }
 
   /* tabla detalle */
@@ -128,6 +128,9 @@
 
 <header>
   <div class="header-left">
+    <a href="https://ag-compositions.com" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:4px;">
+      <img src="../../assets/AG-Outline_Light.svg" alt="AG Compositions" style="height:24px;">
+    </a>
     <span class="header-tag">Ciclo de Vida · Escuela · Chihuahua, Chih. · 220 días hábiles/año</span>
     <h1>Ciclo del Agua Escolar</h1>
     <p class="subtitle">~750 personas/día · Agua potable + tratada + aguas grises reutilizadas</p>
@@ -163,10 +166,9 @@
       <button class="btn" onclick="zoomReset()">Reset</button>
     </div>
     <div class="divider-v"></div>
-    <button class="btn btn-accent" id="export-btn" onclick="doExport()">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 2v6M4 5.5l2.5 2.5 2.5-2.5M2 10h9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="export-label">Exportar PNG</span>
-    </button>
+    <a href="https://ag-compositions.com/link-tree" class="btn btn-accent" style="text-decoration:none;">
+      Contacto
+    </a>
   </div>
 </header>
 
@@ -481,7 +483,6 @@ function setView(v) {
   document.getElementById('zoom-controls').style.visibility = v==='sankey' ? 'visible' : 'hidden';
   document.getElementById('btn-view-sankey').classList.toggle('active', v==='sankey');
   document.getElementById('btn-view-dashboard').classList.toggle('active', v==='dashboard');
-  document.getElementById('export-label').textContent = v==='sankey' ? 'Exportar PNG' : 'Exportar PNG';
   renderAll();
 }
 

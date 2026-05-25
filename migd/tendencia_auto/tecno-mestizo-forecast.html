@@ -586,7 +586,7 @@
   <div class="nav-inner">
     <div style="display:flex;align-items:center;gap:0.75rem;">
       <a href="/" style="display:flex;align-items:center;flex-shrink:0;">
-        <img src="../../assets/AG-Outline_Dark.svg" alt="AG" class="nav-ag-logo">
+        <img src="./logo-quetzal.svg" alt="AG" class="nav-ag-logo">
       </a>
       <a href="#" class="nav-logo">
         Tecno<span>Mestizo</span>™
@@ -654,11 +654,11 @@
         </div>
         <div class="color-item">
           <div class="color-name">Negro Obsidiana</div>
-          <div class="color-desc">Base dominante. Volcánico, mineral, profundo. No es un neutro — es ceremonial.</div>
+          <div class="color-desc">Base dominante. Volcánico, mineral, profundo.</div>
         </div>
         <div class="color-item">
           <div class="color-name">Dorado Ceremonial</div>
-          <div class="color-desc">Tecnología e interfaz. Referencia al oro mesoamericano reinterpretado como UI.</div>
+          <div class="color-desc">Tecnología e interfaz. Referencia al oro mesoamericano reinterpretado como UI + Textil.</div>
         </div>
         <div class="color-item">
           <div class="color-name">Verde Quetzal</div>
@@ -690,8 +690,8 @@
         <div class="finish-item"><div class="finish-dot" style="background:var(--quetzal-bright);"></div>Wet neon translucency</div>
         <div class="finish-item"><div class="finish-dot" style="background:var(--text-secondary);"></div>Reactive parametric textiles</div>
         <div class="finish-item"><div class="finish-dot" style="background:#8B6018;"></div>Smoked acrylic / Bio-resin gloss</div>
-        <div class="finish-item"><div class="finish-dot" style="background:#333;"></div>Engravado paramétrico en cuero</div>
-        <div class="finish-item"><div class="finish-dot" style="background:var(--gold-pale);"></div>Cerámica negra estilo obsidiana</div>
+        <div class="finish-item"><div class="finish-dot" style="background:#333;"></div>Parametric leather engraving</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--gold-pale);"></div>Obsidian-style black ceramic</div>
       </div>
 
     </div>
@@ -824,6 +824,74 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- CONFIGURATION ---
+        // Define your icon paths here
+        const FAVICONS = {
+            // Dark Mode usually needs LIGHT/BRIGHT icons to show up on the dark tab bar
+            dark: [
+                './favicon/Favicon_00.svg',
+                './favicon/Favicon_01.svg',
+                './favicon/Favicon_02.svg',
+                './favicon/Favicon_03.svg',
+                './favicon/Favicon_04.svg'
+            ],
+            // Light Mode usually needs DARK icons
+            light: [
+                './favicon/Favicon_00.svg',
+                './favicon/Favicon_01.svg',
+                './favicon/Favicon_02.svg',
+                './favicon/Favicon_03.svg',
+                './favicon/Favicon_04.svg'
+            ]
+        };
+
+        // --- LOGIC ---
+        function updateFavicon() {
+            // 1. Get current theme (default to dark if missing)
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            
+            // 2. Select the correct array
+            const iconSet = FAVICONS[currentTheme] || FAVICONS.dark;
+            
+            // 3. Pick a random icon
+            const randomIndex = Math.floor(Math.random() * iconSet.length);
+            const selectedIcon = iconSet[randomIndex];
+
+            // 4. Find or Create the Link Tag
+            // We look for any link with 'icon' in the rel attribute
+            let link = document.querySelector("link[rel*='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.type = 'image/x-icon';
+                link.rel = 'shortcut icon';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+
+            // 5. Update the href
+            link.href = selectedIcon;
+        }
+
+        // --- INITIALIZATION ---
+        
+        // 1. Run immediately on load
+        updateFavicon();
+
+        // 2. Watch for Theme Changes (MutationObserver)
+        // This detects when your OTHER script changes the data-theme attribute
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    updateFavicon(); 
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+    });
 </script>
 </body>
 </html>
