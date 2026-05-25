@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TECNO MESTIZO™ — Variante Quetzal | Trend Forecast 2030</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<style>
+  :root {
+    --obsidian: #0A0A0C;
+    --obsidian-mid: #111114;
+    --obsidian-surface: #18181C;
+    --gold: #C9922A;
+    --gold-light: #E8B84B;
+    --gold-pale: #F5DFA0;
+    --quetzal: #1FA882;
+    --quetzal-bright: #2DD4A6;
+    --quetzal-dim: #0E5C47;
+    --text-primary: #F0EDE8;
+    --text-secondary: #9A9490;
+    --text-dim: #4A4745;
+    --border: #2A2825;
+    --border-gold: rgba(201,146,42,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--obsidian);
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--obsidian); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* NAVBAR */
+  #navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,12,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-gold);
+    transition: all 0.3s ease;
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .nav-logo span { color: var(--quetzal); }
+  .nav-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-link {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+  }
+  .nav-link:hover { color: var(--gold); }
+  .nav-cta {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--obsidian);
+    padding: 6px 16px;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+  .nav-ag-logo { height: 26px; width: auto; display: block; }
+
+  /* HERO */
+  .hero-section {
+    position: relative;
+    height: 85vh;
+    min-height: 600px;
+    overflow: hidden;
+  }
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10,10,12,0.1) 0%,
+      rgba(10,10,12,0.0) 30%,
+      rgba(10,10,12,0.5) 70%,
+      rgba(10,10,12,1) 100%
+    );
+  }
+  .hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem 3rem 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--quetzal-bright);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--quetzal-bright);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: 0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+  }
+  .hero-top-label {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: rgba(240,237,232,0.5);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  /* LAYOUT */
+  .page-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* KEY SHIFT */
+  .key-shift-section {
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border-gold), transparent);
+  }
+  .key-shift-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .shift-arrow {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .shift-from, .shift-to {
+    padding: 1.5rem;
+    border-left: 2px solid;
+  }
+  .shift-from {
+    border-color: var(--text-dim);
+    opacity: 0.5;
+  }
+  .shift-to {
+    border-color: var(--gold);
+  }
+  .shift-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .shift-from .shift-tag { color: var(--text-dim); }
+  .shift-to .shift-tag { color: var(--gold); }
+  .shift-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .shift-connector {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--quetzal);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .key-shift-body h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+  .key-shift-body h2 span { color: var(--gold); }
+  .key-shift-body p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    max-width: 54ch;
+  }
+
+  /* GRID EDITORIAL */
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* COLOR SYSTEM */
+  .color-block {
+    grid-column: span 4;
+    padding: 2.5rem 2rem;
+    background: var(--obsidian-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .color-swatch-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .swatch {
+    height: 48px;
+    flex: 1;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .swatch-obsidian {
+    background: radial-gradient(ellipse at 30% 30%, #2a2025, #060607);
+    border: 1px solid #2A2825;
+  }
+  .swatch-gold {
+    background: linear-gradient(135deg, #E8B84B, #8B6018);
+  }
+  .swatch-quetzal {
+    background: linear-gradient(135deg, #2DD4A6, #0A4035);
+  }
+  .color-item { margin-bottom: 1rem; }
+  .color-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.2rem;
+  }
+  .color-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* CONSUMER MOOD */
+  .mood-block {
+    grid-column: span 4;
+    padding: 2.5rem 2rem;
+    background: var(--obsidian-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  .archetype-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.08em;
+    color: var(--quetzal-bright);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .archetype-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+  }
+  .trait-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex: 1;
+  }
+  .trait-list li {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.4;
+  }
+  .trait-list li::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0.45em;
+  }
+
+  /* MATERIALS */
+  .materials-block {
+    grid-column: span 4;
+    padding: 2.5rem 2rem;
+    background: var(--obsidian-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .finish-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .finish-item:last-child { border-bottom: none; }
+  .finish-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* IMAGE BLOCKS */
+  .img-block {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .img-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .img-block:hover img { transform: scale(1.03); }
+  .img-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.25rem 0.75rem;
+    background: linear-gradient(to top, rgba(10,10,12,0.9), transparent);
+  }
+  .img-caption-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .img-caption-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* MOBILITY ROW */
+  .mobility-section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobility-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .mobility-img-wrap {
+    aspect-ratio: 4/3;
+  }
+  .cmf-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .cmf-item {
+    padding: 1.5rem;
+    background: var(--obsidian-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .cmf-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--quetzal);
+    margin-bottom: 0.75rem;
+  }
+  .cmf-item p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* KEYWORDS */
+  .keywords-section {
+    padding: 4rem 0 2rem;
+  }
+  .keywords-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .keyword {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    background: var(--obsidian-surface);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .keyword:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .keyword.accent {
+    border-color: var(--quetzal-dim);
+    color: var(--quetzal-bright);
+    background: rgba(14,92,71,0.2);
+  }
+
+  /* FOOTER */
+  .forecast-footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+  }
+
+  /* ANIMATIONS */
+  .anime-el { opacity: 0; }
+
+  /* BG TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.5' fill='%23ffffff' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .key-shift-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .editorial-grid { grid-template-columns: 1fr; }
+    .color-block, .mood-block, .materials-block { grid-column: span 1; }
+    .mobility-grid, .cmf-row { grid-template-columns: 1fr; }
+    .hero-content { padding: 2rem 1.5rem; }
+    .page-wrap { padding: 0 1.25rem; }
+    .nav-logo { flex-wrap: wrap; row-gap: 0.15rem; }
+    .nav-links .nav-link { display: none; }
+    .nav-ag-logo { height: 20px; }
+    .detail-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <a href="/" style="display:flex;align-items:center;flex-shrink:0;">
+        <img src="../../assets/AG-Outline_Dark.svg" alt="AG" class="nav-ag-logo">
+      </a>
+      <a href="#" class="nav-logo">
+        Tecno<span>Mestizo</span>™
+        <span class="nav-badge">Trend Forecast</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#key-shift" class="nav-link">Key Shift</a>
+      <a href="#cmf" class="nav-link">CMF</a>
+      <a href="#mobility" class="nav-link">Mobility</a>
+      <a href="#keywords" class="nav-link">Signals</a>
+      <a href="https://ag-compositions.com/link-tree" class="nav-cta">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section">
+  <img class="hero-img" src="./HVS-SSDS_Hypercar.png" alt="Tecno Mestizo Quetzal — Exterior"/>
+  <div class="hero-overlay"></div>
+  <div class="hero-top-label">México 2030 — Variante Quetzal</div>
+  <div class="hero-content page-wrap">
+    <div class="hero-eyebrow anime-el" id="eyebrow">Trend Forecast / Automotive / CMF</div>
+    <h1 class="hero-title anime-el" id="h-title">TECNO<br/><em>MESTIZO</em></h1>
+    <p class="hero-subtitle anime-el" id="h-sub">Hyperlocal Cyber-Prehispanic — México 2030</p>
+  </div>
+</section>
+
+<!-- KEY SHIFT -->
+<section id="key-shift" class="key-shift-section">
+  <div class="page-wrap">
+    <div class="section-label">Key Cultural Shift</div>
+    <div class="key-shift-grid">
+      <div class="shift-arrow anime-el">
+        <div class="shift-from">
+          <div class="shift-tag">From</div>
+          <div class="shift-text">Imported Futures</div>
+        </div>
+        <div class="shift-connector">→</div>
+        <div class="shift-to">
+          <div class="shift-tag">To</div>
+          <div class="shift-text">Rooted Futurism</div>
+        </div>
+      </div>
+      <div class="key-shift-body anime-el">
+        <h2>Del futurismo <span>genérico</span> al futurismo <span>raíz</span></h2>
+        <p>Una nueva generación mexicana rechaza el futurismo de exportación y reconstruye identidades híbridas donde la herencia indígena, la cultura urbana y la tecnología convergen en nuevas expresiones materiales, digitales y sociales. El diseño ya no llega de Tokio ni de Los Ángeles — emerge desde CDMX, Oaxaca, Monterrey y Chihuahua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL GRID: COLOR + MOOD + MATERIALS -->
+<section id="cmf">
+  <div class="page-wrap">
+    <div class="editorial-grid">
+
+      <!-- COLOR SYSTEM -->
+      <div class="color-block anime-el">
+        <div class="section-label" style="margin-bottom:1.5rem;">Sistema de Color</div>
+        <div class="color-swatch-row">
+          <div class="swatch swatch-obsidiana" style="background:radial-gradient(ellipse at 30% 30%,#1e1a1f,#050507);border:1px solid #2A2825;"></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#E8B84B,#7A5010);"></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#2DD4A6,#094030);"></div>
+        </div>
+        <div class="color-item">
+          <div class="color-name">Negro Obsidiana</div>
+          <div class="color-desc">Base dominante. Volcánico, mineral, profundo. No es un neutro — es ceremonial.</div>
+        </div>
+        <div class="color-item">
+          <div class="color-name">Dorado Ceremonial</div>
+          <div class="color-desc">Tecnología e interfaz. Referencia al oro mesoamericano reinterpretado como UI.</div>
+        </div>
+        <div class="color-item">
+          <div class="color-name">Verde Quetzal</div>
+          <div class="color-desc">Acentos e iluminación reactiva. Presencia digital del plumaje sagrado.</div>
+        </div>
+      </div>
+
+      <!-- CONSUMER MOOD -->
+      <div class="mood-block anime-el">
+        <div class="section-label" style="margin-bottom:1.5rem;">Consumer Archetype</div>
+        <div class="archetype-name">Neo-Artesano<br/>Digital</div>
+        <div class="archetype-sub">Perfil del Consumidor 2030</div>
+        <ul class="trait-list">
+          <li>Rechaza lo genérico global; busca identidad cultural profunda</li>
+          <li>Mezcla lujo con calle sin jerarquía de clase</li>
+          <li>Adopta IA como herramienta creativa, no como sustituto</li>
+          <li>Hiperconectado pero territorial: orgullosamente local</li>
+          <li>Ve la artesanía como código fuente de la cultura</li>
+          <li>Consume materiales con historia, no con tendencia</li>
+        </ul>
+      </div>
+
+      <!-- MATERIALS / FINISHES -->
+      <div class="materials-block anime-el">
+        <div class="section-label" style="margin-bottom:1.5rem;">Finish Language</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--text-dim);"></div>Soft-touch volcanic matte</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--quetzal);"></div>Iridescent oxide coatings</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--gold);"></div>Burnished ritual metallics</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--quetzal-bright);"></div>Wet neon translucency</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--text-secondary);"></div>Reactive parametric textiles</div>
+        <div class="finish-item"><div class="finish-dot" style="background:#8B6018;"></div>Smoked acrylic / Bio-resin gloss</div>
+        <div class="finish-item"><div class="finish-dot" style="background:#333;"></div>Engravado paramétrico en cuero</div>
+        <div class="finish-item"><div class="finish-dot" style="background:var(--gold-pale);"></div>Cerámica negra estilo obsidiana</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MOBILITY / AUTOMOTIVE -->
+<section id="mobility" class="mobility-section">
+  <div class="page-wrap">
+    <div class="section-label">Aplicación Automotriz — Variante Quetzal</div>
+
+    <div class="mobility-grid">
+      <div class="img-block mobility-img-wrap anime-el">
+        <img src="./HVS-SSDS.png" alt="Exterior Quetzal"/>
+        <div class="img-caption">
+          <span class="img-caption-label">Exterior</span>
+          <span class="img-caption-title">Obsidiana + Neon Quetzal</span>
+        </div>
+      </div>
+      <div class="img-block mobility-img-wrap anime-el">
+        <img src="./HVS-SSDS_Dash.png" alt="Cockpit Dashboard"/>
+        <div class="img-caption">
+          <span class="img-caption-label">UX / Interfaz</span>
+          <span class="img-caption-title">HUD Ceremonial + Performance Mode</span>
+        </div>
+      </div>
+      <div class="img-block mobility-img-wrap anime-el">
+        <img src="./HVS-SSDS_Seats.png" alt="Interior Asientos"/>
+        <div class="img-caption">
+          <span class="img-caption-label">Interior</span>
+          <span class="img-caption-title">Telar Reinterpretado + Ambient Quetzal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAIL: TEXTURE -->
+    <div class="detail-grid" style="display:grid;grid-template-columns:1fr 2fr;gap:1.5rem;margin-top:1.5rem;">
+      <div class="img-block anime-el" style="aspect-ratio:1/1;">
+        <img src="./HVS-SSDS_Detail.png" alt="Textura bordado"/>
+        <div class="img-caption">
+          <span class="img-caption-label">Materialidad</span>
+          <span class="img-caption-title">Bordado Paramétrico — Simbología Mexica</span>
+        </div>
+      </div>
+      <div class="cmf-row" style="margin-top:0;">
+        <div class="cmf-item anime-el">
+          <div class="cmf-label">Exterior</div>
+          <p>Pintura negro obsidiana con reflejos índigo bajo luz rasante. Iluminación quetzal reactiva. Superficies satinadas con micro-textura de greca.</p>
+        </div>
+        <div class="cmf-item anime-el">
+          <div class="cmf-label">Interior</div>
+          <p>Textiles inspirados en telar oaxaqueño reinterpretado digitalmente. Ambient lighting bugambilia–quetzal. Cobre ennegrecido y biomateriales.</p>
+        </div>
+        <div class="cmf-item anime-el">
+          <div class="cmf-label">UX / IA</div>
+          <p>Identidad regional embebida en la IA. Sonidos inspirados en instrumentos mesoamericanos sintetizados. Navegación contextual urbana hiperlocal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEYWORDS -->
+<section id="keywords" class="keywords-section">
+  <div class="page-wrap">
+    <div class="section-label">Future Signals</div>
+    <div class="keywords-flow anime-el">
+      <span class="keyword accent">Digital Heritage</span>
+      <span class="keyword">Hyperlocal Futures</span>
+      <span class="keyword accent">Ritual Tech</span>
+      <span class="keyword">Neo-Craft</span>
+      <span class="keyword accent">Urban Indigenous</span>
+      <span class="keyword">Cyber Folk</span>
+      <span class="keyword">Emotional Saturation</span>
+      <span class="keyword accent">Post-Global Aesthetics</span>
+      <span class="keyword">Rooted Futurism</span>
+      <span class="keyword">Identidad Híbrida</span>
+      <span class="keyword accent">Obsidiana Digital</span>
+      <span class="keyword">Mesotech</span>
+      <span class="keyword">Patrimonio Paramétrico</span>
+      <span class="keyword accent">CDMX 2030</span>
+    </div>
+    <div class="forecast-footer anime-el">
+      <div class="footer-meta">Trend Forecast — México 2030 — Variante Quetzal</div>
+      <div class="footer-brand">TECNO MESTIZO™</div>
+      <div class="footer-meta">Hyperlocal Cyber-Prehispanic</div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        anime({
+          targets: entry.target,
+          opacity: [0, 1],
+          translateY: [30, 0],
+          duration: 900,
+          easing: 'easeOutQuart'
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.anime-el').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+
+  // Stagger hero elements
+  anime({
+    targets: ['#eyebrow','#h-title','#h-sub'],
+    opacity: [0, 1],
+    translateY: [40, 0],
+    delay: anime.stagger(150, { start: 300 }),
+    duration: 1000,
+    easing: 'easeOutQuart'
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.style.borderBottomColor = 'rgba(201,146,42,0.4)';
+    } else {
+      navbar.style.borderBottomColor = 'rgba(201,146,42,0.25)';
+    }
+  });
+});
+</script>
+</body>
+</html>

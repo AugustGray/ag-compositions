@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo del Agua — Escuela Chihuahua</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #e0e5ec; --surface: #ffffff; --surface2: #dbe0e7;
+    --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.16);
+    --text: #212428; --text2: #464d56; --text3: #8A9098;
+    --c-potable: #2a6496; --c-tratada: #3a7d44; --c-gris: #6b5ea8;
+    --c-uso: #b06820; --c-residual: #a83232; --c-ahorro: #2e7d50;
+  }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
+
+  /* ── HEADER ── */
+  header { padding:16px 24px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--surface); position:sticky; top:0; z-index:100; }
+  .header-left { display:flex; flex-direction:column; gap:2px; }
+  .header-tag { font-size:10px; font-family:'DM Mono',monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--c-potable); font-weight:500; }
+  h1 { font-size:15px; font-weight:600; color:var(--text); line-height:1.3; }
+  .subtitle { font-size:11px; color:var(--text2); margin-top:2px; }
+  .controls { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .btn { display:flex; align-items:center; gap:5px; padding:6px 13px; border-radius:6px; border:1px solid var(--border2); background:var(--surface2); color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:background .15s,border-color .15s; white-space:nowrap; }
+  .btn:hover { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.22); }
+  .btn:active { transform:scale(.97); }
+  .btn-accent { background:var(--c-potable); border-color:var(--c-potable); color:#fff; font-weight:500; }
+  .btn-accent:hover { background:#1f4d73; border-color:#1f4d73; }
+  .toggle-group { display:flex; border:1px solid var(--border2); border-radius:6px; overflow:hidden; }
+  .toggle-btn { padding:6px 14px; background:transparent; border:none; color:var(--text2); font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:background .15s,color .15s; white-space:nowrap; }
+  .toggle-btn+.toggle-btn { border-left:1px solid var(--border2); }
+  .toggle-btn.active { background:var(--surface2); color:var(--text); font-weight:500; }
+  .toggle-btn:hover:not(.active) { background:rgba(255,255,255,.04); }
+  .divider-v { width:1px; height:22px; background:var(--border2); }
+  .zoom-val { font-family:'DM Mono',monospace; font-size:12px; color:var(--text2); min-width:36px; text-align:center; }
+  #zoom-controls { display:flex; align-items:center; gap:6px; }
+
+  /* ── MAIN ── */
+  main { flex:1; overflow:auto; padding:20px 20px 40px; display:flex; flex-direction:column; align-items:center; }
+  .stats-row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; width:100%; max-width:1300px; }
+  .stat-card { flex:1; min-width:110px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:11px 14px; transition:border-color .3s; }
+  .stat-card.highlight { border-color:rgba(46,125,80,.4); }
+  .stat-card.highlight .stat-value { color:var(--c-ahorro); }
+  .stat-label { font-size:10px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--text3); margin-bottom:4px; }
+  .stat-value { font-size:18px; font-weight:600; color:var(--text); line-height:1.1; }
+  .stat-sub { font-size:11px; color:var(--text3); margin-top:2px; }
+
+  /* ── SANKEY VIEW ── */
+  #sankey-view { width:100%; max-width:1300px; }
+  #zoom-container { transform-origin:top center; transition:transform .2s ease; width:100%; }
+  #chart-wrap { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 16px 18px; }
+  #sankey-svg { width:100%; display:block; }
+  .link { cursor:pointer; transition:opacity .15s; }
+  .link:hover { opacity:.82 !important; }
+  .legend-row { display:flex; flex-wrap:wrap; gap:14px; margin-top:16px; padding:0 4px; }
+  .legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text2); }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .scenario-badge { display:inline-block; padding:3px 10px; border-radius:4px; font-size:10px; font-family:'DM Mono',monospace; letter-spacing:.08em; text-transform:uppercase; font-weight:500; margin-bottom:12px; }
+  .badge-actual { background:rgba(42,100,150,.12); color:var(--c-potable); border:1px solid rgba(42,100,150,.3); }
+  .badge-mejora { background:rgba(46,125,80,.10); color:var(--c-ahorro); border:1px solid rgba(46,125,80,.3); }
+  #scenario-label { text-align:center; }
+
+  /* ── DASHBOARD VIEW ── */
+  #dashboard-view { width:100%; max-width:1300px; display:none; }
+  .dash-section { margin-bottom:24px; }
+  .dash-title { font-size:11px; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--text3); margin-bottom:12px; }
+  .dash-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 22px; }
+
+  /* barras */
+  .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+  .bar-label { font-size:13px; color:var(--text2); width:200px; flex-shrink:0; line-height:1.35; }
+  .bar-track { flex:1; background:var(--surface2); border-radius:4px; height:22px; overflow:hidden; position:relative; }
+  .bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:500; white-space:nowrap; transition:width .5s ease; }
+  .bar-val { font-size:12px; color:var(--text2); width:80px; text-align:right; flex-shrink:0; font-family:'DM Mono',monospace; }
+
+  /* tabla detalle */
+  .det-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .det-table thead tr { border-bottom:1px solid var(--border2); }
+  .det-table th { text-align:left; padding:7px 10px 7px 0; color:var(--text3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+  .det-table th:not(:first-child) { text-align:right; }
+  .det-table td { padding:8px 10px 8px 0; border-bottom:.5px solid var(--border); color:var(--text2); vertical-align:middle; }
+  .det-table td:not(:first-child) { text-align:right; font-family:'DM Mono',monospace; font-size:12px; }
+  .det-table tbody tr:last-child td { border-bottom:none; }
+  .det-table tfoot td { padding-top:10px; border-top:1px solid var(--border2); color:var(--text); font-weight:600; border-bottom:none; }
+  .det-table tfoot td:not(:first-child) { font-family:'DM Mono',monospace; }
+  .tag-sm { display:inline-block; font-size:10px; font-weight:500; padding:2px 7px; border-radius:4px; white-space:nowrap; }
+  .tag-p { background:rgba(42,100,150,.12); color:var(--c-potable); }
+  .tag-t { background:rgba(58,125,68,.12); color:var(--c-tratada); }
+  .tag-g { background:rgba(107,94,168,.12); color:var(--c-gris); }
+
+  /* comparativa */
+  .comp-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .comp-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+  .comp-card-title { font-size:13px; font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .comp-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:.5px solid var(--border); font-size:13px; }
+  .comp-row:last-child { border-bottom:none; }
+  .comp-label { color:var(--text2); }
+  .comp-val { font-family:'DM Mono',monospace; font-size:12px; color:var(--text); font-weight:500; }
+  .comp-val.green { color:var(--c-ahorro); }
+  .comp-val.blue  { color:var(--c-potable); }
+  .comp-val.purple{ color:var(--c-gris); }
+
+  /* tabla resumen comparativo global */
+  .global-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .global-table thead tr { border-bottom:1px solid var(--border2); }
+  .global-table th { padding:7px 12px 7px 0; color:var(--text3); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.06em; text-align:right; white-space:nowrap; }
+  .global-table th:first-child { text-align:left; }
+  .global-table td { padding:9px 12px 9px 0; border-bottom:.5px solid var(--border); text-align:right; font-family:'DM Mono',monospace; font-size:12px; color:var(--text2); }
+  .global-table td:first-child { text-align:left; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text); }
+  .global-table tbody tr:last-child td { border-bottom:none; }
+  .global-table .ahorro-cell { color:var(--c-ahorro); font-weight:600; }
+  .global-table .total-cell  { color:var(--text); font-weight:600; }
+
+  /* tooltip */
+  #tooltip { position:fixed; background:var(--surface); border:1px solid var(--border2); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text); pointer-events:none; opacity:0; transition:opacity .12s; z-index:999; max-width:230px; box-shadow:0 8px 24px rgba(0,0,0,.15); }
+  #tooltip strong { display:block; margin-bottom:4px; font-size:13px; }
+  #tooltip .tip-val { font-family:'DM Mono',monospace; font-size:12px; }
+  #tooltip .tip-pct { color:var(--text3); font-size:11px; margin-top:2px; }
+
+  footer { text-align:center; font-size:11px; color:var(--text3); padding:12px; border-top:1px solid var(--border); font-family:'DM Mono',monospace; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="header-tag">Ciclo de Vida · Escuela · Chihuahua, Chih. · 220 días hábiles/año</span>
+    <h1>Ciclo del Agua Escolar</h1>
+    <p class="subtitle">~750 personas/día · Agua potable + tratada + aguas grises reutilizadas</p>
+  </div>
+  <div class="controls">
+    <!-- Escenario -->
+    <div class="toggle-group">
+      <button class="toggle-btn active" id="btn-actual" onclick="setScenario('actual')">Situación actual</button>
+      <button class="toggle-btn"        id="btn-mejora" onclick="setScenario('mejora')">Con mejoras</button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- Vista -->
+    <div class="toggle-group">
+      <button class="toggle-btn active" id="btn-view-sankey"    onclick="setView('sankey')">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="margin-right:3px"><path d="M1 2h2v2H1zM5 1h2v3H5zM9 3h3v1H9zM1 6h2v5H1zM5 5h2v2H5zM9 5h3v4H9zM5 9h2v3H5z" fill="currentColor" opacity=".7"/><path d="M3 3h2M7 2.5h2M3 9h2M7 6h2" stroke="currentColor" stroke-width="1"/></svg>
+        Sankey
+      </button>
+      <button class="toggle-btn"        id="btn-view-dashboard" onclick="setView('dashboard')">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="margin-right:3px"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".6"/><rect x="7" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".6"/><rect x="1" y="7" width="5" height="5" rx="1" fill="currentColor" opacity=".6"/><rect x="7" y="7" width="5" height="5" rx="1" fill="currentColor" opacity=".6"/></svg>
+        Tabla / Dashboard
+      </button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- Zoom (solo sankey) -->
+    <div id="zoom-controls">
+      <button class="btn" onclick="zoomOut()" title="−">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="6" width="9" height="1.4" rx=".7" fill="currentColor"/></svg>
+      </button>
+      <span class="zoom-val" id="zoom-display">100%</span>
+      <button class="btn" onclick="zoomIn()" title="+">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="6" y="2" width="1.4" height="9" rx=".7" fill="currentColor"/><rect x="2" y="6" width="9" height="1.4" rx=".7" fill="currentColor"/></svg>
+      </button>
+      <button class="btn" onclick="zoomReset()">Reset</button>
+    </div>
+    <div class="divider-v"></div>
+    <button class="btn btn-accent" id="export-btn" onclick="doExport()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 2v6M4 5.5l2.5 2.5 2.5-2.5M2 10h9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="export-label">Exportar PNG</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="stats-row" id="stats-row"></div>
+
+  <!-- SANKEY VIEW -->
+  <div id="sankey-view">
+    <div id="zoom-container">
+      <div id="chart-wrap">
+        <div id="scenario-label"></div>
+        <svg id="sankey-svg" viewBox="0 0 1260 640" role="img">
+          <title>Diagrama de Sankey — Ciclo del agua escuela Chihuahua</title>
+        </svg>
+        <div class="legend-row">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c-potable)"></div>Agua potable</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c-tratada)"></div>Agua tratada</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c-gris)"></div>Aguas grises reutilizadas</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c-uso)"></div>Usos / consumos</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--c-residual)"></div>Agua residual</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view">
+    <!-- Sección 1: Resumen anual -->
+    <div class="dash-section">
+      <!-- <div class="dash-title">Resumen anual estimado</div> -->
+      <div id="dash-resumen"></div>
+    </div>
+    <!-- Sección 2: Barras potable -->
+    <div class="dash-section">
+      <div class="dash-title">Desglose por uso — Agua potable</div>
+      <div class="dash-card" id="dash-barras-potable"></div>
+    </div>
+    <!-- Sección 3: Barras tratada / grises -->
+    <div class="dash-section" id="dash-section-tratada">
+      <div class="dash-title">Desglose — Agua tratada y aguas grises</div>
+      <div class="dash-card" id="dash-barras-tratada"></div>
+    </div>
+    <!-- Sección 4: Tabla detalle -->
+    <div class="dash-section">
+      <div class="dash-title">Detalle por subsistema</div>
+      <div class="dash-card">
+        <table class="det-table" id="dash-tabla-detalle">
+          <thead><tr>
+            <th>Subsistema</th>
+            <th>L / día hábil</th>
+            <th>m³ / año</th>
+            <th>Tipo</th>
+          </tr></thead>
+          <tbody id="dash-tabla-body"></tbody>
+          <tfoot id="dash-tabla-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+    <!-- Sección 5: Comparativa de mejoras (solo escenario mejora) -->
+    <div class="dash-section" id="dash-section-mejoras" style="display:none">
+      <div class="dash-title">Comparativa de mejoras por categoría</div>
+      <div class="comp-grid" id="dash-comp-grid"></div>
+    </div>
+    <!-- Sección 6: Resumen comparativo global (siempre visible) -->
+    <div class="dash-section">
+      <div class="dash-title">Resumen comparativo global</div>
+      <div class="dash-card">
+        <table class="global-table">
+          <thead><tr>
+            <th>Escenario</th>
+            <th>Potable m³/año</th>
+            <th>Tratada m³/año</th>
+            <th>Total m³/año</th>
+            <th>Ahorro vs actual</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tag-sm tag-p">Actual</span> Base corregida</td>
+              <td>2,970</td><td>480</td>
+              <td class="total-cell">3,450</td>
+              <td style="color:var(--text3)">—</td>
+            </tr>
+            <tr>
+              <td><span class="tag-sm" style="background:rgba(46,125,80,.10);color:var(--c-ahorro);border:1px solid rgba(46,125,80,.25)">Mejoras</span> Muebles BC + aguas grises</td>
+              <td>1,977</td><td>480</td>
+              <td class="total-cell">2,457</td>
+              <td class="ahorro-cell">−993 m³ (−29%)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="tooltip"></div>
+<footer>Estudio de Ciclo de Vida · Escuela Chihuahua · Estimaciones basadas en estándares CONAGUA para clima árido · 2025</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   DATOS
+═══════════════════════════════════════════════════ */
+const SCENARIOS = {
+  actual: {
+    label: 'Situación actual', badge: 'badge-actual',
+    stats: [
+      { label:'Total potable',   value:'2,970 m³', sub:'2,970,000 L/año',          color:'#2a6496' },
+      { label:'Agua tratada',    value:'480 m³',   sub:'Solo riego jardín acceso',  color:'#3a7d44' },
+      { label:'Aguas grises',    value:'—',        sub:'Sin reutilización',         color:'#8A9098' },
+      { label:'Agua residual',   value:'~2,450 m³',sub:'Va al drenaje municipal',   color:'#a83232' },
+      { label:'Total consumido', value:'3,450 m³', sub:'220 días hábiles/año',      color:'#212428' },
+    ],
+    // Barras agua potable: [label, L/año, color]
+    barrasPotable: [
+      ['Sanitarios módulos ×4 (desc. rápida)', 950000, '#2a6496'],
+      ['Estaciones llenado → Bebida/hidratación',1140000,'#2a6496'],
+      ['Cafetería + café',                       420000, '#2a6496'],
+      ['Sanitarios cafetería/admin (conv.)',      440000, '#2a6496'],
+      ['Lavamanos (todos)',                       255000, '#2a6496'],
+      ['Limpieza / mantenimiento',               180000, '#2a6496'],
+      ['Mingitorios (convencionales)',            205000, '#2a6496'],
+      ['Riego patio central',                     30000, '#2a6496'],
+    ],
+    barrasTratada: [
+      ['Riego jardín de acceso', 480000, '#3a7d44'],
+    ],
+    barrasGris: [],
+    tablaDetalle: [
+      ['Sanitarios módulos ×4',       4318,  950, 'p'],
+      ['Estaciones llenado → Bebida', 5182, 1140, 'p'],
+      ['Cafetería + café',            1909,  420, 'p'],
+      ['Sanitarios cafetería/admin',  2000,  440, 'p'],
+      ['Lavamanos (todos)',           1159,  255, 'p'],
+      ['Limpieza / mantenimiento',     818,  180, 'p'],
+      ['Mingitorios',                  932,  205, 'p'],
+      ['Riego patio central',          136,   30, 'p'],
+      ['Riego jardín de acceso',      2182,  480, 't'],
+    ],
+    totalL: 3450000,
+    // Comparativa por categoría (no aplica en actual)
+    mejoras: null,
+    nodes: [
+      {id:0, name:'Agua\nPotable',         color:'#2a6496'},
+      {id:1, name:'Agua\nTratada',         color:'#3a7d44'},
+      {id:2, name:'Sanitarios\nmódulos ×4',color:'#b06820'},
+      {id:3, name:'Sanitarios\ncafetería/\nadmin', color:'#b06820'},
+      {id:4, name:'Lavamanos\n(todos)',    color:'#b06820'},
+      {id:5, name:'Mingitorios',           color:'#b06820'},
+      {id:6, name:'Bebida /\nhidratación', color:'#b06820'},
+      {id:7, name:'Estaciones\nllenado ×4',color:'#b06820'},
+      {id:8, name:'Cafetería\n+ café',     color:'#b06820'},
+      {id:9, name:'Limpieza /\nmant.',     color:'#b06820'},
+      {id:10,name:'Riego\npatio central',  color:'#b06820'},
+      {id:11,name:'Riego jardín\nacceso',  color:'#b06820'},
+      {id:12,name:'Agua\nResidual',        color:'#a83232'},
+    ],
+    links: [
+      {source:0,target:2, value:950000},
+      {source:0,target:3, value:440000},
+      {source:0,target:4, value:255000},
+      {source:0,target:5, value:205000},
+      {source:0,target:7, value:1140000},
+      {source:0,target:8, value:420000},
+      {source:0,target:9, value:180000},
+      {source:0,target:10,value:30000},
+      {source:7,target:6, value:1140000},
+      {source:1,target:11,value:480000},
+      {source:2, target:12,value:950000},
+      {source:3, target:12,value:440000},
+      {source:4, target:12,value:255000},
+      {source:5, target:12,value:205000},
+      {source:8, target:12,value:420000},
+      {source:9, target:12,value:180000},
+    ],
+    totalPotable: 3450000,
+  },
+
+  mejora: {
+    label: 'Con mejoras', badge: 'badge-mejora',
+    stats: [
+      { label:'Total potable',   value:'1,977 m³', sub:'−993 m³ vs actual (−29%)', color:'#2e7d50', highlight:true },
+      { label:'Agua tratada',    value:'480 m³',   sub:'Riego jardín (sin cambio)', color:'#3a7d44' },
+      { label:'Aguas grises',    value:'128 m³',   sub:'Lavamanos → escusados',    color:'#6b5ea8' },
+      { label:'Agua residual',   value:'~1,445 m³',sub:'Reducción del 41%',        color:'#a83232' },
+      { label:'Total consumido', value:'2,457 m³', sub:'Ahorro de 993 m³/año',     color:'#2e7d50', highlight:true },
+    ],
+    barrasPotable: [
+      ['Sanitarios módulos ×4 (dual 3/4.5 L)',    620000, '#2e7d50'],
+      ['Estaciones llenado → Bebida/hidratación', 1140000, '#2a6496'],
+      ['Cafetería + café',                         420000, '#2a6496'],
+      ['Sanitarios cafetería/admin (dual)',         286000, '#2e7d50'],
+      ['Lavamanos aireadores',                     128000, '#2e7d50'],
+      ['Limpieza / mantenimiento',                 180000, '#2a6496'],
+      ['Mingitorios sin agua',                      21000, '#2e7d50'],
+      ['Riego patio central',                       30000, '#2a6496'],
+    ],
+    barrasTratada: [
+      ['Riego jardín de acceso', 480000, '#3a7d44'],
+    ],
+    barrasGris: [
+      ['Aguas grises reutilizadas\n(lavamanos → escusados módulos)', 128000, '#6b5ea8'],
+    ],
+    tablaDetalle: [
+      ['Sanitarios módulos ×4 (dual)',     2818,  620, 'p'],
+      ['Estaciones llenado → Bebida',      5182, 1140, 'p'],
+      ['Cafetería + café',                 1909,  420, 'p'],
+      ['Sanitarios cafetería/admin (dual)',1300,  286, 'p'],
+      ['Lavamanos aireadores',              582,  128, 'p'],
+      ['Limpieza / mantenimiento',          818,  180, 'p'],
+      ['Mingitorios sin agua',               95,   21, 'p'],
+      ['Riego patio central',               136,   30, 'p'],
+      ['Riego jardín de acceso',           2182,  480, 't'],
+      ['Aguas grises reutilizadas',         582,  128, 'g'],
+    ],
+    totalL: 2457000,
+    mejoras: [
+      {
+        titulo: 'Sanitarios — escusados',
+        badge: 'tag-p', badgeLabel: 'Potable',
+        rows: [
+          {label:'Actual (desc. rápida módulos + conv. cafet/admin)', val:'1,390 m³/año', color:'#8A9098'},
+          {label:'Con mejoras (dual 3/4.5 L)', val:'906 m³/año', color:'#2e7d50'},
+          {label:'Ahorro', val:'−484 m³/año', color:'#2e7d50'},
+          {label:'Reducción', val:'−35%', color:'#2e7d50'},
+        ]
+      },
+      {
+        titulo: 'Mingitorios',
+        badge: 'tag-p', badgeLabel: 'Potable',
+        rows: [
+          {label:'Actual (convencionales 3.5 L/uso)', val:'205 m³/año', color:'#8A9098'},
+          {label:'Con mejoras (sin agua)', val:'21 m³/año', color:'#2e7d50'},
+          {label:'Ahorro', val:'−184 m³/año', color:'#2e7d50'},
+          {label:'Reducción', val:'−90%', color:'#2e7d50'},
+        ]
+      },
+      {
+        titulo: 'Lavamanos',
+        badge: 'tag-p', badgeLabel: 'Potable',
+        rows: [
+          {label:'Actual (convencionales 3 L/min)', val:'255 m³/año', color:'#8A9098'},
+          {label:'Con aireadores (1.5 L/min)', val:'128 m³/año', color:'#2e7d50'},
+          {label:'Ahorro potable', val:'−127 m³/año', color:'#2e7d50'},
+          {label:'Reducción', val:'−50%', color:'#2e7d50'},
+        ]
+      },
+      {
+        titulo: 'Sistema aguas grises',
+        badge: 'tag-g', badgeLabel: 'Grises',
+        rows: [
+          {label:'Agua de lavamanos recuperada', val:'128 m³/año', color:'#6b5ea8'},
+          {label:'Redirigida a escusados módulos', val:'128 m³/año', color:'#6b5ea8'},
+          {label:'Ahorro adicional vs Esc. A', val:'−128 m³/año', color:'#2e7d50'},
+          {label:'% demanda escusados cubierta', val:'~14%', color:'#6b5ea8'},
+        ]
+      },
+    ],
+    nodes: [
+      {id:0, name:'Agua\nPotable',          color:'#2a6496'},
+      {id:1, name:'Agua\nTratada',          color:'#3a7d44'},
+      {id:2, name:'Sanitarios\nmódulos ×4', color:'#b06820'},
+      {id:3, name:'Sanitarios\ncafetería/\nadmin', color:'#b06820'},
+      {id:4, name:'Lavamanos\naireadores',  color:'#b06820'},
+      {id:5, name:'Mingitorios\nsin agua',  color:'#b06820'},
+      {id:6, name:'Bebida /\nhidratación',  color:'#b06820'},
+      {id:7, name:'Estaciones\nllenado ×4', color:'#b06820'},
+      {id:8, name:'Cafetería\n+ café',      color:'#b06820'},
+      {id:9, name:'Limpieza /\nmant.',      color:'#b06820'},
+      {id:10,name:'Riego\npatio central',   color:'#b06820'},
+      {id:11,name:'Riego jardín\nacceso',   color:'#3a7d44'},
+      {id:12,name:'Agua\nResidual',         color:'#a83232'},
+      {id:13,name:'Aguas\nGrises',          color:'#6b5ea8'},
+    ],
+    links: [
+      {source:0, target:2,  value:620000},
+      {source:0, target:3,  value:286000},
+      {source:0, target:4,  value:128000},
+      {source:0, target:5,  value:21000},
+      {source:0, target:7,  value:1140000},
+      {source:0, target:8,  value:420000},
+      {source:0, target:9,  value:180000},
+      {source:0, target:10, value:30000},
+      {source:7, target:6,  value:1140000},
+      {source:4, target:13, value:128000},
+      {source:13,target:2,  value:128000},
+      {source:1, target:11, value:480000},
+      {source:2, target:12, value:748000},
+      {source:3, target:12, value:286000},
+      {source:5, target:12, value:21000},
+      {source:8, target:12, value:420000},
+      {source:9, target:12, value:180000},
+    ],
+    totalPotable: 2457000,
+  }
+};
+
+/* ═══════════════════════════════════════════════════
+   ESTADO
+═══════════════════════════════════════════════════ */
+let currentScenario = 'actual';
+let currentView     = 'sankey';
+let currentZoom     = 1;
+const zoomStep=.15, zoomMin=.3, zoomMax=2.5;
+
+/* ═══════════════════════════════════════════════════
+   VIEW SWITCHING
+═══════════════════════════════════════════════════ */
+function setView(v) {
+  currentView = v;
+  document.getElementById('sankey-view').style.display    = v==='sankey'    ? 'block' : 'none';
+  document.getElementById('dashboard-view').style.display = v==='dashboard' ? 'block' : 'none';
+  document.getElementById('zoom-controls').style.visibility = v==='sankey' ? 'visible' : 'hidden';
+  document.getElementById('btn-view-sankey').classList.toggle('active', v==='sankey');
+  document.getElementById('btn-view-dashboard').classList.toggle('active', v==='dashboard');
+  document.getElementById('export-label').textContent = v==='sankey' ? 'Exportar PNG' : 'Exportar PNG';
+  renderAll();
+}
+
+function setScenario(s) {
+  currentScenario = s;
+  document.getElementById('btn-actual').classList.toggle('active', s==='actual');
+  document.getElementById('btn-mejora').classList.toggle('active', s==='mejora');
+  renderAll();
+}
+
+/* ═══════════════════════════════════════════════════
+   ZOOM
+═══════════════════════════════════════════════════ */
+function applyZoom() {
+  document.getElementById('zoom-container').style.transform = `scale(${currentZoom})`;
+  document.getElementById('zoom-display').textContent = Math.round(currentZoom*100)+'%';
+}
+function zoomIn()    { currentZoom=Math.min(zoomMax,currentZoom+zoomStep); applyZoom(); }
+function zoomOut()   { currentZoom=Math.max(zoomMin,currentZoom-zoomStep); applyZoom(); }
+function zoomReset() { currentZoom=1; applyZoom(); }
+document.addEventListener('keydown',e=>{
+  if(e.key==='+'||e.key==='='){e.preventDefault();zoomIn();}
+  if(e.key==='-'){e.preventDefault();zoomOut();}
+  if(e.key==='0'){e.preventDefault();zoomReset();}
+});
+document.addEventListener('wheel',e=>{
+  if(e.ctrlKey||e.metaKey){e.preventDefault();e.deltaY<0?zoomIn():zoomOut();}
+},{passive:false});
+
+/* ═══════════════════════════════════════════════════
+   RENDER STATS (siempre)
+═══════════════════════════════════════════════════ */
+const fmtM3   = v => (v/1000).toFixed(0)+' m³';
+const fmtFull = v => v.toLocaleString('es-MX')+' L/año';
+const fmtDay  = v => v.toLocaleString('es-MX')+' L/día';
+
+function renderStats(data) {
+  document.getElementById('stats-row').innerHTML = data.stats.map(s=>`
+    <div class="stat-card ${s.highlight?'highlight':''}">
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-value" style="color:${s.color}">${s.value}</div>
+      <div class="stat-sub">${s.sub}</div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER DASHBOARD
+═══════════════════════════════════════════════════ */
+function renderDashboard(data) {
+  /* Resumen anual */
+  const maxTotal = 3450000;
+  const resumen = [
+    {label:'Agua potable',  val:data.barrasPotable.reduce((s,b)=>s+b[1],0), color:'var(--c-potable)'},
+    {label:'Agua tratada',  val:data.barrasTratada.reduce((s,b)=>s+b[1],0), color:'var(--c-tratada)'},
+    {label:'Aguas grises',  val:data.barrasGris.reduce((s,b)=>s+b[1],0),    color:'var(--c-gris)'},
+    {label:'Total',         val:data.totalL,                                  color:'var(--text)'},
+  ];
+  /*
+  document.getElementById('dash-resumen').innerHTML = `<div style="display:flex;gap:12px;flex-wrap:wrap">`+
+    resumen.filter(r=>r.val>0).map(r=>`
+      <div class="stat-card" style="min-width:140px">
+        <div class="stat-label">${r.label}</div>
+        <div class="stat-value" style="color:${r.color}">${fmtM3(r.val)}</div>
+        <div class="stat-sub">${r.val.toLocaleString('es-MX')} L/año</div>
+      </div>`).join('')+`</div>`;
+  */
+
+  /* Barras potable */
+  const maxP = Math.max(...data.barrasPotable.map(b=>b[1]));
+  document.getElementById('dash-barras-potable').innerHTML =
+    data.barrasPotable.map(([lbl,val,col])=>{
+      const pct = (val/maxP*100).toFixed(0);
+      const pctTotal = (val/maxTotal*100).toFixed(1);
+      return `<div class="bar-row">
+        <span class="bar-label">${lbl}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${pct}%;background:${col};opacity:.75">${fmtM3(val)}</div>
+        </div>
+        <span class="bar-val">${pctTotal}%</span>
+      </div>`;
+    }).join('');
+
+  /* Barras tratada + grises */
+  const allOther = [...data.barrasTratada, ...data.barrasGris];
+  const maxO = Math.max(...allOther.map(b=>b[1]), 1);
+  document.getElementById('dash-barras-tratada').innerHTML =
+    allOther.map(([lbl,val,col])=>{
+      const pct = (val/maxO*100).toFixed(0);
+      const pctTotal = (val/maxTotal*100).toFixed(1);
+      return `<div class="bar-row">
+        <span class="bar-label">${lbl.replace(/\n/g,' ')}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${pct}%;background:${col};opacity:.8">${fmtM3(val)}</div>
+        </div>
+        <span class="bar-val">${pctTotal}%</span>
+      </div>`;
+    }).join('');
+
+  /* Tabla detalle */
+  const tagMap = {p:'<span class="tag-sm tag-p">Potable</span>', t:'<span class="tag-sm tag-t">Tratada</span>', g:'<span class="tag-sm tag-g">Grises</span>'};
+  document.getElementById('dash-tabla-body').innerHTML =
+    data.tablaDetalle.map(([lbl,ldia,m3,tipo])=>`
+      <tr>
+        <td>${lbl}</td>
+        <td>${ldia.toLocaleString('es-MX')}</td>
+        <td>${m3.toLocaleString('es-MX')}</td>
+        <td>${tagMap[tipo]}</td>
+      </tr>`).join('');
+  const totL = data.tablaDetalle.reduce((s,r)=>s+r[1],0);
+  const totM = data.tablaDetalle.reduce((s,r)=>s+r[2],0);
+  document.getElementById('dash-tabla-foot').innerHTML = `
+    <tr><td>Total</td><td>${totL.toLocaleString('es-MX')}</td><td>${totM.toLocaleString('es-MX')}</td><td></td></tr>`;
+
+  /* Comparativa de mejoras */
+  const secMej = document.getElementById('dash-section-mejoras');
+  if (data.mejoras) {
+    secMej.style.display='block';
+    document.getElementById('dash-comp-grid').innerHTML = data.mejoras.map(m=>`
+      <div class="comp-card">
+        <div class="comp-card-title">
+          <span class="tag-sm ${m.badge}">${m.badgeLabel}</span>
+          ${m.titulo}
+        </div>
+        ${m.rows.map(r=>`
+          <div class="comp-row">
+            <span class="comp-label">${r.label}</span>
+            <span class="comp-val" style="color:${r.color}">${r.val}</span>
+          </div>`).join('')}
+      </div>`).join('');
+  } else {
+    secMej.style.display='none';
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER SANKEY
+═══════════════════════════════════════════════════ */
+const W=1260, H=640;
+
+function renderSankey(data) {
+  const svg = d3.select('#sankey-svg');
+  svg.selectAll('*').remove();
+  const defs = svg.append('defs');
+
+  const sankey = d3.sankey()
+    .nodeId(d=>d.id).nodeWidth(22).nodePadding(18)
+    .extent([[88,40],[W-88,H-40]]);
+
+  const graph = sankey({
+    nodes: data.nodes.map(d=>Object.assign({},d)),
+    links: data.links.map(d=>Object.assign({},d))
+  });
+
+  const nodeMap={};
+  data.nodes.forEach(n=>nodeMap[n.id]=n);
+
+  graph.links.forEach((link,i)=>{
+    const sc=nodeMap[link.source.id].color, tc=nodeMap[link.target.id].color;
+    const g=defs.append('linearGradient').attr('id','lg'+i)
+      .attr('gradientUnits','userSpaceOnUse')
+      .attr('x1',link.source.x1).attr('x2',link.target.x0);
+    g.append('stop').attr('offset','0%').attr('stop-color',sc).attr('stop-opacity',.48);
+    g.append('stop').attr('offset','100%').attr('stop-color',tc).attr('stop-opacity',.48);
+  });
+
+  const tip=document.getElementById('tooltip');
+  const showTip=(evt,html)=>{tip.innerHTML=html;tip.style.opacity=1;moveTip(evt);};
+  const moveTip=evt=>{
+    let x=evt.clientX+14,y=evt.clientY-44;
+    if(x+240>window.innerWidth)x=evt.clientX-240;
+    if(y<0)y=evt.clientY+14;
+    tip.style.left=x+'px';tip.style.top=y+'px';
+  };
+  const hideTip=()=>{tip.style.opacity=0;};
+
+  svg.selectAll('.link').data(graph.links).join('path')
+    .attr('class','link')
+    .attr('d',d3.sankeyLinkHorizontal())
+    .attr('stroke-width',d=>Math.max(1,d.width))
+    .attr('fill','none')
+    .attr('stroke',(d,i)=>'url(#lg'+i+')')
+    .on('mousemove',(evt,d)=>{
+      const pct=((d.value/data.totalPotable)*100).toFixed(1);
+      showTip(evt,`<strong>${nodeMap[d.source.id].name.replace(/\n/g,' ')} → ${nodeMap[d.target.id].name.replace(/\n/g,' ')}</strong>
+        <div class="tip-val">${fmtFull(d.value)}</div>
+        <div class="tip-pct">${fmtM3(d.value)} · ${pct}% del total</div>`);
+    })
+    .on('mouseleave',hideTip);
+
+  const nodeG=svg.selectAll('.node-g').data(graph.nodes).join('g')
+    .attr('class','node-g').style('cursor','pointer')
+    .on('mousemove',(evt,d)=>{
+      const inV=d.targetLinks.reduce((s,l)=>s+l.value,0);
+      const outV=d.sourceLinks.reduce((s,l)=>s+l.value,0);
+      const val=Math.max(inV,outV);
+      const pct=((val/data.totalPotable)*100).toFixed(1);
+      const ins=d.targetLinks.map(l=>`<div style="color:#8A9098;font-size:11px">← ${nodeMap[l.source.id].name.replace(/\n/g,' ')}: ${fmtFull(l.value)}</div>`).join('');
+      const outs=d.sourceLinks.map(l=>`<div style="color:#8A9098;font-size:11px">→ ${nodeMap[l.target.id].name.replace(/\n/g,' ')}: ${fmtFull(l.value)}</div>`).join('');
+      showTip(evt,`<strong>${d.name.replace(/\n/g,' ')}</strong>
+        <div class="tip-val">${fmtFull(val)}</div>
+        <div class="tip-pct">${fmtM3(val)} · ${pct}% del total</div>
+        ${ins}${outs?'<div style="height:4px"></div>':''}${outs}`);
+    })
+    .on('mouseleave',hideTip);
+
+  document.addEventListener('mousemove',evt=>{if(tip.style.opacity==='1')moveTip(evt);});
+
+  nodeG.append('rect')
+    .attr('x',d=>d.x0).attr('y',d=>d.y0)
+    .attr('width',d=>d.x1-d.x0).attr('height',d=>Math.max(6,d.y1-d.y0))
+    .attr('rx',4).attr('fill',d=>nodeMap[d.id].color).attr('opacity',.9);
+
+  nodeG.each(function(d){
+    const g=d3.select(this);
+    const onR=d.x0>W/2;
+    const cx=onR?d.x1+10:d.x0-10, anch=onR?'start':'end';
+    const cy=(d.y0+d.y1)/2;
+    const lines=d.name.split('\n'), lh=14, totH=lines.length*lh;
+    lines.forEach((line,i)=>{
+      g.append('text')
+        .attr('x',cx).attr('y',cy-totH/2+i*lh+6)
+        .attr('text-anchor',anch).attr('dominant-baseline','middle')
+        .attr('font-family',"'DM Sans',sans-serif")
+        .attr('font-size',i===0?'12px':'11px').attr('font-weight',i===0?'600':'400')
+        .attr('fill',i===0?'#212428':'#464d56').text(line);
+    });
+    const inV=d.targetLinks.reduce((s,l)=>s+l.value,0);
+    const outV=d.sourceLinks.reduce((s,l)=>s+l.value,0);
+    const val=Math.max(inV,outV);
+    if(val>=100000){
+      g.append('text')
+        .attr('x',cx).attr('y',cy-totH/2+lines.length*lh+10)
+        .attr('text-anchor',anch).attr('font-family',"'DM Mono',monospace")
+        .attr('font-size','10px').attr('fill',nodeMap[d.id].color).attr('opacity',.85)
+        .text(fmtM3(val));
+    }
+  });
+
+  // badge escenario
+  document.getElementById('scenario-label').innerHTML =
+    `<span class="scenario-badge ${data.badge}">${data.label}</span>`;
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════════ */
+function renderAll() {
+  const data = SCENARIOS[currentScenario];
+  renderStats(data);
+  if (currentView==='sankey')    renderSankey(data);
+  if (currentView==='dashboard') renderDashboard(data);
+}
+
+renderAll();
+
+/* ═══════════════════════════════════════════════════
+   EXPORT PNG
+═══════════════════════════════════════════════════ */
+function doExport() {
+  const svgEl = document.getElementById('sankey-svg');
+  const serializer = new XMLSerializer();
+  const svgStr = serializer.serializeToString(svgEl);
+  const canvas = document.createElement('canvas');
+  canvas.width=2520; canvas.height=1280;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#e0e5ec'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  const img=new Image();
+  const blob=new Blob([svgStr],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  img.onload=()=>{
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    const a=document.createElement('a');
+    a.download=`sankey_agua_escuela_${currentScenario}.png`;
+    a.href=canvas.toDataURL('image/png'); a.click();
+  };
+  img.src=url;
+}
+</script>
+</body>
+</html>
