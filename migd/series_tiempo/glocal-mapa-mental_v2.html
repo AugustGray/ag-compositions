@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glocal — Serie de Tiempos · Mapa Mental</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #e0e5ec;
+  --ink: #212428;
+  --ink-muted: #464d56;
+  --ink-faint: #8A9098;
+  --border: #ced2d9;
+  --accent: #44a0d1;
+  --white: #ffffff;
+  --surface: #f4f6f9;
+
+  /* Regiones */
+  --europa: #2a6496;
+  --europa-lt: #dbeaf5;
+  --europa-mid: #9dc5e0;
+  --asia: #6b4f9e;
+  --asia-lt: #ede7f6;
+  --asia-mid: #c5aee8;
+  --latam: #3a7d44;
+  --latam-lt: #d6eedd;
+  --latam-mid: #92c49c;
+
+  /* Periodos */
+  --p-a: #5c6b7a;
+  --p-b: #7a6a3a;
+  --p-c: #8a3a3a;
+  --p-d: #3a6a6a;
+  --p-e: #6a3a6a;
+  --p-f: #3a6a44;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── STICKY HEADER ── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--cream);
+  border-bottom: 1.5px solid var(--ink);
+  backdrop-filter: blur(16px);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.header-title h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.header-title h1 span { color: var(--accent); }
+.header-sub {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ── CONTROLS ── */
+.controls-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 32px 0;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ctrl-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.pill-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  color: var(--ink-muted);
+}
+.pill:hover { border-color: var(--ink-muted); color: var(--ink); }
+.pill.active { color: var(--white); border-color: transparent; }
+.pill-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pill-europa { --c: var(--europa); }
+.pill-asia   { --c: var(--asia); }
+.pill-latam  { --c: var(--latam); }
+.pill-europa.active { background: var(--europa); }
+.pill-asia.active   { background: var(--asia); }
+.pill-latam.active  { background: var(--latam); }
+
+.pill-period.active { background: var(--ink); }
+.pill-axis.active   { background: var(--accent); }
+
+.divider-ctrl {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+  margin: 0 4px;
+  margin-top: 22px;
+}
+
+/* ── VIEW TOGGLE ── */
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  margin-top: 22px;
+}
+.view-btn {
+  padding: 4px 12px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--ink-muted);
+  font-family: inherit;
+  letter-spacing: 0.04em;
+}
+.view-btn.active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ── MAIN CANVAS ── */
+.canvas-area {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px 64px;
+}
+
+/* ── VISTA: TIMELINE VISUAL ── */
+.timeline-view {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 8px 0 32px;
+}
+
+/* Línea central vertical */
+.timeline-spine {
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent 0%, var(--border) 5%, var(--border) 95%, transparent 100%);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cada fila de periodo */
+.tl-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: start;
+  gap: 0;
+  position: relative;
+  margin-bottom: 20px;
+  transition: opacity 0.35s ease;
+}
+.tl-row.tl-hidden { display: none; }
+.tl-row.tl-dimmed { opacity: 0.15; pointer-events: none; }
+.tl-row.tl-active .tl-node-wrap { transform: scale(1.08); }
+
+/* Columnas izquierda y derecha */
+.tl-left  { display: flex; justify-content: flex-end; padding-right: 28px; padding-top: 6px; }
+.tl-right { display: flex; justify-content: flex-start; padding-left: 28px; padding-top: 6px; }
+
+/* Nodo central */
+.tl-node-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer;
+  user-select: none;
+}
+.tl-node {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600;
+  color: var(--white);
+  border: 3px solid var(--cream);
+  box-shadow: 0 0 0 2px var(--border);
+  transition: box-shadow 0.25s, border-color 0.25s;
+  flex-shrink: 0;
+}
+.tl-row.tl-active .tl-node {
+  box-shadow: 0 0 0 4px currentColor;
+  border-color: var(--white);
+}
+.tl-node-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Tarjeta flotante */
+.tl-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+.tl-row.tl-active .tl-card {
+  border-color: var(--ink-muted);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* Header de tarjeta */
+.tl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.tl-period-badge {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--white); flex-shrink: 0;
+}
+.tl-period-title { font-size: 12px; font-weight: 600; line-height: 1.25; }
+.tl-period-tagline { font-size: 11px; color: var(--ink-faint); font-style: italic; line-height: 1.3; }
+
+/* Cuerpo con región(es) */
+.tl-card-body { padding: 10px 0 2px; }
+.tl-region-block {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  transition: opacity 0.2s;
+}
+.tl-region-block:last-child { border-bottom: none; }
+.tl-region-block.region-hidden { display: none; }
+.tl-region-name {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.09em; text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.tl-rdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.tl-region-text {
+  font-size: 11.5px; line-height: 1.55; color: var(--ink-muted);
+}
+.tl-region-text strong { color: var(--ink); font-weight: 500; }
+
+/* Ejes dentro de región */
+.tl-axes { display: flex; flex-direction: column; gap: 0; }
+.tl-axis-item {
+  padding: 6px 0 5px;
+  border-top: 1px dashed var(--border);
+  transition: opacity 0.2s;
+}
+.tl-axis-item:first-child { border-top: none; padding-top: 2px; }
+.tl-axis-item.axis-hidden { display: none; }
+.tl-axis-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-faint); margin-bottom: 2px;
+  display: flex; align-items: center; gap: 4px;
+}
+.tl-axis-text {
+  font-size: 11px; line-height: 1.5; color: var(--ink-muted);
+}
+.tl-axis-text strong { color: var(--ink); font-weight: 500; }
+
+/* Pista de click / hint */
+.tl-hint {
+  text-align: center;
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+/* Conector horizontal (línea de unión entre nodo y tarjeta) */
+.tl-left  .tl-card { border-right: 3px solid transparent; }
+.tl-right .tl-card { border-left:  3px solid transparent; }
+.tl-row.tl-active .tl-left  .tl-card { border-right-color: var(--p-color, var(--ink)); }
+.tl-row.tl-active .tl-right .tl-card { border-left-color:  var(--p-color, var(--ink)); }
+
+/* Filas alternadas: par → tarjeta izq vacía / detail derecha; impar → lo contrario */
+/* Se controla via JS con clases .tl-has-left / .tl-has-right */
+.tl-left.tl-empty, .tl-right.tl-empty { pointer-events: none; }
+
+/* ── VISTA: TARJETAS ── */
+.cards-view {
+  display: none;
+  gap: 16px;
+}
+.cards-view.active { display: flex; flex-direction: column; }
+.region-col-group { display: flex; flex-direction: column; gap: 16px; }
+
+.region-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.region-section.hidden { display: none; }
+.region-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.region-badge {
+  width: 12px; height: 12px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.region-section-name {
+  font-size: 13px; font-weight: 600;
+}
+.region-subtitle {
+  font-size: 11px; color: var(--ink-faint);
+  font-style: italic;
+}
+.region-expand { margin-left: auto; font-size: 12px; color: var(--ink-faint); transition: transform 0.2s; }
+.region-section.open .region-expand { transform: rotate(180deg); }
+
+.region-cards-body { display: none; padding: 16px 20px; gap: 12px; }
+.region-section.open .region-cards-body { display: flex; flex-wrap: wrap; }
+
+.period-card {
+  flex: 1;
+  min-width: 260px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+.period-card.hidden { display: none; }
+.period-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.period-card-letter {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--white); flex-shrink: 0;
+}
+.period-card-name { font-size: 11.5px; font-weight: 500; }
+.period-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.axis-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: opacity 0.2s;
+}
+.axis-item.hidden { display: none; }
+.axis-item-label {
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex; align-items: center; gap: 4px;
+}
+.axis-item-text {
+  font-size: 11.5px; line-height: 1.5; color: var(--ink-muted);
+}
+.axis-item-text strong { color: var(--ink); font-weight: 500; }
+
+/* ── MATRIX VIEW ── */
+.matrix-view { display: none; overflow-x: auto; }
+.matrix-view.active { display: block; }
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  min-width: 900px;
+}
+.matrix-table th, .matrix-table td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+.matrix-table thead th {
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.matrix-table th.region-header {
+  text-align: center;
+}
+.matrix-region-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.matrix-axis-cell {
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.matrix-period-cell {
+  background: var(--white);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  text-align: center;
+}
+.matrix-content-cell {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  background: var(--white);
+  transition: opacity 0.2s;
+}
+.matrix-content-cell.hidden-region, .matrix-content-cell.hidden-axis { display: none; }
+.matrix-content-cell strong { color: var(--ink); font-weight: 500; }
+
+/* ── COMPARE BAR ── */
+.compare-info {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 32px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  flex-wrap: wrap;
+  min-height: 36px;
+}
+.compare-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.compare-badge.europa { background: var(--europa-lt); color: var(--europa); }
+.compare-badge.asia   { background: var(--asia-lt); color: var(--asia); }
+.compare-badge.latam  { background: var(--latam-lt); color: var(--latam); }
+
+/* ── FOOTER ── */
+footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .controls-bar { padding: 16px 16px 0; gap: 14px; }
+  .canvas-area { padding: 16px 16px 40px; }
+  .header-inner { padding: 0 16px; }
+  .compare-info { padding: 10px 16px 0; }
+  footer { padding: 20px 16px 32px; }
+  .tl-row { grid-template-columns: 1fr 60px 1fr; }
+  .tl-card { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>Glocal — <span>Serie de Tiempos</span></h1>
+      <span class="header-sub">Arquitectura · Sostenibilidad · Comparativa Regional · ISAD 2026</span>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="timeline">Cronológico</button>
+      <button class="view-btn" data-view="cards">Regiones</button>
+      <button class="view-btn" data-view="matrix">Matriz</button>
+    </div>
+  </div>
+</header>
+
+<div class="controls-bar">
+  <div class="ctrl-group">
+    <span class="ctrl-label">Regiones</span>
+    <div class="pill-row" id="region-pills">
+      <button class="pill pill-europa active" data-region="europa">
+        <span class="pill-dot" style="background:var(--europa)"></span> Europa
+      </button>
+      <button class="pill pill-asia active" data-region="asia">
+        <span class="pill-dot" style="background:var(--asia)"></span> Asia
+      </button>
+      <button class="pill pill-latam active" data-region="latam">
+        <span class="pill-dot" style="background:var(--latam)"></span> Latinoamérica
+      </button>
+    </div>
+  </div>
+
+  <div class="divider-ctrl"></div>
+
+  <div class="ctrl-group">
+    <span class="ctrl-label">Periodos</span>
+    <div class="pill-row" id="period-pills">
+      <button class="pill pill-period active" data-period="A" style="--c:#5c6b7a">A · Tradicional</button>
+      <button class="pill pill-period active" data-period="B" style="--c:#7a6a3a">B · Trans. Urbana</button>
+      <button class="pill pill-period active" data-period="C" style="--c:#8a3a3a">C · Modernismo</button>
+      <button class="pill pill-period active" data-period="D" style="--c:#3a6a6a">D · Conc. Ambiental</button>
+      <button class="pill pill-period active" data-period="E" style="--c:#6a3a6a">E · Crisis Climática</button>
+      <button class="pill pill-period active" data-period="F" style="--c:#3a6a44">F · Regenerativo</button>
+    </div>
+  </div>
+
+  <div class="divider-ctrl"></div>
+
+  <div class="ctrl-group">
+    <span class="ctrl-label">Ejes</span>
+    <div class="pill-row" id="axis-pills">
+      <button class="pill pill-axis active" data-axis="cosmovis">🌐 Cosmovisión</button>
+      <button class="pill pill-axis active" data-axis="tecnicas">⚙️ Técnicas</button>
+      <button class="pill pill-axis active" data-axis="materiales">🧱 Materiales</button>
+      <button class="pill pill-axis active" data-axis="impacto">🎯 Impacto</button>
+    </div>
+  </div>
+</div>
+
+<div class="compare-info" id="compare-info">
+  <span>Comparando:</span>
+  <span class="compare-badge europa"><span style="width:7px;height:7px;border-radius:50%;background:var(--europa);display:inline-block"></span> Europa</span>
+  <span class="compare-badge asia"><span style="width:7px;height:7px;border-radius:50%;background:var(--asia);display:inline-block"></span> Asia</span>
+  <span class="compare-badge latam"><span style="width:7px;height:7px;border-radius:50%;background:var(--latam);display:inline-block"></span> Latinoamérica</span>
+</div>
+
+<div class="canvas-area">
+
+<!-- ════════════════════════════════
+     VISTA CRONOLÓGICA (Timeline visual)
+════════════════════════════════ -->
+<div id="view-timeline" class="timeline-view">
+  <div class="timeline-spine"></div>
+  <p class="tl-hint">Haz clic en un periodo para enfocarlo</p>
+</div><!-- end timeline-view -->
+
+
+<!-- ════════════════════════════════
+     VISTA REGIONES (Cards)
+════════════════════════════════ -->
+<div id="view-cards" class="cards-view">
+
+  <!-- EUROPA -->
+  <div class="region-section open" data-region="europa">
+    <div class="region-section-header" onclick="toggleRegionSection(this)">
+      <span class="region-badge" style="background:var(--europa)"></span>
+      <span class="region-section-name">Europa</span>
+      <span class="region-subtitle">— La Arquitectura del Control y el Progreso Racional</span>
+      <span class="region-expand">▼</span>
+    </div>
+    <div class="region-cards-body" id="cards-europa"></div>
+  </div>
+
+  <!-- ASIA -->
+  <div class="region-section open" data-region="asia">
+    <div class="region-section-header" onclick="toggleRegionSection(this)">
+      <span class="region-badge" style="background:var(--asia)"></span>
+      <span class="region-section-name">Asia</span>
+      <span class="region-subtitle">— El Arte de la Superposición Funcional</span>
+      <span class="region-expand">▼</span>
+    </div>
+    <div class="region-cards-body" id="cards-asia"></div>
+  </div>
+
+  <!-- LATAM -->
+  <div class="region-section open" data-region="latam">
+    <div class="region-section-header" onclick="toggleRegionSection(this)">
+      <span class="region-badge" style="background:var(--latam)"></span>
+      <span class="region-section-name">Latinoamérica</span>
+      <span class="region-subtitle">— La Arquitectura del Territorio y la Dignidad Humana</span>
+      <span class="region-expand">▼</span>
+    </div>
+    <div class="region-cards-body" id="cards-latam"></div>
+  </div>
+
+</div><!-- end cards-view -->
+
+
+<!-- ════════════════════════════════
+     VISTA MATRIZ
+════════════════════════════════ -->
+<div id="view-matrix" class="matrix-view">
+  <table class="matrix-table" id="matrix-table"></table>
+</div>
+
+</div><!-- end canvas-area -->
+
+<footer>
+  <span>Serie de Tiempos · Europa · Asia · Latinoamérica · 6 periodos × 4 ejes analíticos</span>
+  <span>Elaboración propia · Maestría en Innovación y Gestión del Diseño · @ISAD 2026</span>
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const DATA = {
+  periods: [
+    { id:'A', name:'Tradicional / Pre-Industrial', tagline:'La adaptación al entorno', color:'#5c6b7a' },
+    { id:'B', name:'Transición Urbana', tagline:'Racionalización y densidad', color:'#7a6a3a' },
+    { id:'C', name:'Modernismo Industrial', tagline:'La supremacía de la máquina', color:'#8a3a3a' },
+    { id:'D', name:'Conciencia Ambiental Temprana', tagline:'La corrección superficial', color:'#3a6a6a' },
+    { id:'E', name:'Crisis Climática', tagline:'El desafío del sistema global', color:'#6a3a6a' },
+    { id:'F', name:'Regenerativo', tagline:'Sistemas cíclicos y responsabilidad', color:'#3a6a44' }
+  ],
+  axes: [
+    { id:'cosmovis', name:'Cosmovisión', icon:'🌐' },
+    { id:'tecnicas', name:'Técnicas / Diseño', icon:'⚙️' },
+    { id:'materiales', name:'Materiales Clave', icon:'🧱' },
+    { id:'impacto', name:'Impacto / Meta', icon:'🎯' }
+  ],
+  regions: [
+    { id:'europa', name:'Europa', color:'var(--europa)', lt:'var(--europa-lt)' },
+    { id:'asia',   name:'Asia',   color:'var(--asia)',   lt:'var(--asia-lt)' },
+    { id:'latam',  name:'Latinoamérica', color:'var(--latam)', lt:'var(--latam-lt)' }
+  ],
+  content: {
+    europa: {
+      A: {
+        cosmovis: 'La naturaleza es un <strong>aliado</strong> respetado y gestionado según ciclos estacionales. El tiempo lo dicta el sol, no el reloj industrial.',
+        tecnicas: 'Diseño pasivo: <strong>orientación solar</strong>, masas térmicas, patios como microclimas. Construcción orientada a la necesidad inmediata.',
+        materiales: '<strong>Tierra apisonada (tapial), piedra local, madera no tratada.</strong> Bajo CO₂ embebido y alta capacidad reparable por mano de obra local.',
+        impacto: '<strong>Supervivencia sostenible</strong> dentro de un entorno geográfico limitado. Impacto bajo porque el crecimiento está atado a la capacidad regenerativa local.'
+      },
+      B: {
+        cosmovis: 'El <strong>progreso tecnológico</strong> puede resolver cualquier problema. La ciudad debe servir a la eficiencia del capital y la clase media emergente. <strong>(Racionalismo)</strong>.',
+        tecnicas: '<strong>Redes centralizadas e ingenierías masivas:</strong> alcantarillado subterráneo, gasificación, edificios que ignoran el clima local en favor del confort estandarizado.',
+        materiales: '<strong>Acero laminado, hierro fundido, hormigón Portland industrializado, vidrio masivo</strong> (sin control térmico). Alto consumo energético en la producción.',
+        impacto: 'Máximo soporte poblacional y económico. La meta no es ser sustentable, sino <strong>eficiente en términos de capital</strong> (financiero).'
+      },
+      C: {
+        cosmovis: 'El ser humano es capaz de <strong>dominar la naturaleza</strong> mediante la tecnología; la máquina resuelve los problemas sociales. Separación total entre vida y hábitat artificial.',
+        tecnicas: 'Uso de materiales industriales para crear <strong>estructuras descontextualizadas</strong> (el "estilo internacional"). El enfoque es la planta abierta y flexible (máxima adaptabilidad funcional).',
+        materiales: '<strong>Estructuras prefabricadas, paneles estandarizados, revestimientos industriales;</strong> materiales pensados para la rapidez y el impacto visual.',
+        impacto: 'Separación total entre lo humano y lo natural. <strong>El costo ambiental es invisible o externalizado.</strong>'
+      },
+      D: {
+        cosmovis: 'Se empieza a <strong>medir el impacto</strong> (energía, desechos) como un problema técnico más, buscando soluciones "parche" que no alteran el paradigma lineal central.',
+        tecnicas: 'Primeros intentos de <strong>sistemas HVAC complejos</strong>; fachadas verdes como adiciones decorativas o aislantes parciales, sin integrar el flujo natural.',
+        materiales: '<strong>Aislamientos sintéticos, vidrios de doble capa</strong>, primeros biocompuestos con baja certificación energética.',
+        impacto: 'Intentar hacer que los edificios "respiren" <strong>sin desafiar el modelo energético central.</strong> El éxito se mide por reducir el consumo, no por devolver recursos.'
+      },
+      E: {
+        cosmovis: 'El colapso de la resiliencia se vuelve inevitable. La tecnología ya no es suficiente; se requiere una <strong>renegociación radical</strong> con los límites biofísicos del planeta.',
+        tecnicas: '<strong>Mandatos regulatorios globales:</strong> Requerimientos de neutralidad energética (Net-Zero) y gestión de flujos críticos (agua, residuos). La tecnología se vuelve obligatoria por ley.',
+        materiales: '<strong>CLT (Madera cruzada prensada), bambú avanzado, biomateriales</strong> desarrollados en laboratorio, gestión circular de residuos plásticos y metales.',
+        impacto: 'Lograr la <strong>autosuficiencia energética e hídrica</strong> de las comunidades más vulnerables; forzar una descentralización del poder energético.'
+      },
+      F: {
+        cosmovis: 'El diseño debe operar bajo principios de <strong>servidumbre ecológica.</strong> El éxito se mide por el excedente positivo que devuelves al ecosistema, cerrando el ciclo en su totalidad.',
+        tecnicas: '<strong>Ingeniería biológica y modular:</strong> Desmantelamiento planificado; uso de sistemas que emulan procesos naturales (ej. humedales artificiales para depuración).',
+        materiales: 'Materiales que se desintegran o nutren: <strong>Micelio, tierra estabilizada in situ, fibras vegetales modificadas.</strong> Rescate del conocimiento artesanal.',
+        impacto: 'Creación de un <strong>superávit positivo.</strong> La meta es que lo construido sirva para alimentar (energía/agua) o regenerar (biodiversidad) a su entorno inmediato.'
+      }
+    },
+    asia: {
+      A: {
+        cosmovis: 'El ser humano debe mantener el <strong>flujo y la armonía</strong> con los patrones naturales. La estructura física refleja estas reglas cosmológicas (Feng Shui).',
+        tecnicas: 'Patios, <strong>circulación cruzada</strong> natural, separación de zonas productivas y habitacionales. El diseño respeta los vientos dominantes.',
+        materiales: '<strong>Bambú, maderas tropicales ligeras, cerámica local</strong> cocida a bajas temperaturas. Materiales que envejecen con gracia y respeto por el tiempo.',
+        impacto: 'Mantener la <strong>cohesión y el equilibrio</strong> del ecosistema local a pequeña escala, aceptando los límites naturales como ley.'
+      },
+      B: {
+        cosmovis: 'La economía global dicta la forma del hábitat; la <strong>función comercial supera a la residencial</strong>. Se prioriza la conexión marítima y el flujo de bienes por encima del ciclo biológico.',
+        tecnicas: 'Estructuras que canalizan la vida en <strong>ejes comerciales</strong>; soluciones verticales para albergar el comercio masivo (mercados bajo techo).',
+        materiales: '<strong>Acero, hormigón armado</strong> (máxima resistencia estructural), vidrio para la fachada de impacto visual. Énfasis en lo "nuevo" e importado.',
+        impacto: 'Canalizar flujos comerciales y demográficos sin colapsar, manteniendo un <strong>ritmo de vida hiperactivo</strong> organizado por la economía.'
+      },
+      C: {
+        cosmovis: 'El espacio limitado debe llenarse verticalmente <strong>sin pausa</strong>. La tecnología se usa para "saltar" las limitaciones naturales (ej. climatización artificial masiva).',
+        tecnicas: 'Uso del <strong>skyline como símbolo</strong> de poder económico; sistemas HVAC centralizados, muros cortina de vidrio y ascensores ultrarrápidos.',
+        materiales: '<strong>Paneles estandarizados, fachadas cortinas metálicas o acrílicas.</strong> Materiales que buscan la imagen de alta tecnología y permanencia ilimitada.',
+        impacto: 'Proyectar <strong>poderío económico e industrial</strong> en escala global, priorizando la capacidad operativa sobre el impacto ecológico o social directo.'
+      },
+      D: {
+        cosmovis: 'Reconocimiento de que el crecimiento infinito choca contra el <strong>límite territorial</strong>. Se empiezan a aplicar códigos de uso mixto y manejo de escasez hídrica.',
+        tecnicas: 'Implementación gradual de <strong>fachadas verdes</strong> como elemento estético o aislante secundario. Regulación en la gestión de residuos para el envío a rellenos sanitarios controlados.',
+        materiales: '<strong>Aislamientos mejorados; uso limitado de cemento Portland</strong> con aditivos. El material debe soportar la alta humedad y el salitre.',
+        impacto: 'Reducir el perfil ambiental <strong>sin</strong> cambiar la estructura económica del crecimiento constante. La meta es <strong>mitigar la crisis, no resolverla.</strong>'
+      },
+      E: {
+        cosmovis: 'La resiliencia no es un lujo, sino una <strong>necesidad vital</strong> ante desastres por inundación o aumento del nivel del mar. La adaptación se vuelve militarizada y planificada centralmente.',
+        tecnicas: '<strong>Sistemas híbridos:</strong> Ingeniería costera combinada con infraestructura natural (manglares artificiales, barreras bio-estructurales). Infraestructura multi-función obligatoria.',
+        materiales: '<strong>Biomateriales avanzados, refuerzos estructurales híbridos</strong> (acero + madera), materiales reciclados que deben cumplir estándares globales de calidad.',
+        impacto: 'Lograr que el desarrollo sea intrínsecamente <strong>resiliente al clima</strong> y a los choques externos, sin depender de las cadenas de suministro global.'
+      },
+      F: {
+        cosmovis: 'El diseño debe ser <strong>hiper-eficiente</strong> en cada metro cuadrado; la biósfera debe estar integrada de forma funcional (no solo ornamental) para soportar el alto grado de actividad humana.',
+        tecnicas: '<strong>Modularidad y automatización biológica.</strong> Uso de fachadas vivas no solo para decorar, sino como filtros activos de aire y agua; sistemas de recirculación totalmente cerrados.',
+        materiales: '<strong>Materialidad sin residuos:</strong> Sistemas de biofiltración en el propio muro; uso de fibras vegetales locales mejoradas con químicos ecológicos.',
+        impacto: 'Crear <strong>ecosistemas artificiales funcionales</strong> donde el valor económico esté ligado directamente al rendimiento ecológico (agua limpia, aire puro).'
+      }
+    },
+    latam: {
+      A: {
+        cosmovis: 'El ser humano está en <strong>relación de parentesco</strong> con la tierra (Pachamama). El conocimiento son saberes colectivos transmitidos, no propiedad privada.',
+        tecnicas: 'Diseño que respeta la pendiente del terreno; <strong>manejo de cuencas hidrográficas</strong> en el diseño habitacional; sistemas semi-subterráneos.',
+        materiales: '<strong>Piedra de río, adobe estabilizado (tierra), techos vegetales vivos;</strong> materiales que absorben el impacto sísmico local.',
+        impacto: 'Mantener un <strong>ciclo cerrado</strong> donde la gente y la naturaleza coexisten en equilibrio visible; el diseño es parte de la cosmología.'
+      },
+      B: {
+        cosmovis: 'La naturaleza es vista como un <strong>recurso a explotar</strong> por el poder central o foráneo. Los ciclos sociales se basan en la <strong>jerarquía racial y económica impuesta</strong> (colonialismo).',
+        tecnicas: 'Urbanismo lineal centrado en grandes <strong>ejes de transporte y consumo</strong>. Sistemas que dividen los flujos (ej. canalización de ríos).',
+        materiales: '<strong>Materiales industriales importados</strong> para simular el lujo/progreso global: concreto refinado, azulejos industriales. Desconexión entre material y clima.',
+        impacto: 'Creación de una clase urbana separada del proceso productivo real, generando <strong>segregación socioespacial brutal</strong>.'
+      },
+      C: {
+        cosmovis: 'Se importan modelos universales de progreso que ignoran el clima local. <strong>(La universalización como despojo)</strong>.',
+        tecnicas: 'Uso del <strong>estilo internacional</strong> como solución mágica: estructuras monolíticas, fachadas de muro cortina sin conexión con la topografía local.',
+        materiales: '<strong>Acero y hormigón blanco.</strong> La búsqueda de la homogeneidad en la fachada, borrando las marcas del tiempo o la cultura local.',
+        impacto: 'Crear espacios que parecen "globales" pero que ignoran las identidades locales, <strong>reforzando la dependencia tecnológica y económica extranjera.</strong>'
+      },
+      D: {
+        cosmovis: 'Reconocimiento de que la modernidad no funcionó para todos. Los intentos ambientales son a menudo <strong>elitistas o financiados por capitales externos</strong> sin arraigo social.',
+        tecnicas: 'Proyectos piloto de mejoramiento de barrio que introducen <strong>tecnologías externas</strong> (filtros, paneles) sin adaptarse completamente al entorno preexistente.',
+        materiales: 'Uso selectivo de <strong>materiales mejorados</strong> (ej. aditivo químico en el adobe) para cumplir con normativas externas sin cambiar el fondo cultural.',
+        impacto: 'Intentar mitigar el impacto visible (la suciedad, el ruido) sin abordar la <strong>causa estructural de la desigualdad</strong> y la depredación de recursos.'
+      },
+      E: {
+        cosmovis: 'La crisis se vive primero en la vulnerabilidad: <strong>los más pobres son los primeros afectados.</strong> El desafío es diseñar soluciones que protejan la comunidad y el tejido de vida, antes que la infraestructura.',
+        tecnicas: 'Estrategias de <strong>retreat o adaptación</strong> en lugar de resistencia física. Construir defensas flexibles y comunitarias que permitan el movimiento controlado ante el desastre.',
+        materiales: '<strong>Materiales resilientes y disponibles:</strong> bambú reforzado, técnicas mixtas que combinan lo natural con refuerzos estructurales mínimos y locales.',
+        impacto: 'La prioridad es salvar vidas y comunidades enteras; los bienes materiales son secundarios. <strong>El conocimiento popular se vuelve clave</strong> para sobrevivir al colapso de las redes centralizadas.'
+      },
+      F: {
+        cosmovis: 'El diseño debe ser un <strong>acto político-social.</strong> Recuperar las técnicas locales (bioconstrucción) no solo por su baja huella, sino porque empoderan a las comunidades para gestionar sus propios recursos.',
+        tecnicas: '<strong>Co-diseño:</strong> El proceso creativo debe incluir a la población afectada desde la concepción. La técnica es un diálogo entre lo ancestral y la ciencia moderna.',
+        materiales: 'Recuperación del <strong>saber hacer local:</strong> rehacer el uso de la tierra, los pigmentos naturales, las maderas nativas sin pasar por procesos industriales globales.',
+        impacto: 'Crear sistemas urbanos que <strong>reafirmen el vínculo con la tierra.</strong> Que cada intervención sea un acto de memoria cultural y resistencia económica.'
+      }
+    }
+  }
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  regions: { europa: true, asia: true, latam: true },
+  periods: { A: true, B: true, C: true, D: true, E: true, F: true },
+  axes: { cosmovis: true, tecnicas: true, materiales: true, impacto: true },
+  view: 'timeline'
+};
+
+// ══════════════════════════════════════════
+// PILL TOGGLE LOGIC
+// ══════════════════════════════════════════
+document.querySelectorAll('#region-pills .pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const r = btn.dataset.region;
+    state.regions[r] = !state.regions[r];
+    btn.classList.toggle('active', state.regions[r]);
+    applyFilters();
+    updateCompareBar();
+  });
+});
+
+document.querySelectorAll('#period-pills .pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = btn.dataset.period;
+    state.periods[p] = !state.periods[p];
+    btn.classList.toggle('active', state.periods[p]);
+    applyFilters();
+  });
+});
+
+document.querySelectorAll('#axis-pills .pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const a = btn.dataset.axis;
+    state.axes[a] = !state.axes[a];
+    btn.classList.toggle('active', state.axes[a]);
+    applyFilters();
+  });
+});
+
+// ══════════════════════════════════════════
+// VIEW TOGGLE
+// ══════════════════════════════════════════
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.view = btn.dataset.view;
+    document.getElementById('view-timeline').style.display = state.view === 'timeline' ? 'flex' : 'none';
+    document.getElementById('view-cards').style.display = state.view === 'cards' ? 'flex' : 'none';
+    document.getElementById('view-matrix').style.display = state.view === 'matrix' ? 'block' : 'none';
+    if (state.view === 'matrix') buildMatrix();
+    if (state.view === 'timeline') buildTimeline();
+    applyFilters();
+  });
+});
+// Init display
+document.getElementById('view-timeline').style.display = 'flex';
+document.getElementById('view-cards').style.display = 'none';
+document.getElementById('view-matrix').style.display = 'none';
+
+// ══════════════════════════════════════════
+// APPLY FILTERS
+// ══════════════════════════════════════════
+function applyFilters() {
+  if (state.view === 'timeline') applyTimelineFilters();
+  else if (state.view === 'cards') applyCardsFilters();
+  else if (state.view === 'matrix') applyMatrixFilters();
+}
+
+function applyTimelineFilters() {
+  document.querySelectorAll('.tl-row').forEach(row => {
+    const p = row.dataset.period;
+    row.classList.toggle('tl-hidden', !state.periods[p]);
+  });
+  document.querySelectorAll('.tl-region-block').forEach(block => {
+    const r = block.dataset.region;
+    block.classList.toggle('region-hidden', !state.regions[r]);
+  });
+  document.querySelectorAll('.tl-axis-item').forEach(item => {
+    const a = item.dataset.axis;
+    item.classList.toggle('axis-hidden', !state.axes[a]);
+  });
+}
+
+function applyCardsFilters() {
+  // Region sections
+  document.querySelectorAll('.region-section').forEach(sec => {
+    const r = sec.dataset.region;
+    sec.classList.toggle('hidden', !state.regions[r]);
+  });
+  // Period cards
+  document.querySelectorAll('.period-card').forEach(card => {
+    const p = card.dataset.period;
+    card.classList.toggle('hidden', !state.periods[p]);
+  });
+  // Axis items
+  document.querySelectorAll('.axis-item').forEach(item => {
+    const a = item.dataset.axis;
+    item.classList.toggle('hidden', !state.axes[a]);
+  });
+}
+
+function applyMatrixFilters() {
+  // Region columns
+  document.querySelectorAll('.matrix-region-col').forEach(cell => {
+    const r = cell.dataset.region;
+    cell.style.display = state.regions[r] ? '' : 'none';
+  });
+  // Axis rows
+  document.querySelectorAll('.matrix-axis-row').forEach(row => {
+    const a = row.dataset.axis;
+    row.style.display = state.axes[a] ? '' : 'none';
+  });
+  // Period rows
+  document.querySelectorAll('.matrix-period-group').forEach(group => {
+    const p = group.dataset.period;
+    group.style.display = state.periods[p] ? '' : 'none';
+  });
+}
+
+// ══════════════════════════════════════════
+// TOGGLE HELPERS
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// BUILD TIMELINE VIEW
+// ══════════════════════════════════════════
+let tlActive = null;
+
+function buildTimeline() {
+  const container = document.getElementById('view-timeline');
+  if (container.dataset.built) return;
+  container.dataset.built = '1';
+
+  const rColors = { europa:'var(--europa)', asia:'var(--asia)', latam:'var(--latam)' };
+  const rNames  = { europa:'Europa', asia:'Asia', latam:'Latinoamérica' };
+  const axisIcons = { cosmovis:'🌐', tecnicas:'⚙️', materiales:'🧱', impacto:'🎯' };
+  const axisNames = { cosmovis:'Cosmovisión', tecnicas:'Técnicas', materiales:'Materiales', impacto:'Impacto' };
+
+  DATA.periods.forEach((period, i) => {
+    const isLeft = (i % 2 === 0); // A,C,E → tarjeta a la izquierda; B,D,F → derecha
+
+    const card = buildTlCard(period, rColors, rNames, axisIcons, axisNames);
+
+    const row = document.createElement('div');
+    row.className = 'tl-row';
+    row.dataset.period = period.id;
+    row.style.setProperty('--p-color', period.color);
+
+    const leftSlot  = document.createElement('div');
+    leftSlot.className = 'tl-left' + (isLeft ? '' : ' tl-empty');
+
+    const nodeWrap = document.createElement('div');
+    nodeWrap.className = 'tl-node-wrap';
+    nodeWrap.innerHTML = `
+      <div class="tl-node" style="background:${period.color};color:${period.color}">${period.id}</div>
+      <span class="tl-node-label">Periodo ${period.id}</span>
+    `;
+    nodeWrap.addEventListener('click', () => selectTlPeriod(period.id));
+
+    const rightSlot = document.createElement('div');
+    rightSlot.className = 'tl-right' + (isLeft ? ' tl-empty' : '');
+
+    if (isLeft) {
+      leftSlot.appendChild(card);
+    } else {
+      rightSlot.appendChild(card);
+    }
+
+    row.appendChild(leftSlot);
+    row.appendChild(nodeWrap);
+    row.appendChild(rightSlot);
+    container.appendChild(row);
+  });
+}
+
+function buildTlCard(period, rColors, rNames, axisIcons, axisNames) {
+  const card = document.createElement('div');
+  card.className = 'tl-card';
+  card.innerHTML = `
+    <div class="tl-card-header">
+      <div class="tl-period-badge" style="background:${period.color}">${period.id}</div>
+      <div>
+        <div class="tl-period-title">${period.name}</div>
+        <div class="tl-period-tagline">${period.tagline}</div>
+      </div>
+    </div>
+    <div class="tl-card-body">${
+      Object.entries(rColors).map(([rid]) => `
+        <div class="tl-region-block" data-region="${rid}">
+          <div class="tl-region-name">
+            <span class="tl-rdot" style="background:${rColors[rid]}"></span>
+            <span style="color:${rColors[rid]}">${rNames[rid]}</span>
+          </div>
+          <div class="tl-axes">${
+            DATA.axes.map(axis => `
+              <div class="tl-axis-item" data-axis="${axis.id}">
+                <div class="tl-axis-label">${axisIcons[axis.id]} ${axisNames[axis.id]}</div>
+                <div class="tl-axis-text">${DATA.content[rid][period.id][axis.id]}</div>
+              </div>
+            `).join('')
+          }</div>
+        </div>
+      `).join('')
+    }</div>
+  `;
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => selectTlPeriod(period.id));
+  return card;
+}
+
+function selectTlPeriod(periodId) {
+  const rows = document.querySelectorAll('.tl-row');
+  if (tlActive === periodId) {
+    tlActive = null;
+    rows.forEach(r => { r.classList.remove('tl-active', 'tl-dimmed'); });
+    return;
+  }
+  tlActive = periodId;
+  rows.forEach(r => {
+    const isActive = r.dataset.period === periodId;
+    r.classList.toggle('tl-active', isActive);
+    r.classList.toggle('tl-dimmed', !isActive && !r.classList.contains('tl-hidden'));
+  });
+}
+function toggleRegionSection(header) {
+  const sec = header.closest('.region-section');
+  sec.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+// COMPARE BAR
+// ══════════════════════════════════════════
+function updateCompareBar() {
+  const bar = document.getElementById('compare-info');
+  const active = Object.entries(state.regions).filter(([,v]) => v).map(([k]) => k);
+  const labels = { europa:'Europa', asia:'Asia', latam:'Latinoamérica' };
+  let html = '<span>Comparando:</span>';
+  if (active.length === 0) html = '<span style="color:var(--ink-faint)">Selecciona al menos una región</span>';
+  else active.forEach(r => { html += `<span class="compare-badge ${r}"><span style="width:7px;height:7px;border-radius:50%;background:var(--${r});display:inline-block"></span> ${labels[r]}</span>`; });
+  bar.innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+// BUILD CARDS VIEW
+// ══════════════════════════════════════════
+function buildCards() {
+  const regions = [
+    { id:'europa', color:'var(--europa)' },
+    { id:'asia', color:'var(--asia)' },
+    { id:'latam', color:'var(--latam)' }
+  ];
+  regions.forEach(reg => {
+    const container = document.getElementById(`cards-${reg.id}`);
+    if (!container) return;
+    DATA.periods.forEach(period => {
+      const content = DATA.content[reg.id][period.id];
+      const card = document.createElement('div');
+      card.className = 'period-card';
+      card.dataset.period = period.id;
+      card.innerHTML = `
+        <div class="period-card-header">
+          <div class="period-card-letter" style="background:${period.color}">${period.id}</div>
+          <span class="period-card-name">${period.name}</span>
+        </div>
+        <div class="period-card-body">
+          ${DATA.axes.map(axis => `
+            <div class="axis-item" data-axis="${axis.id}">
+              <div class="axis-item-label">${axis.icon} ${axis.name}</div>
+              <div class="axis-item-text">${content[axis.id]}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  });
+}
+
+// ══════════════════════════════════════════
+// BUILD MATRIX VIEW
+// ══════════════════════════════════════════
+function buildMatrix() {
+  const table = document.getElementById('matrix-table');
+  if (table.dataset.built) return;
+  table.dataset.built = '1';
+
+  const regionLabels = { europa:'Europa', asia:'Asia', latam:'Latinoamérica' };
+  const regionColors = { europa:'var(--europa)', asia:'var(--asia)', latam:'var(--latam)' };
+
+  // Header
+  let thead = `<thead><tr>
+    <th style="min-width:80px">Periodo</th>
+    <th class="matrix-axis-cell" style="min-width:100px">Eje</th>
+    ${DATA.regions.map(r => `<th class="region-header matrix-region-col" data-region="${r.id}">
+      <div class="matrix-region-label"><span style="width:9px;height:9px;border-radius:50%;background:${regionColors[r.id]};display:inline-block"></span>${regionLabels[r.id]}</div>
+    </th>`).join('')}
+  </tr></thead>`;
+  table.innerHTML = thead;
+
+  const tbody = document.createElement('tbody');
+  DATA.periods.forEach(period => {
+    DATA.axes.forEach((axis, ai) => {
+      const tr = document.createElement('tr');
+      tr.className = 'matrix-axis-row matrix-period-group';
+      tr.dataset.axis = axis.id;
+      tr.dataset.period = period.id;
+
+      if (ai === 0) {
+        const periodCell = document.createElement('td');
+        periodCell.rowSpan = DATA.axes.length;
+        periodCell.className = 'matrix-period-cell';
+        periodCell.style.background = period.color + '18';
+        periodCell.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;height:24px;border-radius:50%;background:${period.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">${period.id}</div><span style="font-size:9.5px;color:${period.color};font-weight:600;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap">${period.name}</span></div>`;
+        tr.appendChild(periodCell);
+      }
+
+      const axisCell = document.createElement('td');
+      axisCell.className = 'matrix-axis-cell';
+      axisCell.innerHTML = `${axis.icon} ${axis.name}`;
+      tr.appendChild(axisCell);
+
+      DATA.regions.forEach(reg => {
+        const td = document.createElement('td');
+        td.className = 'matrix-content-cell matrix-region-col';
+        td.dataset.region = reg.id;
+        td.innerHTML = DATA.content[reg.id][period.id][axis.id];
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  });
+  table.appendChild(tbody);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildTimeline();
+buildCards();
+applyFilters();
+</script>
+</body>
+</html>
