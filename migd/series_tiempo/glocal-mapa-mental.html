@@ -247,7 +247,7 @@ body {
 }
 .card-imgs img {
   width: 100%;
-  height: 90px;
+  height: 110px;
   object-fit: cover;
   display: block;
   flex: 1;
@@ -278,12 +278,22 @@ body {
 .region-section-name { font-size: 13px; font-weight: 600; }
 .region-subtitle { font-size: 11px; color: var(--ink-faint); font-style: italic; }
 .region-expand { margin-left: auto; font-size: 12px; color: var(--ink-faint); transition: transform 0.2s; }
+.region-section.open {
+  background: none;
+  border: none;
+}
+.region-section-header {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
 .region-section.open .region-expand { transform: rotate(180deg); }
-.region-cards-body { display: none; padding: 16px 20px; gap: 12px; }
+.region-cards-body { display: none; padding-top: 12px; gap: 12px; background: none; border: none;}
 .region-section.open .region-cards-body { display: flex; flex-wrap: wrap; }
 .period-card {
   flex: 1;
   min-width: 260px;
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: 5px;
   overflow: hidden;
@@ -353,9 +363,38 @@ footer {
 @media (max-width: 768px) {
   .controls-bar { padding: 16px 16px 0; gap: 14px; }
   .canvas-area { padding: 16px 16px 40px; }
-  .header-inner { padding: 0 16px; }
+  .header-inner { padding: 8px 16px; height: auto; flex-wrap: wrap; gap: 2px; }
+  .header-title { width: 100%; }
+  .view-toggle { margin-top: 0; }
   .compare-info { padding: 10px 16px 0; }
   footer { padding: 20px 16px 32px; }
+  #view-cards {
+    flex-direction: row;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+  #view-cards .region-section {
+    flex: 0 0 85vw;
+    min-width: 340px;
+    scroll-snap-align: start;
+  }
+  .card-imgs img {
+    height: 210px;
+  }
+  .card-imgs img:only-child {
+  height: 210px;
+  }
+  .region-section.open .region-cards-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .region-section.open .region-cards-body .period-card {
+    flex: none;
+    min-width: 0;
+  }
 }
 </style>
 </head>

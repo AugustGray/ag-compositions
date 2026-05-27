@@ -238,6 +238,23 @@ body {
 .tl-axis-label { font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 2px; }
 .tl-axis-text { font-size: 11px; line-height: 1.5; color: var(--ink-muted); }
 .tl-axis-text strong { color: var(--ink); font-weight: 500; }
+
+/* ── CARD IMAGES ── */
+.card-imgs {
+  display: flex;
+  gap: 3px;
+  overflow: hidden;
+}
+.card-imgs img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  display: block;
+  flex: 1;
+}
+.card-imgs img:only-child {
+  height: 110px;
+}
 .cards-view { display: none; gap: 16px; }
 .cards-view.active { display: flex; flex-direction: column; }
 .region-col-group { display: flex; flex-direction: column; gap: 16px; }
@@ -638,6 +655,32 @@ const DATA = {
       E: 'La crisis se vive en la vulnerabilidad: los más pobres son los primeros afectados. Soluciones que protejan la comunidad.',
       F: 'El diseño como acto político-social. Recuperar técnicas locales (bioconstrucción) para empoderar comunidades.'
     }
+  },
+  images: {
+    europa: {
+      A: ['img/europa/A_tradicional_01.png', 'img/europa/A_tradicional_02.png'],
+      B: ['img/europa/B_transicion_urbana.png'],
+      C: ['img/europa/C_industrial.jpg'],
+      D: ['img/europa/D_conciencia_ambiental.png'],
+      E: ['img/europa/E_crisis_climatica.png'],
+      F: ['img/europa/F_regenerativo.jpg']
+    },
+    asia: {
+      A: ['img/asia/A_tradicional.jpg'],
+      B: ['img/asia/B_transicion_urbana.jpg'],
+      C: ['img/asia/C_industrial.jpg'],
+      D: ['img/asia/D_conciencia_ambiental.jpg'],
+      E: ['img/asia/E_crisis_ambiental.jpg'],
+      F: ['img/asia/F_regenerativo.jpg']
+    },
+    latam: {
+      A: ['img/latam/A_tradicional_01.png', 'img/latam/A_tradicional_02.png'],
+      B: ['img/latam/B_transicion_urbana.jpg'],
+      C: ['img/latam/C_industrial_01.png', 'img/latam/C_industrial_02.png'],
+      D: ['img/latam/D_conciencia_ambiental.png'],
+      E: ['img/latam/E_crisis_climatica.png'],
+      F: ['img/latam/F_regenerativo.png']
+    }
   }
 };
 
@@ -803,6 +846,8 @@ function buildCards() {
     if (!container) return;
     DATA.periods.forEach(period => {
       const content = DATA.content[reg.id][period.id];
+      const imgs = DATA.images[reg.id][period.id];
+      const imgsHtml = imgs && imgs.length ? `<div class="card-imgs">${imgs.map(src => `<img src="${src}" alt="" loading="lazy">`).join('')}</div>` : '';
       const card = document.createElement('div');
       card.className = 'period-card';
       card.dataset.period = period.id;
@@ -812,6 +857,7 @@ function buildCards() {
           <span class="period-card-name">${period.name}</span>
         </div>
         <div class="period-card-body">
+          ${imgsHtml}
           ${DATA.axes.map(axis => `
             <div class="axis-item" data-axis="${axis.id}">
               <div class="axis-item-label">${axis.icon} ${axis.name}</div>
@@ -897,6 +943,8 @@ function buildTimeline() {
     let cardsHtml = '';
     DATA.regions.forEach(reg => {
       const content = DATA.content[reg.id][period.id];
+      const imgs = DATA.images[reg.id][period.id];
+      const imgsHtml = imgs && imgs.length ? `<div class="card-imgs">${imgs.map(src => `<img src="${src}" alt="" loading="lazy">`).join('')}</div>` : '';
       cardsHtml += `
         <div class="tl-card" data-region="${reg.id}" onclick="toggleTlCard(this)">
           <div class="tl-card-header">
@@ -904,6 +952,7 @@ function buildTimeline() {
             <span class="tl-card-name" style="color:var(--${reg.id})">${reg.name}</span>
             <span class="tl-card-expand">▼</span>
           </div>
+          ${imgsHtml}
           <div class="tl-card-summary">${DATA.summaries[reg.id][period.id]}</div>
           <div class="tl-card-detail">
             ${DATA.axes.map(axis => `
@@ -935,5 +984,75 @@ buildTimeline();
 buildCards();
 applyFilters();
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- CONFIGURATION ---
+        // Define your icon paths here
+        const FAVICONS = {
+            // Dark Mode usually needs LIGHT/BRIGHT icons to show up on the dark tab bar
+            dark: [
+                '../../assets/favicons/dark/Favicon_00.svg',
+                '../../assets/favicons/dark/Favicon_01.svg',
+                '../../assets/favicons/dark/Favicon_02.svg',
+                '../../assets/favicons/dark/Favicon_03.svg',
+                '../../assets/favicons/dark/Favicon_04.svg'
+            ],
+            // Light Mode usually needs DARK icons
+            light: [
+                '../../assets/favicons/light/Favicon_00.svg',
+                '../../assets/favicons/light/Favicon_01.svg',
+                '../../assets/favicons/light/Favicon_02.svg',
+                '../../assets/favicons/light/Favicon_03.svg',
+                '../../assets/favicons/light/Favicon_04.svg'
+            ]
+        };
+
+        // --- LOGIC ---
+        function updateFavicon() {
+            // 1. Get current theme (default to dark if missing)
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            
+            // 2. Select the correct array
+            const iconSet = FAVICONS[currentTheme] || FAVICONS.dark;
+            
+            // 3. Pick a random icon
+            const randomIndex = Math.floor(Math.random() * iconSet.length);
+            const selectedIcon = iconSet[randomIndex];
+
+            // 4. Find or Create the Link Tag
+            // We look for any link with 'icon' in the rel attribute
+            let link = document.querySelector("link[rel*='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.type = 'image/x-icon';
+                link.rel = 'shortcut icon';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+
+            // 5. Update the href
+            link.href = selectedIcon;
+        }
+
+        // --- INITIALIZATION ---
+        
+        // 1. Run immediately on load
+        updateFavicon();
+
+        // 2. Watch for Theme Changes (MutationObserver)
+        // This detects when your OTHER script changes the data-theme attribute
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    updateFavicon(); 
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+    });
+</script>
+
 </body>
 </html>
